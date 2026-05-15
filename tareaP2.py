@@ -5,3 +5,6 @@
 
 #Importación de librerias
 from funciones import *
+tiposSangre=mostrarTiposSangre()
+diccionarioLugares=crearDiccionarioLugares()
+matrizDonadores=cargarArchivo()
