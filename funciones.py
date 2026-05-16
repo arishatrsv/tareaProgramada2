@@ -26,18 +26,18 @@ def mostrarProvincias():
 def crearDiccionarioLugares():
     diccionarioLugares = {
     1:["Banco Nacional de Sangre",
-        "Hospital México",
-        "Hospital San Juan de Dios"],
+       "Hospital México",
+       "Hospital San Juan de Dios"],
     2:["Hospital San Rafael de Alajuela",
         "Hospital de San Ramón",
         "Hospital del Cantón Norteño"],
     3:["Hospital Max Peralta"],
     4:["Hospital San Vicente de Paúl"],
     5:["Hospital La Anexión en Nicoya",
-        "Hospital Enrique Baltodano de Liberia"],
+       "Hospital Enrique Baltodano de Liberia"],
     6:["Hospital Monseñor Sanabria"],
     7:["Hospital Tony Facio",
-        "Hospital de Guápiles"]}
+       "Hospital de Guápiles"]}
     return diccionarioLugares
 
 def guardarArchivo(pmatrizD):
@@ -59,8 +59,7 @@ def buscarCedula(pmatrizD,pcedula):
     for i in range(len(pmatrizD)):
         if pmatrizD[i][1]==pcedula:
             return i
-    else:
-        return -1
+    return -1
     
 def obtenerProvincias(pcedula):
     provincia = int(pcedula[0])
@@ -88,25 +87,68 @@ def validarCedula(pcedula):
 
 def validarFecha(pfecha):
     try:
-        datetime.strptime(pfecha,"%d/%m/%Y") #Verifica que el str es una fecha con el formato correcto
-        return True
+        fecha=datetime.strptime(pfecha,"%d/%m/%Y") #Verifica que el str es una fecha con el formato correcto
+        return fecha
     except:
         return False
 
-#def validarCorreo():
+def validarCorreo(pcorreo):
+    #Verifica que el correo cumpla con alguno de los formatos permitidos
+    if re.match(r"^[\w.%+-]+@(gmail\.com|costarricense\.cr|racsa\.go\.cr|ccss\.sa\.cr)$",pcorreo):
+        return True
+    return False
+
 def validarTelefono(ptelefono):
     if re.match(r"^[246789]{1}\d{3}-\d{4}$",ptelefono):
         return True
     else:
         return False
-#def validarPeso():  
-#def validarTipoSangre():
-#def validarNombre():
+    
+def validarPeso(ppeso):
+    if ppeso.isdigit()==False:
+        return False
+    peso = int(ppeso) 
+    if peso > 50 and peso < 120:
+        return True
+    return False
 
-def actualizarDonador(pmatrizD,pposicion,pdatosNuevos):
-    pmatrizD[pposicion][0]=pdatosNuevos[0]
-    pmatrizD[pposicion][2]=pdatosNuevos[1]
-    pmatrizD[pposicion][3]=pdatosNuevos[2]
-    pmatrizD[pposicion][4]=pdatosNuevos[3]
-    pmatrizD[pposicion][5]=pdatosNuevos[4]
-    return pmatrizD
+def analizarEdadDonar(pfecha):
+    fechaNacimiento = validarFecha(pfecha)
+    if fechaNacimiento==False:
+        return False
+    anno= fechaNacimiento.year
+    mes= fechaNacimiento.month
+    dia= fechaNacimiento.day
+    hoy= datetime.now()
+    annoAct= hoy.year
+    mesAct= hoy.month
+    diaAct= hoy.day
+    edad= annoAct - anno
+    if((mesAct,diaAct)<(mes,dia)):
+        edad -= 1
+    return edad >= 18
+
+def mostrarCompatibilidad():
+    compatibilidad = {
+        "O-":[
+            "O-","O+",
+            "A-","A+",
+            "B-","B+",
+            "AB-","AB+"],
+        "O+":[
+            "O+","A+",
+            "B+","AB+"],
+        "A-":[
+            "A-","A+",
+            "AB-","AB+"],
+        "A+":[
+            "A+","AB+"],
+        "B-":[
+            "B-","B+",
+            "AB-","AB+"],
+        "B+":[
+            "B+","AB+"],
+        "AB-":[
+            "AB-","AB+"],
+        "AB+":["AB+"]}
+    return compatibilidad
