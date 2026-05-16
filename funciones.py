@@ -26,18 +26,18 @@ def mostrarProvincias():
 def crearDiccionarioLugares():
     diccionarioLugares = {
     1:["Banco Nacional de Sangre",
-       "Hospital México",
-       "Hospital San Juan de Dios"],
+        "Hospital México",
+        "Hospital San Juan de Dios"],
     2:["Hospital San Rafael de Alajuela",
         "Hospital de San Ramón",
         "Hospital del Cantón Norteño"],
     3:["Hospital Max Peralta"],
     4:["Hospital San Vicente de Paúl"],
     5:["Hospital La Anexión en Nicoya",
-       "Hospital Enrique Baltodano de Liberia"],
+        "Hospital Enrique Baltodano de Liberia"],
     6:["Hospital Monseñor Sanabria"],
     7:["Hospital Tony Facio",
-       "Hospital de Guápiles"]}
+        "Hospital de Guápiles"]}
     return diccionarioLugares
 
 def guardarArchivo(pmatrizD):
@@ -100,4 +100,13 @@ def validarTelefono(ptelefono):
     else:
         return False
 #def validarPeso():  
+#def validarTipoSangre():
+#def validarNombre():
 
+def actualizarDonador(pmatrizD,pposicion,pdatosNuevos):
+    pmatrizD[pposicion][0]=pdatosNuevos[0]
+    pmatrizD[pposicion][2]=pdatosNuevos[1]
+    pmatrizD[pposicion][3]=pdatosNuevos[2]
+    pmatrizD[pposicion][4]=pdatosNuevos[3]
+    pmatrizD[pposicion][5]=pdatosNuevos[4]
+    return pmatrizD
