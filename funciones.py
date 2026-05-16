@@ -6,23 +6,43 @@
 #Importación de librerias
 import pickle
 import re
+from datetime import datetime
 
 def mostrarTiposSangre():
     tipos = ("O+","O-","A+","A-","B+","B-","AB+","AB-")
     return tipos
+
+def mostrarProvincias():
+    provincias= {
+    1: "San José",
+    2: "Alajuela",
+    3: "Cartago",
+    4: "Heredia",
+    5: "Guanacaste",
+    6: "Puntarenas",
+    7: "Limon"}
+    return provincias
+
 def crearDiccionarioLugares():
-    diccionarioLugares = {1:["Banco Nacional de Sangre","Hospital México"],
-    2:["Hospital San Rafael"],
+    diccionarioLugares = {
+    1:["Banco Nacional de Sangre",
+       "Hospital México",
+       "Hospital San Juan de Dios"],
+    2:["Hospital San Rafael de Alajuela",
+        "Hospital de San Ramón",
+        "Hospital del Cantón Norteño"],
     3:["Hospital Max Peralta"],
     4:["Hospital San Vicente de Paúl"],
-    5:["Hospital La Anexión"],
+    5:["Hospital La Anexión en Nicoya",
+       "Hospital Enrique Baltodano de Liberia"],
     6:["Hospital Monseñor Sanabria"],
-    7:["Hospital Tony Facio"]}
+    7:["Hospital Tony Facio",
+       "Hospital de Guápiles"]}
     return diccionarioLugares
 
-def guardarArchivo(pmatriz):
+def guardarArchivo(pmatrizD):
     archivo=open("donadores.txt","wb")
-    pickle.dump(pmatriz,archivo)
+    pickle.dump(pmatrizD,archivo)
     archivo.close()
     return 
 
@@ -35,57 +55,32 @@ def cargarArchivo():
     except:
         return []
 
-def insertarDonador(pmatriz,pdonador):
-    pmatriz.append(pdonador)
-    return pmatriz
-
-def buscarCedula(pmatriz,pcedula):
-    for i in range(len(pmatriz)):
-        if pmatriz[i][1]==pcedula:
+def buscarCedula(pmatrizD,pcedula):
+    for i in range(len(pmatrizD)):
+        if pmatrizD[i][1]==pcedula:
             return i
     else:
         return -1
-
-def actualizarPeso(pmatriz,pcedula,pnuevoPeso):
-    posicion=buscarCedula(pmatriz,pcedula)
-    if not posicion == -1:
-        pmatriz[posicion][5]=pnuevoPeso
-        return pmatriz
-    return []
-
-def validarTelefono(ptelefono):
-    if re.match(r"^[246789]{1}\d{3}-\d{4}$",ptelefono):
-        return True
-    else:
-        return False
     
-from datetime import datetime
-
-def buscarCedula(pdonadores,pcedula):
-    """Funcionamiento: Busca una cédula dentro de la matriz.
-    Entradas:
-    pmatriz (list)
-    pcedula (str)
-    Salidas: True o False
-    """
-    for donador in pdonadores:
-        cedula = donador[1]
-        if cedula == pcedula:
-            return True
-        return False
-    
-def insertarDonador(pdonadores,pdatos):
-    cedula = pdatos[1]
-    existe = buscarCedula(pdonadores,cedula)
-    if existe == True:
-        return False
-    pdonadores.append(pdatos)
-    return True
-
 def obtenerProvincias(pcedula):
     provincia = int(pcedula[0])
     return provincia
 
+def insertarDonador(pmatrizD,pdatos):
+    cedula = pdatos[1]
+    existe = buscarCedula(pmatrizD,cedula)
+    if existe != -1:
+        return False
+    pmatrizD.append(pdatos)
+    return True
+
+def actualizarPeso(pmatrizD,pcedula,pnuevoPeso):
+    posicion=buscarCedula(pmatrizD,pcedula)
+    if not posicion == -1:
+        pmatrizD[posicion][5]=pnuevoPeso
+        return pmatrizD
+    return []
+    
 def validarCedula(pcedula):
     if re.match(r"^[1-9]-\d{4}-\d{4}$",pcedula): #Valida que el formato de cedula sea #-####-#### 
         return True
@@ -99,6 +94,10 @@ def validarFecha(pfecha):
         return False
 
 #def validarCorreo():
-#def validarTelefono():
+def validarTelefono(ptelefono):
+    if re.match(r"^[246789]{1}\d{3}-\d{4}$",ptelefono):
+        return True
+    else:
+        return False
 #def validarPeso():  
 

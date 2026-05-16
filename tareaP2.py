@@ -7,5 +7,6 @@
 from funciones import *
 
 tiposSangre=mostrarTiposSangre()
-diccionarioLugares=crearDiccionarioLugares()
+provincias=mostrarProvincias()
+lugaresDonar=crearDiccionarioLugares()
 matrizDonadores=cargarArchivo()
