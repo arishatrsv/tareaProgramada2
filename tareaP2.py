@@ -13,7 +13,7 @@ matrizDonadores=cargarArchivo()
 
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     while validarNombre(pnombre)==False:
-        print("El nombre debe contener al menos 3 caracteres.")
+        print("El nombre debe contener al menos 2 caracteres.")
         pnombre=input("Digite el nombre completo: ")
     while validarTelefono(ptelefono)==False:
         print("El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
