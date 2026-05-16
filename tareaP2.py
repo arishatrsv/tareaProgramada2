@@ -11,6 +11,36 @@ provincias=mostrarProvincias()
 lugaresDonar=crearDiccionarioLugares()
 matrizDonadores=cargarArchivo()
 
+def analizarEdadDonarAux(pfecha):
+    resultado = analizarEdadDonar(pfecha)
+    if resultado == True:
+        return "Dado su fecha de nacimiento usted ya puede ser donador"
+    else:
+        return "Dado su fecha de nacimiento usted aún no puede ser donador"
+
+def ingresarAnalizarEdad():
+    fecha =input("Ingrese su fecha de nacimiento: ")
+    print(analizarEdadDonarAux(fecha))
+
+def lugarNacimiento(pcedula):
+    provincia= mostrarProvincias()
+    lugares= crearDiccionarioLugares()
+    codProvincia = obtenerProvincias(pcedula)
+    nomProvincia= provincia[codProvincia]
+    listaLugares = lugares[codProvincia]
+    mensaje= ("Dado que usted nació en la provincia de",nomProvincia,", usted podría donar en:\n")
+    for lugar in listaLugares:
+        mensaje += f"-{lugar}\n"
+    return mensaje
+
+def analizarPeso(ppeso):
+    if validarPeso(ppeso):
+        return("Usted posee un peso adecuado, correcto para ser donador de sangre.")
+    elif ppeso <= 50:
+        return("Usted debe pesar más de 50 kgms para poder ser donador.")
+    else:
+        return("Dado su sobre peso, no es posible donar sangre.")
+
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     while validarNombre(pnombre)==False:
         print("El nombre debe contener al menos 3 caracteres.")
@@ -46,7 +76,7 @@ def opcionActualizarDonador(pposicion):
     peso=input("Digite el peso: ")
     datos=actualizarDonadorAux(nombre,telefono,fecha,sangre,peso)
     return datos
-        
+
 def menuActualizarDonador(pposicion):
     datos=opcionActualizarDonador(pposicion)
     while True:
