@@ -82,7 +82,7 @@ def opcionInsertarDonador(pmatrizD):
         break
     while True:
         fecha= input("Ingrese su fecha de nacimiento: ")
-        if validarFecha(fecha):
+        if validarFecha(fecha)==False:
             print("Debe de ingresar una fecha de nacimiento válida")
         break
     while True:
@@ -117,15 +117,10 @@ def opcionInsertarDonador(pmatrizD):
     else:
         print("La cédula ya existe")
 
-        
-        
-
-
-
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     while True:
-        if pnombre==False:
-            print("El nombre debe contener al menos 2 caracteres.")
+        if pnombre=="":
+            print("Debe ingresar un nombre valido.")
             return False
         if validarTelefono(ptelefono)==False:
             print("El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
@@ -133,13 +128,13 @@ def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
         if validarFecha(pfecha)==False:
             print("La fecha debe tener el formato dd/mm/yyyy y ser válida.")
             return False
-        if psangre==False:
+        if psangre not in mostrarTiposSangre():
             print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
             return False
         try:
             ppeso=float(ppeso)
             if validarPeso(ppeso)==False:
-                print("El peso mínimo para donar es de 50 kg")
+                print("El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg.")
                 return False
         except:
             print("El peso debe ser un valor numérico.")
@@ -147,7 +142,7 @@ def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
         return [pnombre,ptelefono,pfecha,psangre,ppeso]
 
 def opcionActualizarDonador(pposicion):
-    print("Número de cédula:",matrizDonadores[pposicion][1])
+    print("Número de cédula:",matrizDonadores[pposicion][0])
     nombre=input("Digite el nombre completo: ")
     telefono=input("Digite el teléfono: ")
     fecha=input("Digite la fecha de nacimiento (dd/mm/yyyy): ")
@@ -174,4 +169,29 @@ def menuActualizarDonador(pposicion):
         elif opcion=="3":
             return
         else:
-            print("La opción seleccionada no existe. Ingrese una opción 1-3")            
+            print("La opción seleccionada no existe. Ingrese una opción 1-3")
+
+def generarDonadoresAux(pmatrizD,pcantidad):
+    #en caso de que se repite la cedula no se guarda el donador
+    # para eso se hace un ciclo while hasta que se genera la cantidad deseada
+    generados=0  
+    while generados<pcantidad:
+        datos=generarDonadorRandom()
+        inserto=insertarDonador(pmatrizD,datos)
+    if inserto: #True si no se repite la cedula
+            generados+=1 #solo aumenta si incerte correctamente
+    guardarArchivo(pmatrizD)
+    return f"{pcantidad} donadores generados correctamente."
+
+def opcionGenerarDonadores():
+    while True:
+        cantidad=input("Digite la cantidad de donadores a generar: ")
+        if cantidad.isdigit()==False:
+            print("Debe ingresar únicamente números.")
+            continue #vuelve a pedir la cantidad reiniciando el ciclo
+        cantidad=int(cantidad)
+        if cantidad<=0:
+            print("La cantidad debe ser mayor a 0.")
+            continue
+        break
+    return generarDonadoresAux(matrizDonadores,cantidad)
