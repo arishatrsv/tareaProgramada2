@@ -162,6 +162,5 @@ def mostrarInfoSangre():
         "O+": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "O-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "AB+":"Se le recomienda donar plaquetas y plasma.",
-        "AB-":"Se le recomienda donar plaquetas y plasma."
-    }
+        "AB-":"Se le recomienda donar plaquetas y plasma."}
     return informacion
