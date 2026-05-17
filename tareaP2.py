@@ -3,7 +3,7 @@
 #Última modificación:
 #Versión: 3.14.3
 
-#Importación de librerias
+#Importación de funciones.py
 from funciones import *
 
 tiposSangre=mostrarTiposSangre()
@@ -68,48 +68,48 @@ def insertarDonadorAux(pmatrizD,pdatos):
     return True
 
 def opcionInsertarDonador(pmatrizD):
-    #Se hace con while True separados, para que en el momento que si ingresa un dato incorrecto
-    #lo detenga hasta que lo ingrese de manera correcta.
+    #Se hace con while True separados, para que en el momento que se ingresa un dato incorrecto
+    #lo detenga hasta que lo ingrese de manera correcta, sin esperar al final para informar.
     while True:
         cedula= input("Ingrese su cédula: ")
         if validarCedula(cedula) == False:
-            print("Debe ingresar una cédula válida")
-        break
+            break
+        print("Debe ingresar una cédula válida")
     while True:
         nombre= input("Ingrese su nombre completo: ")
-        if nombre != "":
-            print("Debe ingresar un nombre Completo")
-        break
+        if nombre == "":
+            break
+        print("Debe ingresar un nombre Completo")
     while True:
         fecha= input("Ingrese su fecha de nacimiento: ")
-        if validarFecha(fecha)==False:
-            print("Debe de ingresar una fecha de nacimiento válida")
-        break
+        if validarFecha(fecha):
+            break 
+        print("Debe de ingresar una fecha de nacimiento válida")
     while True:
         sangre= input("Ingrese su tipo de sangre: ").upper()
         if sangre in mostrarTiposSangre():
-            print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
-        break
+            break
+        print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
     while True:
         sexo= input("Ingrese su sexo: ").upper()
         if sexo != "M" or sexo != "F":
-            print("Debe ingresar M o F")
-        break
+            break
+        print("Debe ingresar M o F")
     while True:
         peso= input("Ingrese su peso en Kg: ")
-        if not validarPeso(peso):
-            print("Debe ingresar un peso válido")
-        break
+        if validarPeso(peso):
+            break
+        print("Debe ingresar un peso válido")
     while True:
         telefono= input("Ingrese su número de teléfono: ")
         if validarTelefono(telefono):
-            print("Debe ingresar un número de teléfono con el formato válido")
-        break
+            break
+        print("Debe ingresar un número de teléfono con el formato válido")
     while True:
         correo= input("Ingrese su correo: ")
         if validarCorreo(correo):
-            print("Debe ingresar un correo con el formato válido")
-        break
+            break
+        print("Debe ingresar un correo con el formato válido")
     datos =[cedula,nombre,fecha,sangre,sexo,peso,telefono,correo]
     inserto = insertarDonadorAux(pmatrizD,datos)
     if inserto:
@@ -117,6 +117,7 @@ def opcionInsertarDonador(pmatrizD):
     else:
         print("La cédula ya existe")
 
+        
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     while True:
         if pnombre=="":

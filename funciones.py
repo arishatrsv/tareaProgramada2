@@ -164,7 +164,7 @@ def mostrarInfoSangre():
         "O-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "AB+":"Se le recomienda donar plaquetas y plasma.",
         "AB-":"Se le recomienda donar plaquetas y plasma."
-    }
+        "AB-":"Se le recomienda donar plaquetas y plasma."}
     return informacion
 
 def actualizarDonador(pmatrizD,pposicion,pdatos):
@@ -239,3 +239,4 @@ def generarDonadorRandom():
     telefono=generarTelefonoRandom()
     correo=generarCorreoRandom(nombre)
     return [cedula,nombre,fecha,sangre,sexo,peso,telefono,correo]
+
