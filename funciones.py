@@ -81,7 +81,7 @@ def actualizarPeso(pmatrizD,pcedula,pnuevoPeso):
     return []
     
 def validarCedula(pcedula):
-    if re.match(r"^[1-9]-\d{4}-\d{4}$",pcedula): #Valida que el formato de cedula sea #-####-#### 
+    if re.match(r"^[1-8]-\d{4}-\d{4}$",pcedula): #Valida que el formato de cedula sea #-####-#### 
         return True
     return False
 
@@ -152,3 +152,16 @@ def mostrarCompatibilidad():
             "AB-","AB+"],
         "AB+":["AB+"]}
     return compatibilidad
+
+def mostrarInfoSangre():
+    informacion={
+        "A+": "Se le recomienda que done sangre entera y plaquetas.",
+        "A-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
+        "B+": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
+        "B-": "Se le recomienda que done sangre entera o plaquetas.",
+        "O+": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
+        "O-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
+        "AB+":"Se le recomienda donar plaquetas y plasma.",
+        "AB-":"Se le recomienda donar plaquetas y plasma."
+    }
+    return informacion
