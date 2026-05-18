@@ -171,6 +171,14 @@ def actualizarDonador(pmatrizD,pposicion,pdatos):
     pmatrizD[pposicion][9]=justificacion
     return pmatrizD
 
+def eliminarDonador(pmatrizD,pcedula,pjustificacion):
+    posicion = buscarCedula(pmatrizD,pcedula)
+    if posicion == -1: #Si no existe
+        return False
+    pmatrizD[posicion][8]=0 #Si existe, cambia el estado
+    pmatrizD[posicion][9]= pjustificacion
+    return True
+
 def generarCedulaRandom():
     provincia=str(random.randint(1,8)) #Genera un número de provincia entre 1 y 8
     tomo=random.randint(1000,9999) #Genera 4 números aleatorios para el tomo
