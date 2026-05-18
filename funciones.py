@@ -58,7 +58,7 @@ def cargarArchivo():
 
 def buscarCedula(pmatrizD,pcedula):
     for i in range(len(pmatrizD)):
-        if pmatrizD[i][0]==pcedula:
+        if pmatrizD[i][1]==pcedula:
             return i
     return -1
     
@@ -67,7 +67,7 @@ def obtenerProvincias(pcedula):
     return provincia
 
 def insertarDonador(pmatrizD,pdatos):
-    cedula = pdatos[0]
+    cedula = pdatos[1]
     existe = buscarCedula(pmatrizD,cedula)
     if existe != -1:
         return False
@@ -102,7 +102,7 @@ def validarPeso(ppeso):
     if ppeso.isdigit()==False:
         return False
     peso = int(ppeso) 
-    if peso >= 50 and peso <= 120:
+    if peso > 50 and peso < 120:
         return True
     return False
 
@@ -161,10 +161,10 @@ def mostrarInfoSangre():
     return informacion
 
 def actualizarDonador(pmatrizD,pposicion,pdatos):
-    pmatrizD[pposicion][1]=pdatos[0]
-    pmatrizD[pposicion][6]=pdatos[1]
-    pmatrizD[pposicion][2]=pdatos[2]
-    pmatrizD[pposicion][3]=pdatos[3]
+    pmatrizD[pposicion][0]=pdatos[0]
+    pmatrizD[pposicion][7]=pdatos[1]
+    pmatrizD[pposicion][4]=pdatos[2]
+    pmatrizD[pposicion][2]=pdatos[3]
     pmatrizD[pposicion][5]=pdatos[4]
     return pmatrizD
 
@@ -230,6 +230,11 @@ def generarJustificacionRandom(pfecha,ppeso):
     if int(ppeso)>120:
         return 3
     return 0
+
+def generarEstadoDonador(pjustificacion):
+    if pjustificacion == 0:
+        return "Apto"
+    return "No apto"
 
 """def mostrarJustificacion(pnumero):
     justificaciones={
