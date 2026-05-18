@@ -200,6 +200,17 @@ def opcionGenerarDonadores():
 def opcionReporteLugares():
     reporte=reporteLugaresDonacion(matrizDonadores)
     if reporte:
-        print("Reporte creado satisfactoriamente")
+        return "Reporte creado satisfactoriamente"
     else:
-        print("Reporte no creado")
+        return "Reporte no creado"
+
+def opcionReporteProvincia():
+    print(mostrarProvincias())
+    provincia=int(input("Digite el número de provincia: "))
+    if provincia not in mostrarProvincias():
+        return "Provincia inválida."
+    reporte=reporteDonadoresProvincia(matrizDonadores,provincia)
+    if reporte:
+        return "Reporte creado satisfactoriamente"
+    else:
+        return "Reporte no creado"

@@ -256,14 +256,33 @@ def crearInicioHtml(ptitulo):
     html="<html>" #Comienza el documento HTML
     html+="<head>"
     html+="<title>"+ptitulo+"</title>" #Coloca el título de la página,aparece en la pestaña del navegador
+    #"""style""" abre una seccion de estilos para modificar la apariencia visual
+    #collapse une los bordes de la tabla
+    #width define el ancho de la tabla
+    #1px es el grosor del borde
+    #solid significa línea continua
+    #padding agrega espacio interno
+    #text-align alinea el texto
+    #background-color cambia el color del fondo
+    html+="""<style> 
+    table{border-collapse: collapse;width: 70%;} 
+    th, td{border: 1px solid black; padding: 8px; text-align: left;}
+    th{background-color: lightgray;}
+    </style>""" #cierra la ceccion de estilos.
     html+="</head>" 
     html+="<body>" #Todo lo visible va dentro del body
     html+="<h1>"+ptitulo+"</h1>" #Agrega un título grande visible en la página
-    html+="<p>"+str(fecha)+"</p>" #Agrega la fecha y hora del sistema
+    html+="<p>"+str(fecha.strftime("%d/%m/%Y %H:%M"))+"</p>" #Agrega la fecha y hora del sistema, <p> es un parrafo
     return html #Retorna el html creado hasta el momento
 
 def cerrarHtml():
     return "</body></html>" #cierra el body y el html, para no repetirlo en cada funcion
+
+def guardarHtml(pnombreArchivo,phtml):
+    archivo=open(pnombreArchivo,"w")
+    archivo.write(phtml) #Escribe todo el html dentro del archivo
+    archivo.close()
+    return True
 
 def reporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
@@ -291,7 +310,33 @@ def reporteLugaresDonacion(pmatrizD):
         #aqui se repite el ciclo para cada provincia creando una fila nueva
     html+="</table>" #cierra la tabla
     html+=cerrarHtml() 
-    archivo=open("reporteLugares.html","w")
-    archivo.write(html) #Escribe todo el html dentro del archivo
-    archivo.close()
-    return True
+    return guardarHtml("reporteLugares.html",html)
+
+def reporteDonadoresProvincia(pmatrizD,pprovincia):
+    html=crearInicioHtml("Reporte Donadores por Provincia")
+    html+="<table border='1'>"
+    html+="<tr>" #abre la fila de encabezados
+    html+="<th>Cédula</th>" #agrega los titulod de las columnas
+    html+="<th>Nombre</th>"
+    html+="<th>Fecha Nacimiento</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>" #cierra la fila de encabezados
+    listaOrdenada=pmatrizD[:] #crea una copia indepediente de la matriz sin modificar el orden original
+    listaOrdenada.sort(key=lambda donador: donador[1]) #ordena la lista por el nombre del donador. 
+    #key es el criterio de ordenamiento
+    #lambda es una funcion que toma un donador y devuelve su nombre (donador[1]) entonces se ordena por el nombre
+    #sin usar eso se ordenaria por cedula ya que es el primer elemento de cada donador
+    for donador in listaOrdenada:
+        if obtenerProvincias(donador[0])==pprovincia:
+            html+="<tr>"#abre una nueva fila para cada donador, tr significa table row
+            html+="<td>"+donador[0]+"</td>" #agrega la cedula
+            html+="<td>"+donador[1]+"</td>" #nombre
+            html+="<td>"+donador[2]+"</td>" #fecha de naciemiento
+            html+="<td>"+donador[6]+"</td>" #telefono
+            html+="<td>"+donador[7]+"</td>" #correo
+            html+="</tr>"
+    html+="</table>" #cierra la tabla
+        #se repite el ciclo para cada donador
+    html+=cerrarHtml() 
+    return guardarHtml("reporteDonadoresProvincia.html",html)
