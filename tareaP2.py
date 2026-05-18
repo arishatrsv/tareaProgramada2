@@ -78,7 +78,7 @@ def opcionInsertarDonador(pmatrizD):
         print("Debe ingresar una cédula válida")
     while True:
         nombre= input("Ingrese su nombre completo: ")
-        if nombre != "":
+        if nombre.replace(" ","").isalpha():
             break
         print("Debe ingresar un nombre Completo")
     while True:
@@ -111,7 +111,8 @@ def opcionInsertarDonador(pmatrizD):
         if validarCorreo(correo):
             break
         print("Debe ingresar un correo con el formato válido")
-    datos =[cedula,nombre,fecha,sangre,sexo,peso,telefono,correo]
+    justificacion = generarJustificacionRandom(fecha,peso)
+    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,1,justificacion]
     inserto = insertarDonadorAux(pmatrizD,datos)
     if inserto:
         print("Donador registrado correctamente")
@@ -143,7 +144,7 @@ def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
         return [pnombre,ptelefono,pfecha,psangre,ppeso]
 
 def opcionActualizarDonador(pposicion):
-    print("Número de cédula:",matrizDonadores[pposicion][0])
+    print("Número de cédula:",matrizDonadores[pposicion][1])
     nombre=input("Digite el nombre completo: ")
     telefono=input("Digite el teléfono: ")
     fecha=input("Digite la fecha de nacimiento (dd/mm/yyyy): ")
