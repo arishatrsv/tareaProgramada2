@@ -196,3 +196,10 @@ def opcionGenerarDonadores():
             continue
         break
     return generarDonadoresAux(matrizDonadores,cantidad)
+
+def opcionReporteLugares():
+    reporte=reporteLugaresDonacion(matrizDonadores)
+    if reporte:
+        print("Reporte creado satisfactoriamente")
+    else:
+        print("Reporte no creado")

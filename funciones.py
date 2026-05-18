@@ -229,6 +229,23 @@ def generarFechaRandom():
         #02-que ocupe 2 espacios, y si falta un espacio lo rellene con 0
     return fecha
 
+def generarJustificacionRandom(pfecha,ppeso):
+    if analizarEdadDonar(pfecha)==False:
+        return 1
+    if int(ppeso)<50:
+        return 2
+    if int(ppeso)>120:
+        return 3
+    return 0
+
+"""def mostrarJustificacion(pnumero):
+    justificaciones={
+        0:"Apto para donar",
+        1:"Menor de edad",
+        2:"Peso menor a 50 kg",
+        3:"Peso mayor a 120 kg"}
+    return justificaciones[pnumero]"""
+
 def generarDonadorRandom():
     cedula=generarCedulaRandom()
     nombre=generarNombreRandom()
@@ -238,5 +255,49 @@ def generarDonadorRandom():
     peso=generarPesoRandom()
     telefono=generarTelefonoRandom()
     correo=generarCorreoRandom(nombre)
-    return [cedula,nombre,fecha,sangre,sexo,peso,telefono,correo]
+    justificacion=generarJustificacionRandom(fecha,peso)
+    return [cedula,nombre,fecha,sangre,sexo,peso,telefono,correo,justificacion]
 
+def crearInicioHtml(ptitulo):
+    fecha=datetime.now()
+    html="<html>" #Comienza el documento HTML
+    html+="<head>"
+    html+="<title>"+ptitulo+"</title>" #Coloca el título de la página,aparece en la pestaña del navegador
+    html+="</head>" 
+    html+="<body>" #Todo lo visible va dentro del body
+    html+="<h1>"+ptitulo+"</h1>" #Agrega un título grande visible en la página
+    html+="<p>"+str(fecha)+"</p>" #Agrega la fecha y hora del sistema
+    return html #Retorna el html creado hasta el momento
+
+def cerrarHtml():
+    return "</body></html>" #cierra el body y el html, para no repetirlo en cada funcion
+
+def reporteLugaresDonacion(pmatrizD):
+    html=crearInicioHtml("Reporte Lugares de Donación")
+    html+="<table border='1'>" #Crea una tabla con bordes visibles
+    html+="<tr>" #Abre la fila de encabezados 
+    html+="<th>Provincia</th>"  #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Cantidad Donadores</th>"
+    html+="<th>Recintos</th>"
+    html+="</tr>" #Cierra la fila de encabezados
+    provincias=mostrarProvincias()
+    lugares=crearDiccionarioLugares()
+    for provincia in provincias: #Recorre cada provincia
+        cantidad=0
+        for donador in pmatrizD:
+            if obtenerProvincias(donador[0])==provincia:
+                cantidad+=1
+        textoLugares=""
+        for lugar in lugares[provincia]:
+            textoLugares+=lugar+"<br>" #<br> para salto de linea en html
+        html+="<tr>"
+        html+="<td>"+provincias[provincia]+"</td>"
+        html+="<td>"+str(cantidad)+"</td>"
+        html+="<td>"+textoLugares+"</td>"
+        html+="</tr>"
+    html+="</table>"
+    html+=cerrarHtml()
+    archivo=open("reporteLugares.html","w")
+    archivo.write(html)
+    archivo.close()
+    return True
