@@ -156,16 +156,19 @@ def mostrarInfoSangre():
         "O+": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "O-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "AB+":"Se le recomienda donar plaquetas y plasma.",
-        "AB-":"Se le recomienda donar plaquetas y plasma.",
         "AB-":"Se le recomienda donar plaquetas y plasma."}
     return informacion
 
 def actualizarDonador(pmatrizD,pposicion,pdatos):
-    pmatrizD[pposicion][0]=pdatos[0]
-    pmatrizD[pposicion][7]=pdatos[1]
-    pmatrizD[pposicion][4]=pdatos[2]
-    pmatrizD[pposicion][2]=pdatos[3]
-    pmatrizD[pposicion][5]=pdatos[4]
+    pmatrizD[pposicion][0]=pdatos[0] #nombre
+    pmatrizD[pposicion][7]=pdatos[1] #telefono
+    pmatrizD[pposicion][4]=pdatos[2] #fecha
+    pmatrizD[pposicion][2]=pdatos[3] #sangre
+    pmatrizD[pposicion][5]=pdatos[4] #peso
+    justificacion=generarJustificacionRandom(pdatos[2],pdatos[4])
+    estado=generarEstadoDonador(justificacion)
+    pmatrizD[pposicion][8]=estado
+    pmatrizD[pposicion][9]=justificacion
     return pmatrizD
 
 def generarCedulaRandom():
@@ -229,20 +232,25 @@ def generarJustificacionRandom(pfecha,ppeso):
         return 2
     if int(ppeso)>120:
         return 3
-    return 0
+    otrasJustificaciones=[0,4,5,6,7]
+    return random.choice(otrasJustificaciones)
 
 def generarEstadoDonador(pjustificacion):
     if pjustificacion == 0:
         return "Apto"
     return "No apto"
 
-"""def mostrarJustificacion(pnumero):
+def mostrarJustificacion(pnumero):
     justificaciones={
         0:"Apto para donar",
         1:"Menor de edad",
         2:"Peso menor a 50 kg",
-        3:"Peso mayor a 120 kg"}
-    return justificaciones[pnumero]"""
+        3:"Peso mayor a 120 kg",
+        4:"Enfermedad infecciosa o crónica",
+        5:"Uso de medicamentos no permitidos",
+        6:"Procedimiento médico reciente",
+        7:"Viaje o conducta de riesgo"}
+    return justificaciones[pnumero]
 
 def generarDonadorRandom():
     cedula=generarCedulaRandom()
@@ -254,7 +262,8 @@ def generarDonadorRandom():
     telefono=generarTelefonoRandom()
     correo=generarCorreoRandom(nombre)
     justificacion=generarJustificacionRandom(fecha,peso)
-    return [cedula,nombre,fecha,sangre,sexo,peso,telefono,correo,justificacion]
+    estado=generarEstadoDonador(justificacion)
+    return [nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,estado,justificacion]
 
 def crearInicioHtml(ptitulo):
     fecha=datetime.now()
@@ -289,7 +298,7 @@ def guardarHtml(pnombreArchivo,phtml):
     archivo.close()
     return True
 
-def reporteLugaresDonacion(pmatrizD):
+def generarReporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
     html+="<table border='1'>" #Crea una tabla con bordes visibles
     html+="<tr>" #Abre la fila de encabezados 
@@ -302,7 +311,7 @@ def reporteLugaresDonacion(pmatrizD):
     for provincia in provincias: #Recorre cada provincia
         cantidad=0 #contador de donadores por provincia
         for donador in pmatrizD: #recorre todos los donadores de la matriz
-            if obtenerProvincias(donador[0])==provincia: #Obtiene la provincia de la cédula y la compara con la del ciclo
+            if obtenerProvincias(donador[1])==provincia: #Obtiene la provincia de la cédula y la compara con la del ciclo
                 cantidad+=1 #suma un donador a la provincia
         textoLugares="" #guarda lugares
         for lugar in lugares[provincia]: #recorre los lugares de la provincia
@@ -317,7 +326,7 @@ def reporteLugaresDonacion(pmatrizD):
     html+=cerrarHtml() 
     return guardarHtml("reporteLugares.html",html)
 
-def reporteDonadoresProvincia(pmatrizD,pprovincia):
+def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html=crearInicioHtml("Reporte Donadores por Provincia")
     html+="<table border='1'>"
     html+="<tr>" #abre la fila de encabezados
@@ -328,18 +337,18 @@ def reporteDonadoresProvincia(pmatrizD,pprovincia):
     html+="<th>Correo</th>"
     html+="</tr>" #cierra la fila de encabezados
     listaOrdenada=pmatrizD[:] #crea una copia indepediente de la matriz sin modificar el orden original
-    listaOrdenada.sort(key=lambda donador: donador[1]) #ordena la lista por el nombre del donador. 
+    listaOrdenada.sort(key=lambda donador: donador[0]) #ordena la lista por el nombre del donador. 
     #key es el criterio de ordenamiento
-    #lambda es una funcion que toma un donador y devuelve su nombre (donador[1]) entonces se ordena por el nombre
+    #lambda es una funcion que toma un donador y devuelve su nombre (donador[0]) entonces se ordena por el nombre
     #sin usar eso se ordenaria por cedula ya que es el primer elemento de cada donador
     for donador in listaOrdenada:
-        if obtenerProvincias(donador[0])==pprovincia:
+        if obtenerProvincias(donador[1])==pprovincia:
             html+="<tr>"#abre una nueva fila para cada donador, tr significa table row
-            html+="<td>"+donador[0]+"</td>" #agrega la cedula
-            html+="<td>"+donador[1]+"</td>" #nombre
-            html+="<td>"+donador[2]+"</td>" #fecha de naciemiento
-            html+="<td>"+donador[6]+"</td>" #telefono
-            html+="<td>"+donador[7]+"</td>" #correo
+            html+="<td>"+donador[1]+"</td>" #agrega la cedula
+            html+="<td>"+donador[0]+"</td>" #nombre
+            html+="<td>"+donador[4]+"</td>" #fecha de naciemiento
+            html+="<td>"+donador[7]+"</td>" #telefono
+            html+="<td>"+donador[6]+"</td>" #correo
             html+="</tr>"
     html+="</table>" #cierra la tabla
         #se repite el ciclo para cada donador

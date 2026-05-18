@@ -112,13 +112,13 @@ def opcionInsertarDonador(pmatrizD):
             break
         print("Debe ingresar un correo con el formato válido")
     justificacion = generarJustificacionRandom(fecha,peso)
-    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,1,justificacion]
+    estado=generarEstadoDonador(justificacion)
+    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,estado,justificacion]
     inserto = insertarDonadorAux(pmatrizD,datos)
     if inserto:
         print("Donador registrado correctamente")
     else:
-        print("La cédula ya existe")
-
+        print("La cédula ya existe") 
         
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     while True:
@@ -199,7 +199,7 @@ def opcionGenerarDonadores():
     return generarDonadoresAux(matrizDonadores,cantidad)
 
 def opcionReporteLugares():
-    reporte=reporteLugaresDonacion(matrizDonadores)
+    reporte=generarReporteLugaresDonacion(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente"
     else:
@@ -210,8 +210,10 @@ def opcionReporteProvincia():
     provincia=int(input("Digite el número de provincia: "))
     if provincia not in mostrarProvincias():
         return "Provincia inválida."
-    reporte=reporteDonadoresProvincia(matrizDonadores,provincia)
+    reporte=generarReporteDonadoresProvincia(matrizDonadores,provincia)
     if reporte:
         return "Reporte creado satisfactoriamente"
     else:
         return "Reporte no creado"
+
+print(opcionGenerarDonadores())
