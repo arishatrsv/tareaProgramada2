@@ -74,13 +74,6 @@ def insertarDonador(pmatrizD,pdatos):
     pmatrizD.append(pdatos)
     return True
 
-def actualizarPeso(pmatrizD,pcedula,pnuevoPeso):
-    posicion=buscarCedula(pmatrizD,pcedula)
-    if not posicion == -1:
-        pmatrizD[posicion][5]=pnuevoPeso
-        return pmatrizD
-    return []
-    
 def validarCedula(pcedula):
     if re.match(r"^[1-8]-\d{4}-\d{4}$",pcedula): #Valida que el formato de cedula sea #-####-#### 
         return True
@@ -163,7 +156,7 @@ def mostrarInfoSangre():
         "O+": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "O-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
         "AB+":"Se le recomienda donar plaquetas y plasma.",
-        "AB-":"Se le recomienda donar plaquetas y plasma."
+        "AB-":"Se le recomienda donar plaquetas y plasma.",
         "AB-":"Se le recomienda donar plaquetas y plasma."}
     return informacion
 
@@ -183,8 +176,8 @@ def generarCedulaRandom():
     return cedula
 
 def generarNombreRandom():
-    nombres=["Ana","Hilary","Víctor","Kaleb","María","Luis","Carlos","María","Elena","Sofía","Daniel","Andrés"]
-    apellidos=["Ramírez","Gómez","Vargas","Solano","Rojas","Castro"] #listas de nombres y apellidos para usar en la generacion
+    nombres=["Víctor","Augusto","Ana","Hilary","Kaleb","María","Luis","Carlos","María","Elena","Sofía","Daniel","Andrés"]
+    apellidos=["Torrealba","Porras","Ramírez","Gómez","Vargas","Solano","Rojas","Castro"] #listas de nombres y apellidos para usar en la generacion
     nombre=random.choice(nombres) #.choice elige un elemento al azar de la lista
     apellido=random.choice(apellidos)
     return nombre+" "+apellido #construye el nombre completo
@@ -203,7 +196,7 @@ def generarPesoRandom():
 def generarTelefonoRandom():
     primerNumero=random.choice(["2","4","6","7","8","9"])
     resto=str(random.randint(1000000,9999999)) #str para poder separarlo despues
-    telefono=primerNumero+resto[:3]+"-"+resto[3:] #Genera un número de teléfono con formato #-###-####
+    telefono=primerNumero+resto[:3]+"-"+resto[3:] #Genera un número de teléfono con formato ####-####
     return telefono
 
 def generarCorreoRandom(pnombre):
@@ -283,21 +276,22 @@ def reporteLugaresDonacion(pmatrizD):
     provincias=mostrarProvincias()
     lugares=crearDiccionarioLugares()
     for provincia in provincias: #Recorre cada provincia
-        cantidad=0
-        for donador in pmatrizD:
-            if obtenerProvincias(donador[0])==provincia:
-                cantidad+=1
-        textoLugares=""
-        for lugar in lugares[provincia]:
-            textoLugares+=lugar+"<br>" #<br> para salto de linea en html
-        html+="<tr>"
-        html+="<td>"+provincias[provincia]+"</td>"
-        html+="<td>"+str(cantidad)+"</td>"
-        html+="<td>"+textoLugares+"</td>"
-        html+="</tr>"
-    html+="</table>"
-    html+=cerrarHtml()
+        cantidad=0 #contador de donadores por provincia
+        for donador in pmatrizD: #recorre todos los donadores de la matriz
+            if obtenerProvincias(donador[0])==provincia: #Obtiene la provincia de la cédula y la compara con la del ciclo
+                cantidad+=1 #suma un donador a la provincia
+        textoLugares="" #guarda lugares
+        for lugar in lugares[provincia]: #recorre los lugares de la provincia
+            textoLugares+=lugar+"<br>" #<br> para salto de linea en html(break line)
+        html+="<tr>" #abre una nueva fila para cada provincia
+        html+="<td>"+provincias[provincia]+"</td>" #Agrega el nombre de la provincia. (tb-table data)
+        html+="<td>"+str(cantidad)+"</td>" #Agrefa la cantidad de donadores
+        html+="<td>"+textoLugares+"</td>" #Agrega los lugares de donacion con saltos de linea
+        html+="</tr>" #cierra la fila de provincia
+        #aqui se repite el ciclo para cada provincia creando una fila nueva
+    html+="</table>" #cierra la tabla
+    html+=cerrarHtml() 
     archivo=open("reporteLugares.html","w")
-    archivo.write(html)
+    archivo.write(html) #Escribe todo el html dentro del archivo
     archivo.close()
     return True

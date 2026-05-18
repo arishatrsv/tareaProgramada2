@@ -28,15 +28,16 @@ def lugarNacimiento(pcedula):
     codProvincia = obtenerProvincias(pcedula)
     nomProvincia= provincia[codProvincia]
     listaLugares = lugares[codProvincia]
-    mensaje= ("Dado que usted nació en la provincia de",nomProvincia,", usted podría donar en:\n")
+    mensaje="Dado que usted nació en la provincia de "+nomProvincia+", usted podría donar en:\n"    
     for lugar in listaLugares:
         mensaje += f"-{lugar}\n"
     return mensaje
 
 def validarPesoAux(ppeso):
+    peso=int(ppeso)
     if validarPeso(ppeso):
         return("Usted posee un peso adecuado, correcto para ser donador de sangre.")
-    elif ppeso <= 50:
+    elif peso <= 50:
         return("Usted debe pesar más de 50 kgms para poder ser donador.")
     else:
         return("Dado su sobre peso, no es posible donar sangre.")
@@ -72,12 +73,12 @@ def opcionInsertarDonador(pmatrizD):
     #lo detenga hasta que lo ingrese de manera correcta, sin esperar al final para informar.
     while True:
         cedula= input("Ingrese su cédula: ")
-        if validarCedula(cedula) == False:
+        if validarCedula(cedula):
             break
         print("Debe ingresar una cédula válida")
     while True:
         nombre= input("Ingrese su nombre completo: ")
-        if nombre == "":
+        if nombre != "":
             break
         print("Debe ingresar un nombre Completo")
     while True:
@@ -92,7 +93,7 @@ def opcionInsertarDonador(pmatrizD):
         print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
     while True:
         sexo= input("Ingrese su sexo: ").upper()
-        if sexo != "M" or sexo != "F":
+        if sexo == "M" or sexo == "F":
             break
         print("Debe ingresar M o F")
     while True:
@@ -133,7 +134,6 @@ def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
             print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
             return False
         try:
-            ppeso=float(ppeso)
             if validarPeso(ppeso)==False:
                 print("El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg.")
                 return False
@@ -179,7 +179,7 @@ def generarDonadoresAux(pmatrizD,pcantidad):
     while generados<pcantidad:
         datos=generarDonadorRandom()
         inserto=insertarDonador(pmatrizD,datos)
-    if inserto: #True si no se repite la cedula
+        if inserto: #True si no se repite la cedula
             generados+=1 #solo aumenta si incerte correctamente
     guardarArchivo(pmatrizD)
     return f"{pcantidad} donadores generados correctamente."
