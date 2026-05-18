@@ -112,7 +112,7 @@ def opcionInsertarDonador(pmatrizD):
             break
         print("Debe ingresar un correo con el formato válido")
     justificacion = generarJustificacionRandom(fecha,peso)
-    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,1,justificacion]
+    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,1,0]
     inserto = insertarDonadorAux(pmatrizD,datos)
     if inserto:
         print("Donador registrado correctamente")
@@ -169,6 +169,49 @@ def menuActualizarDonador(pposicion):
         elif opcion=="2":
             print("Datos No actualizados.")
         elif opcion=="3":
+            return
+        else:
+            print("La opción seleccionada no existe. Ingrese una opción 1-3")
+
+def eliminarDonadorAux(pmatrizD,pcedula,pjustificacion):
+    while True:
+        if validarCedula(pcedula)==False:
+            print("Debe ingresar una cédula válida")
+            return False
+        posicion = buscarCedula(matrizDonadores,pcedula)
+        if posicion == -1:
+            print("La persona con el número de cédula:",pcedula,
+              "no está registrado en la base de datos del Banco de Sangre aún.")
+            return False
+        if pjustificacion=="":
+            print("Debe ingresar una justificación")
+            return False
+        return [pcedula,pjustificacion]
+
+def opcionEliminarDonador():
+    cedula = input("Digite el número de cédula: ")
+    justificacion= input("Digite la justificación de eliminación: ")
+    eliminado=eliminarDonadorAux(cedula,justificacion)
+    if not eliminado==False:
+        return eliminado
+
+def menuEliminarDonador():
+    eliminado= opcionEliminarDonador()
+    if eliminado == False:
+        return
+    while True:
+        print("-----ELIMINAR DONADOR-----")
+        print("\n1. Confirmar eliminación")
+        print("\n2. Cancelar eliminación")
+        print("\n3. Regresar")
+        opcion=input("Digite una opción: ")
+        if opcion == "1":
+            eliminarDonador(matrizDonadores,eliminado[0],eliminado[1])
+            guardarArchivo(matrizDonadores)
+            return "Donador eliminado satisfactoriamente."
+        elif opcion == "2":
+            print("Donador NO eliminado")
+        elif opcion == "3":
             return
         else:
             print("La opción seleccionada no existe. Ingrese una opción 1-3")
