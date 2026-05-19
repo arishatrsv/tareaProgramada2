@@ -181,7 +181,7 @@ def eliminarDonadorAux(pmatrizD,pcedula,pjustificacion):
         posicion = buscarCedula(matrizDonadores,pcedula)
         if posicion == -1:
             print("La persona con el número de cédula:",pcedula,
-              "no está registrado en la base de datos del Banco de Sangre aún.")
+            "no está registrado en la base de datos del Banco de Sangre aún.")
             return False
         if pjustificacion=="":
             print("Debe ingresar una justificación")
@@ -290,8 +290,6 @@ def opcionReporteProvincia():
     else:
         return "Reporte no creado"
     
-print(opcionGenerarDonadores())
-
 def opcionReporteDonar():
     for tipo in tiposSangre:
         print("-",tipo)
@@ -307,3 +305,4 @@ def opcionReporteDonar():
     else:
         print("Reporte no creado.")
     return
+

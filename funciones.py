@@ -8,6 +8,8 @@ import pickle
 import re
 from datetime import datetime
 import random
+from faker import Faker #permite generar datos aleatorios
+fake = Faker("es_MX") #español de Mexico
 
 def mostrarTiposSangre():
     tipos = ("O+","O-","A+","A-","B+","B-","AB+","AB-")
@@ -193,20 +195,20 @@ def generarCedulaRandom():
     cedula=f"{provincia}-{tomo}-{asiento}" #Construye la cédula con formato #-####-####
     return cedula
 
-def generarNombreRandom():
-    nombres=["Víctor","Augusto","Ana","Hilary","Kaleb","María","Luis","Carlos","María","Elena","Sofía","Daniel","Andrés"]
-    apellidos=["Torrealba","Porras","Ramírez","Gómez","Vargas","Solano","Rojas","Castro"] #listas de nombres y apellidos para usar en la generacion
-    nombre=random.choice(nombres) #.choice elige un elemento al azar de la lista
-    apellido=random.choice(apellidos)
-    return nombre+" "+apellido #construye el nombre completo
+def generarNombreSexoRandom():
+    sexo=random.choice(["M","F"])
+    if sexo=="M":
+        nombre=fake.first_name_male()
+    else:
+        nombre=fake.first_name_female()
+    apellido1=fake.last_name()
+    apellido2=fake.last_name()
+    nombreCompleto=nombre+" "+apellido1+" "+apellido2
+    return nombreCompleto,sexo
 
 def generarTipoSangreRandom():
     tipos=mostrarTiposSangre()
     return random.choice(tipos)
-
-def generarSexoRandom():
-    sexos=["M","F"]
-    return random.choice(sexos)
 
 def generarPesoRandom():
     return str(random.randint(30,150))
@@ -247,7 +249,7 @@ def generarJustificacionRandom(pfecha,ppeso):
         return 2
     if int(ppeso)>120:
         return 3
-    otrasJustificaciones=[0,4,5,6,7]
+    otrasJustificaciones=[0,4,5,6,7,0,0,0] #puse 0 para que sea mas probable que sea apto
     return random.choice(otrasJustificaciones)
 
 def mostrarJustificacion(pnumero):
@@ -269,10 +271,9 @@ def generarEstadoDonador(pjustificacion):
 
 def generarDonadorRandom():
     cedula=generarCedulaRandom()
-    nombre=generarNombreRandom()
+    nombre,sexo=generarNombreSexoRandom()    
     fecha=generarFechaRandom()
     sangre=generarTipoSangreRandom()
-    sexo=generarSexoRandom()
     peso=generarPesoRandom()
     telefono=generarTelefonoRandom()
     correo=generarCorreoRandom(nombre)
@@ -372,7 +373,7 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
     return guardarHtml("reporteAquiénPuedeDonar?.html",html)  
-             
+            
 def generarReporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
     html+="<table border='1'>" #Crea una tabla con bordes visibles
