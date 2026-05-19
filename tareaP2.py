@@ -216,6 +216,37 @@ def menuEliminarDonador():
         else:
             print("La opción seleccionada no existe. Ingrese una opción 1-3")
 
+def insertarLugarAux(pprovincia,plugar):
+    if pprovincia not in provincias:
+        print("Debe seleccionar una provincia válida")
+        return False
+    if plugar=="":
+        print("Debe ingresar un lugar válido")
+        return False
+    insertar = insertarLugar(lugaresDonar,pprovincia,plugar)
+    if insertar == False:
+        print("El lugar ya está registrado en esa provincia.")
+        return False
+    return True
+    
+def opcionInsertarLugar():
+    while True:
+        print("-----INSERTAR LUGAR DE DONACIÓN-----")
+        for codigo in provincias:
+            print(codigo,"-",provincias[codigo])
+        print("8 - Salir")
+        try:
+            provincia= int(input("Digite el número de provincia: "))
+        except:
+            print("Debe ingresar el número de la provincia: ")
+            continue
+        if provincia== 8:
+            return
+        lugar = input("Digite el nuevo lugar de donación: ")
+        insertar= insertarLugarAux(provincia,lugar)
+        if insertar:
+            print("Lugar agregado correctamente.")
+
 def generarDonadoresAux(pmatrizD,pcantidad):
     #en caso de que se repite la cedula no se guarda el donador
     # para eso se hace un ciclo while hasta que se genera la cantidad deseada

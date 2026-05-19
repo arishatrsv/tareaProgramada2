@@ -179,6 +179,13 @@ def eliminarDonador(pmatrizD,pcedula,pjustificacion):
     pmatrizD[posicion][9]= pjustificacion
     return True
 
+def insertarLugar(pdiccionario,pprovincia,plugar):
+    listaLugares = pdiccionario[pprovincia]
+    if plugar in listaLugares:
+        return False
+    listaLugares.append(plugar)
+    return True
+
 def generarCedulaRandom():
     provincia=str(random.randint(1,8)) #Genera un número de provincia entre 1 y 8
     tomo=random.randint(1000,9999) #Genera 4 números aleatorios para el tomo
