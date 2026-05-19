@@ -289,5 +289,21 @@ def opcionReporteProvincia():
         return "Reporte creado satisfactoriamente"
     else:
         return "Reporte no creado"
-
+    
 print(opcionGenerarDonadores())
+
+def opcionReporteDonar():
+    for tipo in tiposSangre:
+        print("-",tipo)
+    print("\n9 - Regresar")
+    tipo= input("Seleccione el tipo de sangre: ")
+    if tipo==9: #Regresa al menú reportes
+        return
+    if tipo not in tiposSangre:
+        print("Debe ingresar un tipo de sangre válido.")
+    reporte=generarReportePuedeDonar(matrizDonadores,tipo)
+    if reporte:
+        print("Reporte creado satisfactoriamente.")
+    else:
+        print("Reporte no creado.")
+    return

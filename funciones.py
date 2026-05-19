@@ -313,7 +313,6 @@ def guardarHtml(pnombreArchivo,phtml):
     archivo.close()
     return True
 
-
 def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html=crearInicioHtml("Reporte Donadores por Provincia")
     html+="<table border='1'>"
@@ -343,6 +342,37 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html+=cerrarHtml() 
     return guardarHtml("reporteDonadoresProvincia.html",html)
 
+def generarReportePuedeDonar(pmatrizD,ptipo):
+    compatibilidad= mostrarCompatibilidad()
+    listaCompatibles= compatibilidad[ptipo]
+    html=crearInicioHtml("Reporte ¿A quién puede donar?")
+    html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
+    html+="<table border='1'>" #Crea una tabla con bordes visibles
+    html+="<tr>" #Abre la fila de encabezados 
+    html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Nombre Completo</th>"
+    html+="<th>Tipo de sangre</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>" #Cierra la fila de encabezados
+    provincias= mostrarProvincias()
+    for provincia in provincias: #Recorre provincias
+        for donador in pmatrizD: #Recorre donadores
+            provinciaDonador= obtenerProvincias(donador[1])
+            tipoDonador=donador[2]
+            if provinciaDonador==provincia:
+                if tipoDonador in listaCompatibles:
+                    html+="<tr>"
+                    html+="<td>"+donador[1]+"</td>" #agrega la cedula
+                    html+="<td>"+donador[0]+"</td>" #nombre
+                    html+="<td>"+donador[2]+"</td>" #tipo de sangre
+                    html+="<td>"+donador[7]+"</td>" #telefono
+                    html+="<td>"+donador[6]+"</td>" #correo
+                    html+="</tr>"
+    html+="</table>" #cierra la tabla 
+    html+=cerrarHtml() 
+    return guardarHtml("reporteAquiénPuedeDonar?.html",html)  
+             
 def generarReporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
     html+="<table border='1'>" #Crea una tabla con bordes visibles
@@ -363,7 +393,7 @@ def generarReporteLugaresDonacion(pmatrizD):
             textoLugares+=lugar+"<br>" #<br> para salto de linea en html(break line)
         html+="<tr>" #abre una nueva fila para cada provincia
         html+="<td>"+provincias[provincia]+"</td>" #Agrega el nombre de la provincia. (tb-table data)
-        html+="<td>"+str(cantidad)+"</td>" #Agrefa la cantidad de donadores
+        html+="<td>"+str(cantidad)+"</td>" #Agrega la cantidad de donadores
         html+="<td>"+textoLugares+"</td>" #Agrega los lugares de donacion con saltos de linea
         html+="</tr>" #cierra la fila de provincia
         #aqui se repite el ciclo para cada provincia creando una fila nueva
