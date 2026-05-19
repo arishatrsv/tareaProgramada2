@@ -149,6 +149,18 @@ def mostrarCompatibilidad():
         "AB+":["AB+"]}
     return compatibilidad
 
+def mostrarRecibeDe():
+    recibe = {
+        "O-":["O-"],
+        "O+":["O-","O+"],
+        "A-":["O-","A-"],
+        "A+":["O-","O+","A-","A+"],
+        "B-":["O-","B-"],
+        "B+":["O-","O+","B-","B+"],
+        "AB-":["O-","A-","B-","AB-"],
+        "AB+":["O-","O+","A-","A+","B-","B+","AB-","AB+"]}
+    return recibe
+
 def mostrarInfoSangre():
     informacion={
         "A+": "Se le recomienda que done sangre entera y plaquetas.",
@@ -372,7 +384,7 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
                     html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
-    return guardarHtml("reporteAquiénPuedeDonar?.html",html)  
+    return guardarHtml("reporteAquienPuedeDonar.html",html)  
             
 def generarReporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
@@ -401,3 +413,34 @@ def generarReporteLugaresDonacion(pmatrizD):
     html+="</table>" #cierra la tabla
     html+=cerrarHtml() 
     return guardarHtml("reporteLugares.html",html)
+
+def generarReporteRecibeDe(pmatrizD,ptipo):
+    recibe= mostrarRecibeDe()
+    listaCompatibles= recibe[ptipo]
+    html=crearInicioHtml("Reporte ¿De quién puede recibir?")
+    html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
+    html+="<table border='1'>" #bordes visibles
+    html+="<tr>" #fila de encabezados 
+    html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Nombre Completo</th>"
+    html+="<th>Tipo de sangre</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>"
+    provincias= mostrarProvincias()
+    for provincia in provincias: 
+        for donador in pmatrizD:
+            provinciaDonador= obtenerProvincias(donador[1]) #donador[1] es la cedula y de ahi se saca la provincia
+            tipoDonador=donador[2]
+            if provinciaDonador==provincia:
+                if tipoDonador in listaCompatibles:
+                    html+="<tr>"
+                    html+="<td>"+donador[1]+"</td>" #agrega la cedula
+                    html+="<td>"+donador[0]+"</td>" #nombre
+                    html+="<td>"+donador[2]+"</td>" #tipo de sangre
+                    html+="<td>"+donador[7]+"</td>" #telefono
+                    html+="<td>"+donador[6]+"</td>" #correo
+                    html+="</tr>"
+    html+="</table>" #cierra la tabla 
+    html+=cerrarHtml() 
+    return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
