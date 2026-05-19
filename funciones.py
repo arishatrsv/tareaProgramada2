@@ -250,11 +250,6 @@ def generarJustificacionRandom(pfecha,ppeso):
     otrasJustificaciones=[0,4,5,6,7]
     return random.choice(otrasJustificaciones)
 
-def generarEstadoDonador(pjustificacion):
-    if pjustificacion == 0:
-        return "Apto"
-    return "No apto"
-
 def mostrarJustificacion(pnumero):
     justificaciones={
         0:"Apto para donar",
@@ -266,6 +261,11 @@ def mostrarJustificacion(pnumero):
         6:"Procedimiento médico reciente",
         7:"Viaje o conducta de riesgo"}
     return justificaciones[pnumero]
+
+def generarEstadoDonador(pjustificacion):
+    if pjustificacion == 0:
+        return "Apto"
+    return "No apto"
 
 def generarDonadorRandom():
     cedula=generarCedulaRandom()
@@ -297,7 +297,7 @@ def crearInicioHtml(ptitulo):
     table{border-collapse: collapse;width: 70%;} 
     th, td{border: 1px solid black; padding: 8px; text-align: left;}
     th{background-color: lightgray;}
-    </style>""" #cierra la ceccion de estilos.
+    </style>""" #cierra la seccion de estilos.
     html+="</head>" 
     html+="<body>" #Todo lo visible va dentro del body
     html+="<h1>"+ptitulo+"</h1>" #Agrega un título grande visible en la página
@@ -313,33 +313,6 @@ def guardarHtml(pnombreArchivo,phtml):
     archivo.close()
     return True
 
-def generarReporteLugaresDonacion(pmatrizD):
-    html=crearInicioHtml("Reporte Lugares de Donación")
-    html+="<table border='1'>" #Crea una tabla con bordes visibles
-    html+="<tr>" #Abre la fila de encabezados 
-    html+="<th>Provincia</th>"  #Agrega los títulos de las columnas, th significa table header
-    html+="<th>Cantidad Donadores</th>"
-    html+="<th>Recintos</th>"
-    html+="</tr>" #Cierra la fila de encabezados
-    provincias=mostrarProvincias()
-    lugares=crearDiccionarioLugares()
-    for provincia in provincias: #Recorre cada provincia
-        cantidad=0 #contador de donadores por provincia
-        for donador in pmatrizD: #recorre todos los donadores de la matriz
-            if obtenerProvincias(donador[1])==provincia: #Obtiene la provincia de la cédula y la compara con la del ciclo
-                cantidad+=1 #suma un donador a la provincia
-        textoLugares="" #guarda lugares
-        for lugar in lugares[provincia]: #recorre los lugares de la provincia
-            textoLugares+=lugar+"<br>" #<br> para salto de linea en html(break line)
-        html+="<tr>" #abre una nueva fila para cada provincia
-        html+="<td>"+provincias[provincia]+"</td>" #Agrega el nombre de la provincia. (tb-table data)
-        html+="<td>"+str(cantidad)+"</td>" #Agrefa la cantidad de donadores
-        html+="<td>"+textoLugares+"</td>" #Agrega los lugares de donacion con saltos de linea
-        html+="</tr>" #cierra la fila de provincia
-        #aqui se repite el ciclo para cada provincia creando una fila nueva
-    html+="</table>" #cierra la tabla
-    html+=cerrarHtml() 
-    return guardarHtml("reporteLugares.html",html)
 
 def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html=crearInicioHtml("Reporte Donadores por Provincia")
@@ -369,3 +342,31 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
         #se repite el ciclo para cada donador
     html+=cerrarHtml() 
     return guardarHtml("reporteDonadoresProvincia.html",html)
+
+def generarReporteLugaresDonacion(pmatrizD):
+    html=crearInicioHtml("Reporte Lugares de Donación")
+    html+="<table border='1'>" #Crea una tabla con bordes visibles
+    html+="<tr>" #Abre la fila de encabezados 
+    html+="<th>Provincia</th>"  #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Cantidad Donadores</th>"
+    html+="<th>Recintos</th>"
+    html+="</tr>" #Cierra la fila de encabezados
+    provincias=mostrarProvincias()
+    lugares=crearDiccionarioLugares()
+    for provincia in provincias: #Recorre cada provincia
+        cantidad=0 #contador de donadores por provincia
+        for donador in pmatrizD: #recorre todos los donadores de la matriz
+            if obtenerProvincias(donador[1])==provincia: #Obtiene la provincia de la cédula y la compara con la del ciclo
+                cantidad+=1 #suma un donador a la provincia
+        textoLugares="" #guarda lugares
+        for lugar in lugares[provincia]: #recorre los lugares de la provincia
+            textoLugares+=lugar+"<br>" #<br> para salto de linea en html(break line)
+        html+="<tr>" #abre una nueva fila para cada provincia
+        html+="<td>"+provincias[provincia]+"</td>" #Agrega el nombre de la provincia. (tb-table data)
+        html+="<td>"+str(cantidad)+"</td>" #Agrefa la cantidad de donadores
+        html+="<td>"+textoLugares+"</td>" #Agrega los lugares de donacion con saltos de linea
+        html+="</tr>" #cierra la fila de provincia
+        #aqui se repite el ciclo para cada provincia creando una fila nueva
+    html+="</table>" #cierra la tabla
+    html+=cerrarHtml() 
+    return guardarHtml("reporteLugares.html",html)
