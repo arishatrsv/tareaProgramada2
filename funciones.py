@@ -314,7 +314,7 @@ def crearInicioHtml(ptitulo):
     html+="</head>" 
     html+="<body>" #Todo lo visible va dentro del body
     html+="<h1>"+ptitulo+"</h1>" #Agrega un título grande visible en la página
-    html+="<p>"+str(fecha.strftime("%d/%m/%Y %H:%M"))+"</p>" #Agrega la fecha y hora del sistema, <p> es un parrafo
+    html+="<h2>"+str(fecha.strftime("%d/%m/%Y %H:%M"))+"</h2>" #Agrega la fecha y hora del sistema, <p> es un parrafo
     return html #Retorna el html creado hasta el momento
 
 def cerrarHtml():
@@ -428,19 +428,18 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
     html+="<th>Correo</th>"
     html+="</tr>"
     provincias= mostrarProvincias()
-    for provincia in provincias: 
+    for provincia in range(7,0,-1): #recorre provincias en orden inverso
         for donador in pmatrizD:
             provinciaDonador= obtenerProvincias(donador[1]) #donador[1] es la cedula y de ahi se saca la provincia
             tipoDonador=donador[2]
-            if provinciaDonador==provincia:
-                if tipoDonador in listaCompatibles:
-                    html+="<tr>"
-                    html+="<td>"+donador[1]+"</td>" #agrega la cedula
-                    html+="<td>"+donador[0]+"</td>" #nombre
-                    html+="<td>"+donador[2]+"</td>" #tipo de sangre
-                    html+="<td>"+donador[7]+"</td>" #telefono
-                    html+="<td>"+donador[6]+"</td>" #correo
-                    html+="</tr>"
+            if provinciaDonador==provincia and tipoDonador in listaCompatibles:
+                html+="<tr>"
+                html+="<td>"+donador[1]+"</td>" #agrega la cedula
+                html+="<td>"+donador[0]+"</td>" #nombre
+                html+="<td>"+donador[2]+"</td>" #tipo de sangre
+                html+="<td>"+donador[7]+"</td>" #telefono
+                html+="<td>"+donador[6]+"</td>" #correo
+                html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
     return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
