@@ -272,13 +272,6 @@ def opcionGenerarDonadores():
         break
     return generarDonadoresAux(matrizDonadores,cantidad)
 
-def opcionReporteLugares():
-    reporte=generarReporteLugaresDonacion(matrizDonadores)
-    if reporte:
-        return "Reporte creado satisfactoriamente"
-    else:
-        return "Reporte no creado"
-
 def opcionReporteProvincia():
     print(mostrarProvincias())
     provincia=int(input("Digite el número de provincia: "))
@@ -294,7 +287,7 @@ def opcionReporteDonar():
     for tipo in tiposSangre:
         print("-",tipo)
     print("9 - Regresar")
-    tipo= input("Seleccione el tipo de sangre: ")
+    tipo= input("Seleccione el tipo de sangre: ").upper()
     if tipo=="9": #Regresa al menú reportes
         return
     if tipo not in tiposSangre:
