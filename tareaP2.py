@@ -282,7 +282,21 @@ def opcionReporteProvincia():
         return "Reporte creado satisfactoriamente"
     else:
         return "Reporte no creado"
-    
+
+def opcionReporteDonadores():
+    opcion=input("Digite una opción: ")
+    if opcion=="1": #Genera reporte
+        reporte=generarReporteListaDonadores(matrizDonadores)
+        if reporte:
+            print("Reporte creado satisfactoriamente")
+        else:
+            print("Reporte no creado.")
+        return
+    elif opcion==2: #Regresa al menú reportes
+        return
+    else:
+        print("Debe seleccionar una opción válida.")
+  
 def opcionReporteDonar():
     for tipo in tiposSangre:
         print("-",tipo)
@@ -316,6 +330,23 @@ def opcionReporteRecibeDe():
 
 def opcionReporteMujeresO():
     reporte=generarReporteMujeresDonantes(matrizDonadores)
+    
+def opcionReporteNoActivo():
+    opcion=input("Digite una opción: ")
+    if opcion=="1": #Genera reporte
+        reporte=generarReporteNoActivo(matrizDonadores)
+        if reporte:
+            print("Reporte creado satisfactoriamente")
+        else:
+            print("Reporte no creado.")
+        return
+    elif opcion==2: #Regresa al menú reportes
+        return
+    else:
+        print("Debe seleccionar una opción válida.")
+
+def opcionReporteLugares():
+    reporte=generarReporteLugaresDonacion(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
