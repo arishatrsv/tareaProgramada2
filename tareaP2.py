@@ -197,7 +197,7 @@ def opcionEliminarDonador():
     print("5- Uso de medicamentos no permitidos")
     print("6- Procedimiento médico reciente")
     print("7- Viaje o conducta de riesgo")
-    justificacion= input("Digite la justificación de eliminación: ")
+    justificacion= int(input("Digite la justificación de eliminación: "))
     eliminado=eliminarDonadorAux(matrizDonadores,cedula,justificacion)
     if not eliminado==False:
         return eliminado
