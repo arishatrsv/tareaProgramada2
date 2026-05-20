@@ -323,7 +323,7 @@ def opcionReporteNoActivo():
         else:
             print("Reporte no creado.")
         return
-    elif opcion==2:
+    elif opcion==2: #Regresa al menú reportes
         return
     else:
         print("Debe seleccionar una opción válida.")
