@@ -122,7 +122,7 @@ def analizarEdadDonar(pfecha):
     edad= annoAct - anno
     if((mesAct,diaAct)<(mes,dia)):
         edad -= 1
-    return edad >= 18
+    return edad    
 
 def mostrarCompatibilidad():
     compatibilidad = {
@@ -255,7 +255,7 @@ def generarFechaRandom():
     return fecha
 
 def generarJustificacionRandom(pfecha,ppeso):
-    if analizarEdadDonar(pfecha)==False:
+    if analizarEdadDonar(pfecha)<18:
         return 1
     if int(ppeso)<50:
         return 2
@@ -297,6 +297,7 @@ def crearInicioHtml(ptitulo):
     fecha=datetime.now()
     html="<html>" #Comienza el documento HTML
     html+="<head>"
+    html+="<meta charset='utf-8'>" #formato de caracteres especiales, sin esa linea sale así "TelÃ©fono"
     html+="<title>"+ptitulo+"</title>" #Coloca el título de la página,aparece en la pestaña del navegador
     #"""style""" abre una seccion de estilos para modificar la apariencia visual
     #collapse une los bordes de la tabla
@@ -309,7 +310,7 @@ def crearInicioHtml(ptitulo):
     html+="""<style> 
     table{border-collapse: collapse;width: 70%;} 
     th, td{border: 1px solid black; padding: 8px; text-align: left;}
-    th{background-color: lightgray;}
+    th{background-color:lightgray;}
     </style>""" #cierra la seccion de estilos.
     html+="</head>" 
     html+="<body>" #Todo lo visible va dentro del body
@@ -321,14 +322,14 @@ def cerrarHtml():
     return "</body></html>" #cierra el body y el html, para no repetirlo en cada funcion
 
 def guardarHtml(pnombreArchivo,phtml):
-    archivo=open(pnombreArchivo,"w")
+    archivo=open(pnombreArchivo,"w",encoding="utf-8") #utf-8 es algo que encontre para caracteres especiales. 
     archivo.write(phtml) #Escribe todo el html dentro del archivo
     archivo.close()
     return True
 
 def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html=crearInicioHtml("Reporte Donadores por Provincia")
-    html+="<table border='1'>"
+    html+="<table>"
     html+="<tr>" #abre la fila de encabezados
     html+="<th>Cédula</th>" #agrega los titulod de las columnas
     html+="<th>Nombre</th>"
@@ -360,7 +361,7 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
     listaCompatibles= compatibilidad[ptipo]
     html=crearInicioHtml("Reporte ¿A quién puede donar?")
     html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
-    html+="<table border='1'>" #Crea una tabla con bordes visibles
+    html+="<table>" #Crea una tabla con bordes visibles
     html+="<tr>" #Abre la fila de encabezados 
     html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
     html+="<th>Nombre Completo</th>"
@@ -388,7 +389,7 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
             
 def generarReporteLugaresDonacion(pmatrizD):
     html=crearInicioHtml("Reporte Lugares de Donación")
-    html+="<table border='1'>" #Crea una tabla con bordes visibles
+    html+="<table>" #Crea una tabla con bordes visibles
     html+="<tr>" #Abre la fila de encabezados 
     html+="<th>Provincia</th>"  #Agrega los títulos de las columnas, th significa table header
     html+="<th>Cantidad Donadores</th>"
@@ -419,7 +420,7 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
     listaCompatibles= recibe[ptipo]
     html=crearInicioHtml("Reporte ¿De quién puede recibir?")
     html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
-    html+="<table border='1'>" #bordes visibles
+    html+="<table>" #bordes visibles
     html+="<tr>" #fila de encabezados 
     html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
     html+="<th>Nombre Completo</th>"
@@ -443,3 +444,33 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
     return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
+
+def generarReporteMujeresDonantes(pmatrizD):
+    html=crearInicioHtml("Reporte Mujeres Donantes")
+    html+="<table>" #bordes visibles
+    html+="<tr>" #fila de encabezados 
+    html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Nombre Completo</th>"
+    html+="<th>Fecha de Nacimento</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>"
+    listaOrdenada=pmatrizD[:]#hace una copia de lista para no modificar el orden original
+    listaOrdenada.sort(key=lambda donador: analizarEdadDonar(donador[4]))
+    #key-criterio de ordenamiento
+    #lambda toma un donador y devuelve su edad, entonces se ordena por edad
+    for donador in listaOrdenada:
+        sexo=donador[3]
+        sangre=donador[2]
+        edad=analizarEdadDonar(donador[4])
+        if sexo=="F" and sangre=="O-" and edad<45: #mujeres O- menos de 45
+            html+="<tr>"
+            html+="<td>"+donador[1]+"</td>"
+            html+="<td>"+donador[0]+"</td>"
+            html+="<td>"+donador[4]+"</td>"
+            html+="<td>"+donador[7]+"</td>" #telefono
+            html+="<td>"+donador[6]+"</td>"
+            html+="</tr>"
+    html+="</table>"
+    html+=cerrarHtml()
+    return guardarHtml("reporteMujeresDonantes.html",html)

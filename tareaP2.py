@@ -13,7 +13,7 @@ matrizDonadores=cargarArchivo()
 
 def analizarEdadDonarAux(pfecha):
     resultado = analizarEdadDonar(pfecha)
-    if resultado == True:
+    if resultado >=18:
         return "Dado su fecha de nacimiento usted ya puede ser donador"
     else:
         return "Dado su fecha de nacimiento usted aún no puede ser donador"
@@ -320,4 +320,11 @@ def opcionReporteRecibeDe():
         return "Reporte creado satisfactoriamente."
     else:
         return "Reporte no creado."
-        
+
+def opcionReporteMujeresO():
+    reporte=generarReporteMujeresDonantes(matrizDonadores)
+    if reporte:
+        return "Reporte creado satisfactoriamente."
+    else:
+        return "Reporte no creado."
+
