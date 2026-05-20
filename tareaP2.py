@@ -190,8 +190,15 @@ def eliminarDonadorAux(pmatrizD,pcedula,pjustificacion):
 
 def opcionEliminarDonador():
     cedula = input("Digite el número de cédula: ")
+    print("1- Menor de edad")
+    print("2- Peso menor a 50 kg")
+    print("3- Peso mayor a 120 kg")
+    print("4- Enfermedad infecciosa o crónica")
+    print("5- Uso de medicamentos no permitidos")
+    print("6- Procedimiento médico reciente")
+    print("7- Viaje o conducta de riesgo")
     justificacion= input("Digite la justificación de eliminación: ")
-    eliminado=eliminarDonadorAux(cedula,justificacion)
+    eliminado=eliminarDonadorAux(matrizDonadores,cedula,justificacion)
     if not eliminado==False:
         return eliminado
 
@@ -283,16 +290,32 @@ def opcionReporteProvincia():
     else:
         return "Reporte no creado"
 
-def opcionReporteDonadores():
+def opcionReporteRangoEdad():
+    edadInicial=int(input("Ingrese la edad inicial: "))
+    if edadInicial < 18 or edadInicial > 65:
+        return "La edad inicial debe estar entre 18 y 65 años."
+    while True:
+        edadFinal=int(input("Ingrese la edad final: "))
+        if edadFinal < 18 or edadFinal > 65:
+            return "La edad final debe estar entre 18 y 65 años."
+        if edadFinal < edadInicial:
+            return "La edad final no puede ser menor que la inicial."
+        reporte=generarReporteRangoEdad(matrizDonadores,edadInicial,edadFinal)
+        if reporte:
+            return "Reporte creado satisfactoriamente"
+        else:
+            return "Reporte no creado"
+
+def opcionReporteListaDonadores():
     opcion=input("Digite una opción: ")
     if opcion=="1": #Genera reporte
         reporte=generarReporteListaDonadores(matrizDonadores)
         if reporte:
-            print("Reporte creado satisfactoriamente")
+            return "Reporte creado satisfactoriamente"
         else:
-            print("Reporte no creado.")
+            return "Reporte no creado."
         return
-    elif opcion==2: #Regresa al menú reportes
+    elif opcion=="2": #Regresa al menú reportes
         return
     else:
         print("Debe seleccionar una opción válida.")
@@ -340,7 +363,7 @@ def opcionReporteNoActivo():
         else:
             print("Reporte no creado.")
         return
-    elif opcion==2: #Regresa al menú reportes
+    elif opcion=="2": #Regresa al menú reportes
         return
     else:
         print("Debe seleccionar una opción válida.")

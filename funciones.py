@@ -23,7 +23,8 @@ def mostrarProvincias():
     4: "Heredia",
     5: "Guanacaste",
     6: "Puntarenas",
-    7: "Limon"}
+    7: "Limon",
+    8: "Naturalizado"}
     return provincias
 
 def crearDiccionarioLugares():
@@ -123,6 +124,17 @@ def analizarEdadDonar(pfecha):
     if((mesAct,diaAct)<(mes,dia)):
         edad -= 1
     return edad    
+
+def calcularEdad(pfecha):
+    fechaNacimiento= validarFecha(pfecha)
+    anno= fechaNacimiento.year
+    mes= fechaNacimiento.month
+    dia= fechaNacimiento.day
+    hoy= datetime.now()
+    edad= hoy.year-anno
+    if(hoy.month,hoy.day)<(mes,dia):
+        edad -= 1
+    return edad
 
 def mostrarCompatibilidad():
     compatibilidad = {
@@ -278,8 +290,8 @@ def mostrarJustificacion(pnumero):
 
 def generarEstadoDonador(pjustificacion):
     if pjustificacion == 0:
-        return "Apto"
-    return "No apto"
+        return 1 #Activo
+    return 0 #Inactivo
 
 def generarDonadorRandom():
     cedula=generarCedulaRandom()
@@ -355,6 +367,30 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
         #se repite el ciclo para cada donador
     html+=cerrarHtml() 
     return guardarHtml("reporteDonadoresProvincia.html",html)
+
+def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
+    html=crearInicioHtml("Reporte por Rango de Edad")
+    html+="<table border='1'>"
+    html+="<tr>" #abre la fila de encabezados
+    html+="<th>Cédula</th>" #agrega los titulod de las columnas
+    html+="<th>Nombre</th>"
+    html+="<th>Fecha Nacimiento</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>"
+    for donador in pmatrizD:
+        edad=calcularEdad(donador[4])
+        if edad >= pedadInicial and edad <= pedadFinal:
+            html+="<tr>"#abre una nueva fila para cada donador, tr significa table row
+            html+="<td>"+donador[1]+"</td>" #agrega la cedula
+            html+="<td>"+donador[0]+"</td>" #nombre
+            html+="<td>"+donador[4]+"</td>" #fecha de naciemiento
+            html+="<td>"+donador[7]+"</td>" #telefono
+            html+="<td>"+donador[6]+"</td>" #correo
+            html+="</tr>"
+    html+="</table>" #cierra la tabla 
+    html+=cerrarHtml() 
+    return guardarHtml("reporteRangoEdad.html",html)  
 
 def generarReporteListaDonadores(pmatrizD):
     html=crearInicioHtml("Reporte Lista Completa de Donadores")
@@ -509,36 +545,6 @@ def generarReporteLugaresDonacion(pmatrizD):
     html+="</table>" #cierra la tabla
     html+=cerrarHtml() 
     return guardarHtml("reporteLugares.html",html)
-
-def generarReporteRecibeDe(pmatrizD,ptipo):
-    recibe= mostrarRecibeDe()
-    listaCompatibles= recibe[ptipo]
-    html=crearInicioHtml("Reporte ¿De quién puede recibir?")
-    html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
-    html+="<table>" #bordes visibles
-    html+="<tr>" #fila de encabezados 
-    html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
-    html+="<th>Nombre Completo</th>"
-    html+="<th>Tipo de sangre</th>"
-    html+="<th>Teléfono</th>"
-    html+="<th>Correo</th>"
-    html+="</tr>"
-    provincias= mostrarProvincias()
-    for provincia in range(7,0,-1): #recorre provincias en orden inverso
-        for donador in pmatrizD:
-            provinciaDonador= obtenerProvincias(donador[1]) #donador[1] es la cedula y de ahi se saca la provincia
-            tipoDonador=donador[2]
-            if provinciaDonador==provincia and tipoDonador in listaCompatibles:
-                html+="<tr>"
-                html+="<td>"+donador[1]+"</td>" #agrega la cedula
-                html+="<td>"+donador[0]+"</td>" #nombre
-                html+="<td>"+donador[2]+"</td>" #tipo de sangre
-                html+="<td>"+donador[7]+"</td>" #telefono
-                html+="<td>"+donador[6]+"</td>" #correo
-                html+="</tr>"
-    html+="</table>" #cierra la tabla 
-    html+=cerrarHtml() 
-    return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
 
 def generarReporteMujeresDonantes(pmatrizD):
     html=crearInicioHtml("Reporte Mujeres Donantes")
