@@ -355,6 +355,38 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html+=cerrarHtml() 
     return guardarHtml("reporteDonadoresProvincia.html",html)
 
+def generarReporteListaDonadores(pmatrizD):
+    html=crearInicioHtml("Reporte Lista Completa de Donadores")
+    html+="<table border='1'>"
+    html+="<tr>" #abre la fila de encabezados
+    html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
+    html+="<th>Nombre Completo</th>"
+    html+="<th>Tipo de sangre</th>"
+    html+="<th>Fecha de nacimiento</th>"
+    html+="<th>Peso</th>"
+    html+="<th>Sexo</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>" #cierra la fila de encabezados
+    provincias= mostrarProvincias()
+    for provincia in provincias: #Recorre provincias
+        for donador in pmatrizD: #Recorre donadores
+            provinciaDonador= obtenerProvincias(donador[1])
+            if provinciaDonador==provincia:
+                html+="<tr>"
+                html+="<td>"+donador[1]+"</td>" #agrega la cedula
+                html+="<td>"+donador[0]+"</td>" #nombre
+                html+="<td>"+donador[2]+"</td>" #tipo de sangre
+                html+="<td>"+donador[4]+"</td>" #Fecha nacimiento
+                html+="<td>"+donador[5]+"</td>" #Peso
+                html+="<td>"+donador[3]+"</td>" #Sexo
+                html+="<td>"+donador[7]+"</td>" #Teléfono
+                html+="<td>"+donador[6]+"</td>" #Correo
+                html+="</tr>"
+    html+="</table>" #cierra la tabla 
+    html+=cerrarHtml() 
+    return guardarHtml("reporteListaDonadores.html",html)  
+
 def generarReportePuedeDonar(pmatrizD,ptipo):
     compatibilidad= mostrarCompatibilidad()
     listaCompatibles= compatibilidad[ptipo]
@@ -429,7 +461,7 @@ def generarReporteNoActivo(pmatrizD):
     html+="<th>Sexo</th>"
     html+="<th>Teléfono</th>"
     html+="<th>Correo</th>"
-    html+="</tr>"
+    html+="</tr>" #Cierra la fila de encabezados
     for donador in pmatrizD:
         estado=donador[8]
         if estado==0: #Solo NO activos
