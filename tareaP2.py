@@ -13,7 +13,9 @@ matrizDonadores=cargarArchivo()
 
 def analizarEdadDonarAux(pfecha):
     resultado = analizarEdadDonar(pfecha)
-    if resultado >=18:
+    if resultado == False:
+        return "Fecha inválida"
+    elif resultado >=18:
         return "Dado su fecha de nacimiento usted ya puede ser donador"
     else:
         return "Dado su fecha de nacimiento usted aún no puede ser donador"
@@ -121,27 +123,22 @@ def opcionInsertarDonador(pmatrizD):
         print("La cédula ya existe") 
         
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
-    while True:
-        if pnombre=="":
-            print("Debe ingresar un nombre valido.")
-            return False
-        if validarTelefono(ptelefono)==False:
-            print("El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
-            return False
-        if validarFecha(pfecha)==False:
-            print("La fecha debe tener el formato dd/mm/yyyy y ser válida.")
-            return False
-        if psangre not in mostrarTiposSangre():
-            print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
-            return False
-        try:
-            if validarPeso(ppeso)==False:
-                print("El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg.")
-                return False
-        except:
-            print("El peso debe ser un valor numérico.")
-            return False
-        return [pnombre,ptelefono,pfecha,psangre,ppeso]
+    if pnombre=="":
+        print("Debe ingresar un nombre valido.")
+        return False
+    if validarTelefono(ptelefono)==False:
+        print("El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
+        return False
+    if validarFecha(pfecha)==False:
+        print("La fecha debe tener el formato dd/mm/yyyy y ser válida.")
+        return False
+    if psangre not in mostrarTiposSangre():
+        print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
+        return False
+    if validarPeso(ppeso)==False:
+        print("El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg.")
+        return False
+    return [pnombre,ptelefono,pfecha,psangre,ppeso]
 
 def opcionActualizarDonador(pposicion):
     print("Número de cédula:",matrizDonadores[pposicion][1])
@@ -197,7 +194,14 @@ def opcionEliminarDonador():
     print("5- Uso de medicamentos no permitidos")
     print("6- Procedimiento médico reciente")
     print("7- Viaje o conducta de riesgo")
-    justificacion= int(input("Digite la justificación de eliminación: "))
+    try:
+        justificacion= int(input("Digite la justificación de eliminación: "))
+    except:
+        print("Debe ingresar un número válido.")
+        return False
+    if justificacion not in [1,2,3,4,5,6,7]:
+        print("Debe seleccionar una opción válida.")
+        return False
     eliminado=eliminarDonadorAux(matrizDonadores,cedula,justificacion)
     if not eliminado==False:
         return eliminado
@@ -295,7 +299,11 @@ def opcionReporteRangoEdad():
     if edadInicial < 18 or edadInicial > 65:
         return "La edad inicial debe estar entre 18 y 65 años."
     while True:
-        edadFinal=int(input("Ingrese la edad final: "))
+        try:
+            edadFinal=int(input("Ingrese la edad final: "))
+        except:
+            print("Debe ingresar un número válido.")
+            continue
         if edadFinal < 18 or edadFinal > 65:
             return "La edad final debe estar entre 18 y 65 años."
         if edadFinal < edadInicial:
@@ -319,7 +327,7 @@ def opcionReporteListaDonadores():
         return
     else:
         print("Debe seleccionar una opción válida.")
-  
+
 def opcionReporteDonar():
     for tipo in tiposSangre:
         print("-",tipo)
@@ -353,6 +361,10 @@ def opcionReporteRecibeDe():
 
 def opcionReporteMujeresO():
     reporte=generarReporteMujeresDonantes(matrizDonadores)
+    if reporte:
+        return "Reporte creado satisfactoriamente."
+    else:
+        return "Reporte no creado."
     
 def opcionReporteNoActivo():
     opcion=input("Digite una opción: ")
@@ -375,3 +387,99 @@ def opcionReporteLugares():
     else:
         return "Reporte no creado."
 
+def opcionReporteTipoProvincia():
+    for tipo in tiposSangre:
+        print("-",tipo)
+    tipo=input("Digite el tipo de sangre: ").upper()
+    if tipo not in tiposSangre:
+        return "Debe ingresar un tipo de sangre válido."
+    print(mostrarProvincias())
+    try:
+        provincia=int(input("Digite la provincia: "))
+    except:
+        return "Debe ingresar un número válido."
+    if provincia not in mostrarProvincias():
+        return "Provincia inválida. Intente nuevamente."
+    reporte=generarReporteTipoProvincia(matrizDonadores,tipo,provincia)
+    if reporte:
+        return "Reporte creado satisfactoriamente."
+    else:
+        return "Reporte no creado."
+
+def buscarCedulaActualizar():
+    cedula=input("Digite la cédula del donador: ")
+    if validarCedula(cedula)==False:
+        print("Debe ingresar una cédula válida.")
+        return
+    posicion=buscarCedula(matrizDonadores,cedula)
+    if posicion==-1:
+        print("No existe un donador con esa cédula.")
+        return
+    print(menuActualizarDonador(posicion))
+    
+def menuReportes():
+    while True:
+        print("\n----- REPORTES -----")
+        print("1. Reporte donadores por provincia")
+        print("2. Reporte por rango de edad")
+        print("3. Reporte lista completa de donadores")
+        print("4. Reporte ¿A quién puede donar?")
+        print("5. Reporte ¿De quién puede recibir?")
+        print("6. Reporte mujeres donantes O- menores de 45")
+        print("7. Reporte donadores NO activos")
+        print("8. Reporte lugares de donación")
+        print("9. Reporte por tipo de sangre y provincia")
+        print("10. Regresar")
+        opcion=input("\nDigite una opción: ")
+        if opcion=="1":
+            print(opcionReporteProvincia())
+        elif opcion=="2":
+            print(opcionReporteRangoEdad())
+        elif opcion=="3":
+            print(opcionReporteListaDonadores())
+        elif opcion=="4":
+            opcionReporteDonar()
+        elif opcion=="5":
+            print(opcionReporteRecibeDe())
+        elif opcion=="6":
+            print(opcionReporteMujeresO())
+        elif opcion=="7":
+            opcionReporteNoActivo()
+        elif opcion=="8":
+            print(opcionReporteLugares())
+        elif opcion=="9":
+            print(opcionReporteTipoProvincia())
+        elif opcion=="10":
+            return
+        else:
+            print("Debe seleccionar una opción válida.")
+    
+def menuPrincipal():
+    while True:
+        print("\n----- BANCO DE SANGRE -----")
+        print("1. Insertar donador")
+        print("2. Generar donadores.")
+        print("3. Actualizar datos del donador")
+        print("4. Eliminar donador")
+        print("5. Insertar lugar de donación según provincia")
+        print("6. Reportes")
+        print("7. Salir")
+        opcion=input("Digite una opción: ")
+        if opcion=="1":
+            opcionInsertarDonador(matrizDonadores)
+        elif opcion=="2":
+            print(opcionGenerarDonadores())
+        elif opcion=="3":
+            buscarCedulaActualizar()
+        elif opcion=="4":
+            print(menuEliminarDonador())
+        elif opcion=="5":
+            opcionInsertarLugar()
+        elif opcion=="6":
+            menuReportes()
+        elif opcion=="7":
+            print("Programa finalizado.")
+            break
+        else:
+            print("Debe seleccionar una opción válida.")
+menuPrincipal()
