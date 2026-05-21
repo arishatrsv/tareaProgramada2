@@ -41,7 +41,10 @@ def crearDiccionarioLugares():
         "Hospital Enrique Baltodano de Liberia"],
     6:["Hospital Monseñor Sanabria"],
     7:["Hospital Tony Facio",
-        "Hospital de Guápiles"]}
+        "Hospital de Guápiles"],
+    8:["Banco Nacional de Sangre", 
+        "Hospital México",
+        "Hospital San Juan de Dios"]}
     return diccionarioLugares
 
 def guardarArchivo(pmatrizD):
