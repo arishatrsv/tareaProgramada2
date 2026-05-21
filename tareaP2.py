@@ -24,7 +24,7 @@ def ingresarAnalizarEdad():
     fecha =input("Ingrese su fecha de nacimiento: ")
     print(analizarEdadDonarAux(fecha))
 
-def lugarNacimiento(pcedula):
+def imprimirLugarNacimiento(pcedula):
     provincia= mostrarProvincias()
     lugares= crearDiccionarioLugares()
     codProvincia = obtenerProvincias(pcedula)
