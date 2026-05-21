@@ -105,7 +105,7 @@ def validarPeso(ppeso):
     if ppeso.isdigit()==False:
         return False
     peso = int(ppeso) 
-    if peso > 50 and peso < 120:
+    if peso >= 50 and peso <= 120:
         return True
     return False
 
@@ -370,7 +370,7 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
 
 def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
     html=crearInicioHtml("Reporte por Rango de Edad")
-    html+="<table border='1'>"
+    html+="<table>"
     html+="<tr>" #abre la fila de encabezados
     html+="<th>Cédula</th>" #agrega los titulod de las columnas
     html+="<th>Nombre</th>"
@@ -394,7 +394,7 @@ def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
 
 def generarReporteListaDonadores(pmatrizD):
     html=crearInicioHtml("Reporte Lista Completa de Donadores")
-    html+="<table border='1'>"
+    html+="<table>"
     html+="<tr>" #abre la fila de encabezados
     html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
     html+="<th>Nombre Completo</th>"
@@ -460,7 +460,7 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
     listaCompatibles= recibe[ptipo]
     html=crearInicioHtml("Reporte ¿De quién puede recibir?")
     html+="<h2>Tipo de sangre seleccionado: "+ptipo+"</h2>"
-    html+="<table border='1'>" #bordes visibles
+    html+="<table>" #bordes visibles
     html+="<tr>" #fila de encabezados 
     html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
     html+="<th>Nombre Completo</th>"
@@ -487,7 +487,7 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
 
 def generarReporteNoActivo(pmatrizD):
     html=crearInicioHtml("Reporte Donantes NO Activos")
-    html+="<table border='1'>" #bordes visibles
+    html+="<table>" #bordes visibles
     html+="<tr>" #fila de encabezados
     html+="<th>Justificación</th>" 
     html+="<th>Cédula</th>" #Agrega los títulos de las columnas, th significa table header
@@ -575,3 +575,31 @@ def generarReporteMujeresDonantes(pmatrizD):
     html+="</table>"
     html+=cerrarHtml()
     return guardarHtml("reporteMujeresDonantes.html",html)
+
+def generarReporteTipoProvincia(pmatrizD,ptipo,pprovincia):
+    html=crearInicioHtml("Reporte Donadores por Tipo de Sangre y Provincia")
+    html+="<h2>Tipo de sangre: "+ptipo+"</h2>"
+    html+="<h2>Provincia: "+mostrarProvincias()[pprovincia]+"</h2>"
+    html+="<table>"
+    html+="<tr>"
+    html+="<th>Cédula</th>"
+    html+="<th>Nombre Completo</th>"
+    html+="<th>Fecha de nacimiento</th>"
+    html+="<th>Teléfono</th>"
+    html+="<th>Correo</th>"
+    html+="</tr>"
+    for donador in pmatrizD:
+        provincia=obtenerProvincias(donador[1])
+        sangre=donador[2]
+        estado=donador[8]
+        if provincia==pprovincia and sangre==ptipo and estado==1:
+            html+="<tr>"
+            html+="<td>"+donador[1]+"</td>"
+            html+="<td>"+donador[0]+"</td>"
+            html+="<td>"+donador[4]+"</td>"
+            html+="<td>"+donador[7]+"</td>"
+            html+="<td>"+donador[6]+"</td>"
+            html+="</tr>"
+    html+="</table>"
+    html+=cerrarHtml()
+    return guardarHtml("reporteTipoSangrePorProvincia.html",html)
