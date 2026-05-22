@@ -478,7 +478,7 @@ def menuPrincipal():
         elif opcion=="6":
             menuReportes()
         elif opcion=="7":
-            print("Programa finalizado.")
+            print("Donar sangre,es donar vida")
             break
         else:
             print("Debe seleccionar una opción válida.")
