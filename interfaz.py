@@ -28,10 +28,60 @@ ventana = Tk() #Crea la ventana principal
 ventana.title("Banco de Sangre") #Titulo de la ventana
 ventana.geometry("800x600") #tamaño
 titulo= Label(ventana,
-              text="MENÚ PRINCIPAL",
-              font=("Arial",20))
+            text="MENÚ PRINCIPAL",
+            font=("Arial",20))
 titulo.pack(pady=20) #Coloca el elemento en la ventana
 
+def guardarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+    datosCedula=cedula.get() # .get() obtiene lo escrito por el usuario
+    datosNombre=nombre.get()
+    datosFecha=fecha.get()
+    datosSangre=sangre.get()
+    datosSexo=sexo.get()
+    datosPeso=peso.get()
+    datosTelefono=telefono.get()
+    datosCorreo=correo.get()
+    if validarCedula(datosCedula)==False:
+        messagebox.showerror("Error","Cédula inválida")
+        return
+    # Valida fecha
+    if validarFecha(datosFecha)==False:
+        messagebox.showerror("Error","Fecha inválida")
+        return
+    # Valida peso
+    if validarPeso(datosPeso)==False:
+        messagebox.showerror("Error","Peso inválido")
+        return
+    # Valida teléfono
+    if validarTelefono(datosTelefono)==False:
+        messagebox.showerror("Error","Teléfono inválido")
+        return
+    # Valida correo
+    if validarCorreo(datosCorreo)==False:
+        messagebox.showerror("Error","Correo inválido")
+        return
+    justificacion = generarJustificacionRandom(datosFecha,datosPeso)
+    estado = generarEstadoDonador(justificacion)
+    datos = [
+        datosNombre,
+        datosCedula,
+        datosSangre,
+        datosSexo,
+        datosFecha,
+        datosPeso,
+        datosCorreo,
+        datosTelefono,
+        estado,
+        justificacion]
+    matriz = cargarArchivo()
+    inserto = insertarDonador(matriz,datos)
+    if inserto:
+        guardarArchivo(matriz)
+        messagebox.showinfo("Éxito","Donador registrado correctamente")
+        ventanaInsertar.destroy() #Cierra ventana
+    else:
+        messagebox.showerror("Error","La cédula ya existe")
+    
 def ventanaInsertar():
     ventanaInsertar= Toplevel()
     ventanaInsertar.title("Insertar Donador")
@@ -63,10 +113,20 @@ def ventanaInsertar():
     Label(ventanaInsertar,text="Correo").grid(row=8,column=0,padx=10,pady=10)
     correo= Entry(ventanaInsertar)
     correo.grid(row=8,column=1)
-
+    Button(ventanaInsertar,text="Guardar", #crea un boton en la ventana incertar
+        command=lambda: guardarDonador(   #dice que funcion ejecutar cuando hagan click
+        ventanaInsertar,
+        cedula,
+        nombre,
+        fecha,
+        sangre,
+        sexo,
+        peso,
+        telefono,
+        correo)).grid(row=9,column=1,pady=20) #coloca el boton.
 botonInsertar= Button(ventana,
-                      text="Ingresar",
-                      command=ventanaInsertar)
+                    text="Ingresar",
+                    command=ventanaInsertar)
 botonInsertar.pack()
 ventana.mainloop() #Mantiene abierta la ventana
 
