@@ -24,14 +24,6 @@ from funciones import *
 #StringVar: guarda el valor seleccionado
 #sticky="w": Alinea a la izquierda
 
-ventana = Tk() #Crea la ventana principal
-ventana.title("Banco de Sangre") #Titulo de la ventana
-ventana.geometry("800x600") #tamaño
-titulo= Label(ventana,
-            text="MENÚ PRINCIPAL",
-            font=("Arial",20))
-titulo.pack(pady=20) #Coloca el elemento en la ventana
-
 def guardarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
     datosCedula=cedula.get() # .get() obtiene lo escrito por el usuario
     datosNombre=nombre.get()
@@ -86,7 +78,7 @@ def ventanaInsertar():
     ventanaInsertar= Toplevel()
     ventanaInsertar.title("Insertar Donador")
     ventanaInsertar.geometry("600x500")
-    Label(ventanaInsertar,text="Cédula").grid(row=0,column=0,padx=10,pady=10)
+    Label(ventanaInsertar,text="Cédula").grid(row=0,column=0,padx=15,pady=10,sticky="e")
     cedula= Entry(ventanaInsertar)
     cedula.grid(row=0,column=1)
     Label(ventanaInsertar,text="Nombre Completo").grid(row=1,column=0,padx=10,pady=10)
@@ -99,7 +91,7 @@ def ventanaInsertar():
     sangre= ttk.Combobox(ventanaInsertar,values=mostrarTiposSangre())
     sangre.grid(row=3,column=1)
     Label(ventanaInsertar,text="Sexo").grid(row=4,column=0,padx=10,pady=10)
-    sexo= StringVar()
+    sexo= StringVar(value="M") #masculino aparece como default
     Radiobutton(ventanaInsertar,text="Masculino",variable=sexo,value="M").grid(
         row=4,column=1,sticky="w")
     Radiobutton(ventanaInsertar,text="Femenino",variable=sexo,value="F").grid(
@@ -124,9 +116,39 @@ def ventanaInsertar():
         peso,
         telefono,
         correo)).grid(row=9,column=1,pady=20) #coloca el boton.
-botonInsertar= Button(ventana,
-                    text="Ingresar",
-                    command=ventanaInsertar)
-botonInsertar.pack()
-ventana.mainloop() #Mantiene abierta la ventana
 
+def main():
+    ventana=Tk()
+    ventana.title("Banco de Sangre")
+    ventana.geometry("800x600")
+    titulo=Label(
+        ventana,
+        text="BANCO DE SANGRE",
+        font=("Arial",24,"bold"),
+        fg="#8E1616")
+    titulo.pack(pady=20)
+    botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=ventanaInsertar)
+    botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2)
+    botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2)
+    botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2)
+    botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2)
+    botonReportes = Button(ventana,text="Reportes",width=25,height=2)
+    botonSalir = Button(ventana,text="Salir",width=25,height=2,command=ventana.destroy)
+    #Coloca los botones en la ventana
+    botonInsertar.pack(pady=5)
+    botonGenerar.pack(pady=5)
+    botonActualizar.pack(pady=5)
+    botonEliminar.pack(pady=5)
+    botonLugar.pack(pady=5)
+    botonReportes.pack(pady=5)
+    botonSalir.pack(pady=5)
+    matriz = cargarArchivo()
+    #Si NO hay donadores guardados
+    if matriz == []:
+        #Desactiva actualizar
+        botonActualizar.config(state="disabled")
+        botonEliminar.config(state="disabled")
+        botonReportes.config(state="disabled")
+    ventana.mainloop() #Mantiene abierta la ventana
+
+main()
