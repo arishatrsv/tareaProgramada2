@@ -5,7 +5,7 @@
 
 from tkinter import *
 from tkinter import ttk #Para combobox desplegable
-from tkinter import messagebox #Permite mostrar ventanas emergentes
+from tkinter import messagebox #Permite mostrar ventanas emergentes(validaciones)
 from funciones import *
 
 #label: texto visual
@@ -13,7 +13,6 @@ from funciones import *
 #font: tipo letra,tamaño
 #.pack(): coloca el elemento en la ventana
 #.grid(): para ordenar tipo tabla
-#pady: agrega espacio vertical
 #.get() obtiene lo que el usuario escribe
 #command=, va sin paréntesis Ejecuta funciones cuando se presiona un botón:
 #Entry: caja texto
