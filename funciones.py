@@ -108,7 +108,7 @@ def validarPeso(ppeso):
     if ppeso.isdigit()==False:
         return False
     peso = int(ppeso) 
-    if peso >= 50 and peso <= 120:
+    if peso > 50 and peso < 120:
         return True
     return False
 
@@ -279,7 +279,7 @@ def generarJustificacionRandom(pfecha,ppeso):
     otrasJustificaciones=[0,4,5,6,7,0,0,0] #puse 0 para que sea mas probable que sea apto
     return random.choice(otrasJustificaciones)
 
-def mostrarJustificacion(pnumero):
+def mostrarJustificacion():
     justificaciones={
         0:"Apto para donar",
         1:"Menor de edad",
@@ -289,7 +289,7 @@ def mostrarJustificacion(pnumero):
         5:"Uso de medicamentos no permitidos",
         6:"Procedimiento médico reciente",
         7:"Viaje o conducta de riesgo"}
-    return justificaciones[pnumero]
+    return justificaciones
 
 def generarEstadoDonador(pjustificacion):
     if pjustificacion == 0:
@@ -505,7 +505,8 @@ def generarReporteNoActivo(pmatrizD):
     for donador in pmatrizD:
         estado=donador[8]
         if estado==0: #Solo NO activos
-            justificacion=mostrarJustificacion(donador[9])
+            justificaciones=mostrarJustificacion()
+            justificacion= justificaciones[donador[9]] #donador[9] es el codigo de justificacion, se obtiene el texto con el diccionario
             html+="<tr>"
             html+="<td>"+justificacion+"</td>"
             html+="<td>"+donador[1]+"</td>" #agrega la cedula

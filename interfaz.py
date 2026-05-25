@@ -18,7 +18,8 @@ from tareaP2 import*
 #command=, va sin paréntesis Ejecuta funciones cuando se presiona un botón:
 #Entry: caja texto
 #row: fila, column: columna
-#padx: espacio horizontal, pady: espacio vertical
+#padx: espacio horizontal
+#pady: espacio vertical
 #values: definir lista de opciones
 #Combobox: para lista desplegable
 #StringVar: guarda el valor seleccionado
@@ -122,7 +123,6 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     matriz = cargarArchivo()
     inserto = insertarDonadorAux(matriz,datos)
     if inserto:
-        guardarArchivo(matriz)
         messagebox.showinfo("Éxito","Donador registrado correctamente")
         mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre)
         for boton in listaBotones:
@@ -132,7 +132,7 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
         messagebox.showerror("Error","La cédula ya existe")
 
 def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
-    cedula.delete(0,END)
+    cedula.delete(0,END) #Borra todos los entry(0-> inicio y end -> final)
     nombre.delete(0,END)
     fecha.delete(0,END)
     sangre.set("")
@@ -169,7 +169,7 @@ def ventanaGenerar(listaBotones):
     Label(ventanaGenerar,text="Cantidad de donadores:").pack(pady=15)
     cantidad = Entry(ventanaGenerar)
     cantidad.pack(pady=10)
-    Button(ventanaGenerar,text="Generar",width=20,command=lambda: generarDonadores(ventanaGenerar,cantidad,listaBotones)).pack(pady=20)
+    Button(ventanaGenerar,text="Generar",width=20,command=lambda:generarDonadores(ventanaGenerar,cantidad,listaBotones)).pack(pady=20)
 
 def generarDonadores(ventanaGenerar,cantidad,listaBotones):
     datosCantidad = cantidad.get()
@@ -186,7 +186,45 @@ def generarDonadores(ventanaGenerar,cantidad,listaBotones):
     for boton in listaBotones:
         boton.config(state="normal")
     ventanaGenerar.destroy()
-    
+
+def ventanaEliminar(listaBotones):
+    ventanaEliminar= Toplevel()
+    ventanaEliminar.title("Eliminar Donador")
+    ventanaEliminar.geometry("500x400")
+    Label(ventanaEliminar,text="Cédula").pack(pady=10)
+    cedula=Entry(ventanaEliminar,width=30)
+    cedula.pack()
+    Label(ventanaEliminar,text="Justificación").pack(pady=10)
+    justificacion= StringVar()
+    opciones=mostrarJustificacion()
+    justificaciones= ttk.Combobox(ventanaEliminar,textvariable=justificacion,width=40,
+                                  state="readonly",values=list(opciones.values()))
+    justificaciones.pack(pady=10)
+    botones= Frame(ventanaEliminar) #Para poner los botones al lado uno del otro.
+    botones.pack(pady=20)
+    Button(botones,text="Eliminar",
+           command=lambda:eliminarDonadores(ventanaEliminar,cedula,justificacion)).pack(side=LEFT,padx=10)
+    Button(botones,text="Regresar",
+           command=ventanaEliminar.destroy).pack(side=LEFT,padx=10)
+
+def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
+    matriz= cargarArchivo()
+    cedula= pcedula.get()
+    justificacionEliminar= pjustificacion.get()
+    opciones= mostrarJustificacion()
+    codigoJustificacion=""
+    for codigo in opciones:
+        if opciones[codigo] == justificacionEliminar:
+            codigoJustificacion= codigo
+    confirmar= messagebox.askyesno(
+        "Confirmar eliminación", "¿Desea eliminar el donador?") #muestra ventana con dos botones Si y No
+    resultado= eliminarDonadorMostrar(matriz,cedula,codigoJustificacion,confirmar)
+    if resultado == "Donador eliminado satisfactoriamente.":
+        messagebox.showinfo("Éxito",resultado)
+        pventanaEliminar.destroy()
+    else:
+        messagebox.showerror("Resultado",resultado)
+
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
@@ -200,7 +238,7 @@ def main():
     botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=lambda: ventanaInsertar(listaBotones))
     botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2,command=lambda: ventanaGenerar(listaBotones))
     botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2)
-    botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2)
+    botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar(listaBotones))
     botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2)
     botonReportes = Button(ventana,text="Reportes",width=25,height=2)
     botonSalir = Button(ventana,text="Salir",width=25,height=2,command=ventana.destroy)

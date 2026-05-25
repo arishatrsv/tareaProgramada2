@@ -42,7 +42,7 @@ def validarPesoAux(ppeso):
         return "Peso inválido. Debe ingresar solo números."
     if validarPeso(ppeso):
         return("Usted posee un peso adecuado, correcto para ser donador de sangre.")
-    elif peso <= 50:
+    elif peso < 50:
         return("Usted debe pesar más de 50 kgms para poder ser donador.")
     else:
         return("Dado su sobre peso, no es posible donar sangre.")
@@ -62,7 +62,7 @@ def donarSangre(ptipo):
 def recomendarVideo(ptipo):
     if ptipo == "A+" or ptipo == "A-":
         return ("Le recomendamos ver el video de:\n"
-                "Particularidades de la sangre tipo A:"
+                "Particularidades de la sangre tipo A: "
                 "Responde diferente al estrés según la ciencia.")
     return ""
 
@@ -173,21 +173,18 @@ def menuActualizarDonador(pposicion):
         else:
             print("La opción seleccionada no existe. Ingrese una opción 1-3")
 
-def eliminarDonadorAux(pmatrizD,pcedula,pjustificacion):
-    while True:
-        if validarCedula(pcedula)==False:
-            print("Debe ingresar una cédula válida")
-            return False
-        posicion = buscarCedula(matrizDonadores,pcedula)
-        if posicion == -1:
-            print("La persona con el número de cédula:",pcedula,
-            "no está registrado en la base de datos del Banco de Sangre aún.")
-            return False
-        if pjustificacion=="":
-            print("Debe ingresar una justificación")
-            return False
-        return [pcedula,pjustificacion]
+def eliminarDonadorAux(matrizDonadores,pcedula,pjustificacion):
+    if validarCedula(pcedula)==False:
+        return "Debe ingresar una cédula válida"
+    posicion = buscarCedula(matrizDonadores,pcedula)
+    if posicion == -1:
+        return "La persona con el número de cédula: "+pcedula+" no está registrado en la base de datos del Banco de Sangre aún."
+    if pjustificacion=="":
+        return "Debe ingresar una justificación"
+    return True
 
+#No sirve
+"""
 def opcionEliminarDonador():
     cedula = input("Digite el número de cédula: ")
     print("1- Menor de edad")
@@ -208,27 +205,17 @@ def opcionEliminarDonador():
     eliminado=eliminarDonadorAux(matrizDonadores,cedula,justificacion)
     if not eliminado==False:
         return eliminado
-
-def menuEliminarDonador():
-    eliminado= opcionEliminarDonador()
-    if eliminado == False:
-        return
-    while True:
-        print("-----ELIMINAR DONADOR-----")
-        print("\n1. Confirmar eliminación")
-        print("\n2. Cancelar eliminación")
-        print("\n3. Regresar")
-        opcion=input("Digite una opción: ")
-        if opcion == "1":
-            eliminarDonador(matrizDonadores,eliminado[0],eliminado[1])
+"""
+def eliminarDonadorMostrar(matrizDonadores,pcedula,pjustificacion,pconfirmar):
+        validacion= eliminarDonadorAux(matrizDonadores,pcedula,pjustificacion)
+        if validacion != True:
+            return validacion
+        if pconfirmar == True:
+            eliminarDonador(matrizDonadores,pcedula,int(pjustificacion))
             guardarArchivo(matrizDonadores)
             return "Donador eliminado satisfactoriamente."
-        elif opcion == "2":
-            print("Donador NO eliminado")
-        elif opcion == "3":
-            return
         else:
-            print("La opción seleccionada no existe. Ingrese una opción 1-3")
+            return "Donador NO eliminado"
 
 def insertarLugarAux(pprovincia,plugar):
     if pprovincia not in provincias:
