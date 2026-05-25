@@ -25,7 +25,7 @@ from tareaP2 import*
 #sticky="w": Alinea a la izquierda
 #destroy: cierra una ventana
     
-def ventanaInsertar():
+def ventanaInsertar(listaBotones):
     ventanaInsertar= Toplevel()
     ventanaInsertar.title("Insertar Donador")
     ventanaInsertar.geometry("600x500")
@@ -59,7 +59,7 @@ def ventanaInsertar():
     Button(ventanaInsertar,text="Registrar", #crea un boton en la ventana insertar
         command=lambda: registrarDonador(   #dice que funcion ejecutar cuando hagan click
         ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,
-        correo)).grid(row=9,column=1,pady=20) #coloca el boton.
+        correo,listaBotones)).grid(row=9,column=1,pady=20) #coloca el boton.
     Button(ventanaInsertar,text="Limpiar", #crea un boton en la ventana insertar
         command=lambda: limpiarDonador(   #dice que funcion ejecutar cuando hagan click
         cedula,nombre,fecha,sangre,sexo,peso,telefono,
@@ -67,7 +67,7 @@ def ventanaInsertar():
     Button(ventanaInsertar,text="Regresar", #crea un boton en la ventana insertar
         command=ventanaInsertar.destroy).grid(row=9,column=3,pady=20,padx=10)
 
-def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo,listaBotones):
     datosCedula=cedula.get() # .get() obtiene lo escrito por el usuario
     datosNombre=nombre.get()
     datosFecha=fecha.get()
@@ -77,31 +77,34 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     datosTelefono=telefono.get()
     datosCorreo=correo.get()
     if validarCedula(datosCedula)==False:
-        messagebox.showerror("Error","Cédula inválida")
+        messagebox.showerror("Error","Cédula inválida. Debe tener el formato #-####-####")
         return
     # Valida nombre
     if datosNombre.replace(" ","").isalpha()==False:
-        messagebox.showerror("Error","Nombre inválido")
+        messagebox.showerror("Error","Nombre inválido. Solo se permiten letras y espacios")
         return
     # Valida fecha
     if validarFecha(datosFecha)==False:
-        messagebox.showerror("Error","Fecha inválida")
+        messagebox.showerror("Error","Fecha inválida. Debe ser en formato dd/mm/aaaa")
         return
     # Valida tipo sangre
     if datosSangre not in mostrarTiposSangre():
         messagebox.showerror("Error","Tipo de sangre inválido")
         return
     # Valida peso
-    if validarPeso(datosPeso)==False:
-        messagebox.showerror("Error","Peso inválido")
+    if datosPeso.isdigit()==False:
+        messagebox.showerror("Error","Peso inválido. Debe ingresar solo números")
+        return
+    if int(datosPeso)<=0:
+        messagebox.showerror("Error", "El peso debe ser mayor a 0")
         return
     # Valida teléfono
     if validarTelefono(datosTelefono)==False:
-        messagebox.showerror("Error","Teléfono inválido")
+        messagebox.showerror("Error","Teléfono inválido. Debe ser en formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
         return
     # Valida correo
     if validarCorreo(datosCorreo)==False:
-        messagebox.showerror("Error","Correo inválido")
+        messagebox.showerror("Error","Correo inválido. Debe contener un @ y un dominio")
         return
     justificacion = generarJustificacionRandom(datosFecha,datosPeso)
     estado = generarEstadoDonador(justificacion)
@@ -121,6 +124,9 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     if inserto:
         guardarArchivo(matriz)
         messagebox.showinfo("Éxito","Donador registrado correctamente")
+        mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre)
+        for boton in listaBotones:
+            boton.config(state="normal")
         ventanaInsertar.destroy() #Cierra ventana
     else:
         messagebox.showerror("Error","La cédula ya existe")
@@ -135,6 +141,52 @@ def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
     telefono.delete(0,END)
     correo.delete(0,END)
 
+def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
+    ventanaInfo = Toplevel()
+    ventanaInfo.title("Información del Donador")
+    ventanaInfo.geometry("700x500")
+    mensaje = ""
+    mensaje += analizarEdadDonarAux(datosFecha)
+    mensaje += "\n\n"
+    #Lugar de donación
+    mensaje += imprimirLugarNacimiento(datosCedula)
+    mensaje += "\n"
+    #Peso
+    mensaje += validarPesoAux(datosPeso)
+    mensaje += "\n\n"
+    #Compatibilidad sangre
+    mensaje += donarSangre(datosSangre)
+    mensaje += "\n\n"
+    #Video recomendado
+    mensaje += recomendarVideo(datosSangre)
+    Label(ventanaInfo,text=mensaje,justify="left",wraplength=650).pack(padx=20,pady=20)
+    Button(ventanaInfo,text="Regresar",command=ventanaInfo.destroy).pack(pady=20)
+
+def ventanaGenerar(listaBotones):
+    ventanaGenerar = Toplevel()
+    ventanaGenerar.title("Generar Donadores")
+    ventanaGenerar.geometry("400x200")
+    Label(ventanaGenerar,text="Cantidad de donadores:").pack(pady=15)
+    cantidad = Entry(ventanaGenerar)
+    cantidad.pack(pady=10)
+    Button(ventanaGenerar,text="Generar",width=20,command=lambda: generarDonadores(ventanaGenerar,cantidad,listaBotones)).pack(pady=20)
+
+def generarDonadores(ventanaGenerar,cantidad,listaBotones):
+    datosCantidad = cantidad.get()
+    if datosCantidad.isdigit() == False:
+        messagebox.showerror("Error","Debe ingresar únicamente números enteros positivos")
+        return
+    datosCantidad = int(datosCantidad)
+    if datosCantidad <= 0:
+        messagebox.showerror("Error","La cantidad debe ser mayor a 0")
+        return
+    matriz = cargarArchivo()
+    mensaje = generarDonadoresAux(matriz,datosCantidad)
+    messagebox.showinfo("Éxito",mensaje)
+    for boton in listaBotones:
+        boton.config(state="normal")
+    ventanaGenerar.destroy()
+    
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
@@ -145,13 +197,14 @@ def main():
         font=("Arial",24,"bold"),
         fg="#8E1616")
     titulo.pack(pady=20)
-    botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=ventanaInsertar)
-    botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2)
+    botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=lambda: ventanaInsertar(listaBotones))
+    botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2,command=lambda: ventanaGenerar(listaBotones))
     botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2)
     botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2)
     botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2)
     botonReportes = Button(ventana,text="Reportes",width=25,height=2)
     botonSalir = Button(ventana,text="Salir",width=25,height=2,command=ventana.destroy)
+    listaBotones = [botonActualizar,botonEliminar,botonReportes]
     #Coloca los botones en la ventana
     botonInsertar.pack(pady=5)
     botonGenerar.pack(pady=5)

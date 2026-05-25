@@ -36,7 +36,10 @@ def imprimirLugarNacimiento(pcedula):
     return mensaje
 
 def validarPesoAux(ppeso):
-    peso=int(ppeso)
+    try:
+        peso=int(ppeso)
+    except:
+        return "Peso inválido. Debe ingresar solo números."
     if validarPeso(ppeso):
         return("Usted posee un peso adecuado, correcto para ser donador de sangre.")
     elif peso <= 50:
@@ -458,7 +461,7 @@ def menuPrincipal():
     while True:
         print("\n----- BANCO DE SANGRE -----")
         print("1. Insertar donador")
-        print("2. Generar donadores.")
+        print("2. Generar donadores")
         print("3. Actualizar datos del donador")
         print("4. Eliminar donador")
         print("5. Insertar lugar de donación según provincia")
@@ -482,4 +485,4 @@ def menuPrincipal():
             break
         else:
             print("Debe seleccionar una opción válida.")
-menuPrincipal()
+#menuPrincipal()
