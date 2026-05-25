@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import ttk #Para combobox desplegable
 from tkinter import messagebox #Permite mostrar ventanas emergentes(validaciones)
 from funciones import *
+from tareaP2 import*
 
 #label: texto visual
 #Toplevel: crea ventana secundaria
@@ -22,8 +23,51 @@ from funciones import *
 #Combobox: para lista desplegable
 #StringVar: guarda el valor seleccionado
 #sticky="w": Alinea a la izquierda
+#destroy: cierra una ventana
+    
+def ventanaInsertar():
+    ventanaInsertar= Toplevel()
+    ventanaInsertar.title("Insertar Donador")
+    ventanaInsertar.geometry("600x500")
+    Label(ventanaInsertar,text="Cédula").grid(row=0,column=0,padx=15,pady=10,sticky="e")
+    cedula= Entry(ventanaInsertar)
+    cedula.grid(row=0,column=1)
+    Label(ventanaInsertar,text="Nombre Completo").grid(row=1,column=0,padx=10,pady=10)
+    nombre= Entry(ventanaInsertar)
+    nombre.grid(row=1,column=1)
+    Label(ventanaInsertar,text="Fecha Nacimiento").grid(row=2,column=0,padx=10,pady=10)
+    fecha= Entry(ventanaInsertar)
+    fecha.grid(row=2,column=1)
+    Label(ventanaInsertar,text="Tipo de sangre").grid(row=3,column=0,padx=10,pady=10)
+    sangre= ttk.Combobox(ventanaInsertar,values=mostrarTiposSangre(),state="readonly") #state: evita que escriban cualquier cosa
+    sangre.grid(row=3,column=1)
+    Label(ventanaInsertar,text="Sexo").grid(row=4,column=0,padx=10,pady=10)
+    sexo= StringVar(value="M") #masculino aparece como default
+    Radiobutton(ventanaInsertar,text="Masculino",variable=sexo,value="M").grid(
+        row=4,column=1,sticky="w")
+    Radiobutton(ventanaInsertar,text="Femenino",variable=sexo,value="F").grid(
+        row=5,column=1,sticky="w")
+    Label(ventanaInsertar,text="Peso").grid(row=6,column=0,padx=10,pady=10)
+    peso= Entry(ventanaInsertar)
+    peso.grid(row=6,column=1)
+    Label(ventanaInsertar,text="Teléfono").grid(row=7,column=0,padx=10,pady=10)
+    telefono= Entry(ventanaInsertar)
+    telefono.grid(row=7,column=1)
+    Label(ventanaInsertar,text="Correo").grid(row=8,column=0,padx=10,pady=10)
+    correo= Entry(ventanaInsertar)
+    correo.grid(row=8,column=1)
+    Button(ventanaInsertar,text="Registrar", #crea un boton en la ventana insertar
+        command=lambda: registrarDonador(   #dice que funcion ejecutar cuando hagan click
+        ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,
+        correo)).grid(row=9,column=1,pady=20) #coloca el boton.
+    Button(ventanaInsertar,text="Limpiar", #crea un boton en la ventana insertar
+        command=lambda: limpiarDonador(   #dice que funcion ejecutar cuando hagan click
+        cedula,nombre,fecha,sangre,sexo,peso,telefono,
+        correo)).grid(row=9,column=2,pady=20,padx=10) 
+    Button(ventanaInsertar,text="Regresar", #crea un boton en la ventana insertar
+        command=ventanaInsertar.destroy).grid(row=9,column=3,pady=20,padx=10)
 
-def guardarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
     datosCedula=cedula.get() # .get() obtiene lo escrito por el usuario
     datosNombre=nombre.get()
     datosFecha=fecha.get()
@@ -35,9 +79,17 @@ def guardarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono
     if validarCedula(datosCedula)==False:
         messagebox.showerror("Error","Cédula inválida")
         return
+    # Valida nombre
+    if datosNombre.replace(" ","").isalpha()==False:
+        messagebox.showerror("Error","Nombre inválido")
+        return
     # Valida fecha
     if validarFecha(datosFecha)==False:
         messagebox.showerror("Error","Fecha inválida")
+        return
+    # Valida tipo sangre
+    if datosSangre not in mostrarTiposSangre():
+        messagebox.showerror("Error","Tipo de sangre inválido")
         return
     # Valida peso
     if validarPeso(datosPeso)==False:
@@ -65,56 +117,23 @@ def guardarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono
         estado,
         justificacion]
     matriz = cargarArchivo()
-    inserto = insertarDonador(matriz,datos)
+    inserto = insertarDonadorAux(matriz,datos)
     if inserto:
         guardarArchivo(matriz)
         messagebox.showinfo("Éxito","Donador registrado correctamente")
         ventanaInsertar.destroy() #Cierra ventana
     else:
         messagebox.showerror("Error","La cédula ya existe")
-    
-def ventanaInsertar():
-    ventanaInsertar= Toplevel()
-    ventanaInsertar.title("Insertar Donador")
-    ventanaInsertar.geometry("600x500")
-    Label(ventanaInsertar,text="Cédula").grid(row=0,column=0,padx=15,pady=10,sticky="e")
-    cedula= Entry(ventanaInsertar)
-    cedula.grid(row=0,column=1)
-    Label(ventanaInsertar,text="Nombre Completo").grid(row=1,column=0,padx=10,pady=10)
-    nombre= Entry(ventanaInsertar)
-    nombre.grid(row=1,column=1)
-    Label(ventanaInsertar,text="Fecha Nacimiento").grid(row=2,column=0,padx=10,pady=10)
-    fecha= Entry(ventanaInsertar)
-    fecha.grid(row=2,column=1)
-    Label(ventanaInsertar,text="Tipo de sangre").grid(row=3,column=0,padx=10,pady=10)
-    sangre= ttk.Combobox(ventanaInsertar,values=mostrarTiposSangre())
-    sangre.grid(row=3,column=1)
-    Label(ventanaInsertar,text="Sexo").grid(row=4,column=0,padx=10,pady=10)
-    sexo= StringVar(value="M") #masculino aparece como default
-    Radiobutton(ventanaInsertar,text="Masculino",variable=sexo,value="M").grid(
-        row=4,column=1,sticky="w")
-    Radiobutton(ventanaInsertar,text="Femenino",variable=sexo,value="F").grid(
-        row=5,column=1,sticky="w")
-    Label(ventanaInsertar,text="Peso").grid(row=6,column=0,padx=10,pady=10)
-    peso= Entry(ventanaInsertar)
-    peso.grid(row=6,column=1)
-    Label(ventanaInsertar,text="Teléfono").grid(row=7,column=0,padx=10,pady=10)
-    telefono= Entry(ventanaInsertar)
-    telefono.grid(row=7,column=1)
-    Label(ventanaInsertar,text="Correo").grid(row=8,column=0,padx=10,pady=10)
-    correo= Entry(ventanaInsertar)
-    correo.grid(row=8,column=1)
-    Button(ventanaInsertar,text="Guardar", #crea un boton en la ventana incertar
-        command=lambda: guardarDonador(   #dice que funcion ejecutar cuando hagan click
-        ventanaInsertar,
-        cedula,
-        nombre,
-        fecha,
-        sangre,
-        sexo,
-        peso,
-        telefono,
-        correo)).grid(row=9,column=1,pady=20) #coloca el boton.
+
+def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+    cedula.delete(0,END)
+    nombre.delete(0,END)
+    fecha.delete(0,END)
+    sangre.set("")
+    sexo.set("M")
+    peso.delete(0,END)
+    telefono.delete(0,END)
+    correo.delete(0,END)
 
 def main():
     ventana=Tk()
