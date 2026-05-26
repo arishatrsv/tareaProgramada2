@@ -183,6 +183,7 @@ def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
     else:
         messagebox.showerror("Resultado",resultado)
 
+def
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
