@@ -78,12 +78,12 @@ def insertarDonadorMostrar(pmatrizD,pcedula,pnombre,pfecha,psangre,psexo,ppeso,p
         return "Cédula inválida. Debe tener el formato #-####-####"
     if pnombre.replace(" ","").isalpha()== False:
         return "Debe ingresar un nombre Completo"
-    if validarFecha(pfecha):
+    if validarFecha(pfecha)==False:
         return "Fecha inválida. Debe ser en formato dd/mm/aaaa"
     if psangre not in mostrarTiposSangre():
         return "Tipo de sangre inválido"
     if validarPeso(ppeso)== False:
-     return "Peso inválido. Debe ingresar solo números"
+     return validarPesoAux(ppeso)
     if validarTelefono(ptelefono)==False:
         return "Teléfono inválido. Debe ser en formato ####-#### y comenzar con 2,4,6,7,8 o 9."
     if validarCorreo(pcorreo)==False:
