@@ -77,69 +77,17 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     datosPeso=peso.get()
     datosTelefono=telefono.get()
     datosCorreo=correo.get()
-    if validarCedula(datosCedula)==False:
-        messagebox.showerror("Error","Cédula inválida. Debe tener el formato #-####-####")
-        return
-    # Valida nombre
-    if datosNombre.replace(" ","").isalpha()==False:
-        messagebox.showerror("Error","Nombre inválido. Solo se permiten letras y espacios")
-        return
-    # Valida fecha
-    if validarFecha(datosFecha)==False:
-        messagebox.showerror("Error","Fecha inválida. Debe ser en formato dd/mm/aaaa")
-        return
-    # Valida tipo sangre
-    if datosSangre not in mostrarTiposSangre():
-        messagebox.showerror("Error","Tipo de sangre inválido")
-        return
-    # Valida peso
-    if datosPeso.isdigit()==False:
-        messagebox.showerror("Error","Peso inválido. Debe ingresar solo números")
-        return
-    if int(datosPeso)<=0:
-        messagebox.showerror("Error", "El peso debe ser mayor a 0")
-        return
-    # Valida teléfono
-    if validarTelefono(datosTelefono)==False:
-        messagebox.showerror("Error","Teléfono inválido. Debe ser en formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
-        return
-    # Valida correo
-    if validarCorreo(datosCorreo)==False:
-        messagebox.showerror("Error","Correo inválido. Debe contener un @ y un dominio")
-        return
-    justificacion = generarJustificacionRandom(datosFecha,datosPeso)
-    estado = generarEstadoDonador(justificacion)
-    datos = [
-        datosNombre,
-        datosCedula,
-        datosSangre,
-        datosSexo,
-        datosFecha,
-        datosPeso,
-        datosCorreo,
-        datosTelefono,
-        estado,
-        justificacion]
     matriz = cargarArchivo()
-    inserto = insertarDonadorAux(matriz,datos)
-    if inserto:
-        messagebox.showinfo("Éxito","Donador registrado correctamente")
-        mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre)
-        for boton in listaBotones:
-            boton.config(state="normal")
-        ventanaInsertar.destroy() #Cierra ventana
-    else:
-        messagebox.showerror("Error","La cédula ya existe")
-
-def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
-    cedula.delete(0,END) #Borra todos los entry(0-> inicio y end -> final)
-    nombre.delete(0,END)
-    fecha.delete(0,END)
-    sangre.set("")
-    sexo.set("M")
-    peso.delete(0,END)
-    telefono.delete(0,END)
-    correo.delete(0,END)
+    resultado = insertarDonadorMostrar(matriz,datosCedula,datosNombre,datosFecha,datosSangre,
+                                       datosSexo,datosPeso,datosTelefono,datosCorreo)
+    if type(resultado)==str:
+        messagebox.showerror("Error",resultado)
+        return
+    messagebox.showinfo("Éxito","Donador registrado correctamente")
+    mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre)
+    for boton in listaBotones:
+        boton.config(state="normal")
+    ventanaInsertar.destroy() #Cierra ventana
 
 def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
     ventanaInfo = Toplevel()
@@ -162,6 +110,16 @@ def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
     Label(ventanaInfo,text=mensaje,justify="left",wraplength=650).pack(padx=20,pady=20)
     Button(ventanaInfo,text="Regresar",command=ventanaInfo.destroy).pack(pady=20)
 
+def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+    cedula.delete(0,END) #Borra todos los entry(0-> inicio y end -> final)
+    nombre.delete(0,END)
+    fecha.delete(0,END)
+    sangre.set("")
+    sexo.set("M")
+    peso.delete(0,END)
+    telefono.delete(0,END)
+    correo.delete(0,END)
+    
 def ventanaGenerar(listaBotones):
     ventanaGenerar = Toplevel()
     ventanaGenerar.title("Generar Donadores")

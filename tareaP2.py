@@ -73,57 +73,28 @@ def insertarDonadorAux(pmatrizD,pdatos):
     guardarArchivo(pmatrizD)
     return True
 
-def opcionInsertarDonador(pmatrizD):
-    #Se hace con while True separados, para que en el momento que se ingresa un dato incorrecto
-    #lo detenga hasta que lo ingrese de manera correcta, sin esperar al final para informar.
-    while True:
-        cedula= input("Ingrese su cédula: ")
-        if validarCedula(cedula):
-            break
-        print("Debe ingresar una cédula válida")
-    while True:
-        nombre= input("Ingrese su nombre completo: ")
-        if nombre.replace(" ","").isalpha():
-            break
-        print("Debe ingresar un nombre Completo")
-    while True:
-        fecha= input("Ingrese su fecha de nacimiento: ")
-        if validarFecha(fecha):
-            break 
-        print("Debe de ingresar una fecha de nacimiento válida")
-    while True:
-        sangre= input("Ingrese su tipo de sangre: ").upper()
-        if sangre in mostrarTiposSangre():
-            break
-        print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
-    while True:
-        sexo= input("Ingrese su sexo: ").upper()
-        if sexo == "M" or sexo == "F":
-            break
-        print("Debe ingresar M o F")
-    while True:
-        peso= input("Ingrese su peso en Kg: ")
-        if validarPeso(peso):
-            break
-        print("Debe ingresar un peso válido")
-    while True:
-        telefono= input("Ingrese su número de teléfono: ")
-        if validarTelefono(telefono):
-            break
-        print("Debe ingresar un número de teléfono con el formato válido")
-    while True:
-        correo= input("Ingrese su correo: ")
-        if validarCorreo(correo):
-            break
-        print("Debe ingresar un correo con el formato válido")
-    justificacion = generarJustificacionRandom(fecha,peso)
+def insertarDonadorMostrar(pmatrizD,pcedula,pnombre,pfecha,psangre,psexo,ppeso,ptelefono,pcorreo):
+    if validarCedula(pcedula)==False:
+        return "Cédula inválida. Debe tener el formato #-####-####"
+    if pnombre.replace(" ","").isalpha()== False:
+        return "Debe ingresar un nombre Completo"
+    if validarFecha(pfecha):
+        return "Fecha inválida. Debe ser en formato dd/mm/aaaa"
+    if psangre not in mostrarTiposSangre():
+        return "Tipo de sangre inválido"
+    if validarPeso(ppeso)== False:
+     return "Peso inválido. Debe ingresar solo números"
+    if validarTelefono(ptelefono)==False:
+        return "Teléfono inválido. Debe ser en formato ####-#### y comenzar con 2,4,6,7,8 o 9."
+    if validarCorreo(pcorreo)==False:
+        return "Correo inválido. Debe contener un @ y un dominio"
+    justificacion = generarJustificacionRandom(pfecha,ppeso)
     estado=generarEstadoDonador(justificacion)
-    datos =[nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,estado,justificacion]
+    datos =[pnombre,pcedula,psangre,psexo,pfecha,ppeso,pcorreo,ptelefono,estado,justificacion]
     inserto = insertarDonadorAux(pmatrizD,datos)
     if inserto:
-        print("Donador registrado correctamente")
-    else:
-        print("La cédula ya existe") 
+        return datos
+    return "La cédula ya existe"
         
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     if pnombre=="":
