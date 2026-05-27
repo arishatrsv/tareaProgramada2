@@ -314,7 +314,64 @@ def insertarLugares(pventanaLugar,pprovincia,plugar):
         pventanaLugar.destroy()
     else:
         messagebox.showerror("Error",resultado)
-        
+
+#def reporteProvinciaInterfaz(pprovincia):
+    #me falta eso
+    
+def ventanaReporteProvincia():
+    ventana = Toplevel()
+    ventana.title("Reporte Donadores por Provincia")
+    ventana.geometry("400x250")
+    Label(ventana,text="Seleccione la provincia:").pack(pady=15)
+    provincias = mostrarProvincias()
+    comboProvincia = ttk.Combobox(
+        ventana,
+        values=list(provincias.values()),
+        state="readonly",width=30)
+    comboProvincia.pack(pady=10)
+    Button(
+        ventana,text="Generar Reporte",
+        command=lambda: reporteProvinciaInterfaz(comboProvincia.get())).pack(pady=15)
+    Button(
+        ventana,
+        text="Regresar",
+        command=ventana.destroy).pack(pady=10)
+
+def ventanaReportes():
+    ventana = Toplevel()
+    ventana.title("Reportes")
+    ventana.geometry("500x500")
+    Button(
+        ventana,text="Donadores por provincia",width=30,
+        command=lambda: ventanaReporteProvincia()).pack(pady=5)
+    Button(
+        ventana,text="Por rango de edad",width=30,
+        command=lambda: ventanaReporteEdad()).pack(pady=5)
+    Button(
+        ventana,text="Por tipo de sangre y provincia",width=30,
+        command=lambda: ventanaReporteSangreProvincia()).pack(pady=5)
+    Button(
+        ventana,text="Lista completa de donadores",width=30,
+        command=lambda: ventanaListaCompleta()).pack(pady=5)
+    Button(
+        ventana,text="Mujeres O-",width=30,
+        command=lambda: ventanaMujeresO()).pack(pady=5)
+    Button(
+        ventana,text="¿A quién puede donar?",width=30,
+        command=lambda: ventanaPuedeDonar()).pack(pady=5)
+    Button(
+        ventana,text="¿De quién puede recibir?",width=30,
+        command=lambda: ventanaPuedeRecibir()).pack(pady=5)
+    Button(
+        ventana,text="Donadores no activos",width=30,
+        command=lambda: ventanaNoActivos()).pack(pady=5)
+    Button(
+        ventana,text="Lugares de donación",width=30,
+        command=lambda: ventanaLugaresDonacion()).pack(pady=5)
+    Button(
+        ventana,text="Regresar",width=30,
+        command=ventana.destroy).pack(pady=20)
+
 def salirSistema(pventana):
     ventanaSalir= Toplevel()
     ventanaSalir.title("Salir")
@@ -339,7 +396,7 @@ def main():
     botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2,command=lambda: ventanaActualizar())
     botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar())
     botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2,command=lambda: ventanaInsertarLugar(lugaresDonar))
-    botonReportes = Button(ventana,text="Reportes",width=25,height=2)
+    botonReportes = Button(ventana,text="Reportes",width=25,height=2,command=lambda: ventanaReportes())
     botonSalir = Button(ventana,text="Salir",width=25,height=2,command=lambda: salirSistema(ventana))
     listaBotones = [botonActualizar,botonEliminar,botonReportes]
     #Coloca los botones en la ventana
