@@ -79,7 +79,7 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     datosCorreo=correo.get()
     matriz = cargarArchivo()
     resultado = insertarDonadorMostrar(matriz,datosCedula,datosNombre,datosFecha,datosSangre,
-                                       datosSexo,datosPeso,datosTelefono,datosCorreo)
+                                        datosSexo,datosPeso,datosTelefono,datosCorreo)
     if type(resultado)==str:
         messagebox.showerror("Error",resultado)
         return
@@ -156,14 +156,14 @@ def ventanaEliminar(listaBotones):
     justificacion= StringVar()
     opciones=mostrarJustificacion()
     justificaciones= ttk.Combobox(ventanaEliminar,textvariable=justificacion,width=40,
-                                  state="readonly",values=list(opciones.values()))
+                                state="readonly",values=list(opciones.values()))
     justificaciones.pack(pady=10)
     botones= Frame(ventanaEliminar) #Para poner los botones al lado uno del otro.
     botones.pack(pady=20)
     Button(botones,text="Eliminar",
-           command=lambda:eliminarDonadores(ventanaEliminar,cedula,justificacion)).pack(side=LEFT,padx=10)
+        command=lambda:eliminarDonadores(ventanaEliminar,cedula,justificacion)).pack(side=LEFT,padx=10)
     Button(botones,text="Regresar",
-           command=ventanaEliminar.destroy).pack(side=LEFT,padx=10)
+        command=ventanaEliminar.destroy).pack(side=LEFT,padx=10)
 
 def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
     matriz= cargarArchivo()
@@ -183,6 +183,120 @@ def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
     else:
         messagebox.showerror("Resultado",resultado)
 
+def formularioActualizar(matriz,posicion):
+    ventana = Toplevel()
+    ventana.title("Actualizar Donador")
+    ventana.geometry("600x500")
+    #DATOS ACTUALES
+    datos = matriz[posicion]
+    Label(ventana,text="Cédula").grid(row=0,column=0,padx=15,pady=10)
+    cedula = Entry(ventana,state="normal")
+    cedula.grid(row=0,column=1)
+    cedula.insert(0,datos[1])
+    #bloquear cédula
+    cedula.config(state="readonly")
+    Label(ventana,text="Nombre").grid(row=1,column=0,padx=15,pady=10)
+    nombre = Entry(ventana)
+    nombre.grid(row=1,column=1)
+    nombre.insert(0,datos[0])
+    Label(ventana,text="Fecha").grid(row=2,column=0,padx=15,pady=10)
+    fecha = Entry(ventana)
+    fecha.grid(row=2,column=1)
+    fecha.insert(0,datos[4])
+    Label(ventana,text="Tipo Sangre").grid(row=3,column=0,padx=15,pady=10)
+    sangre = ttk.Combobox(
+        ventana,
+        values=mostrarTiposSangre(),
+        state="readonly")
+    sangre.grid(row=3,column=1)
+    sangre.set(datos[2])
+    Label(ventana,text="Peso").grid(row=4,column=0,padx=15,pady=10)
+    peso = Entry(ventana)
+    peso.grid(row=4,column=1)
+    peso.insert(0,datos[5])
+    Label(ventana,text="Teléfono").grid(row=5,column=0,padx=15,pady=10)
+    telefono = Entry(ventana)
+    telefono.grid(row=5,column=1)
+    telefono.insert(0,datos[7])
+    Button(
+        ventana,
+        text="Actualizar",
+        command=lambda: actualizarInterfaz(
+            ventana,
+            cedula,
+            nombre,
+            telefono,
+            fecha,
+            sangre,
+            peso)
+    ).grid(row=6,column=1,pady=20)
+    Button(
+        ventana,
+        text="Regresar",
+        command=ventana.destroy).grid(row=6,column=2,pady=20)
+
+def ventanaActualizar():
+    ventanaActualizar = Toplevel()
+    ventanaActualizar.title("Actualizar Donador")
+    ventanaActualizar.geometry("400x200")
+    Label(ventanaActualizar,text="Digite la cédula:").pack(pady=15)
+    cedula = Entry(ventanaActualizar,width=25)
+    cedula.pack(pady=10)
+    Button(
+        ventanaActualizar,
+        text="Buscar",
+        command=lambda: buscarDonadorCedula(ventanaActualizar,cedula)
+    ).pack(pady=20)
+    Button(
+        ventanaActualizar,
+        text="Regresar",
+        command=ventanaActualizar.destroy).pack()
+    
+def buscarDonadorCedula(pventana,pcedula):
+    cedula = pcedula.get()
+    if validarCedula(cedula)==False:
+        messagebox.showerror("Error","Debe ingresar una cédula válida")
+        return
+    matriz = cargarArchivo()
+    posicion = buscarCedula(matriz,cedula)
+    if posicion == -1:
+        messagebox.showerror("Error","La persona con el número de cédula: "+ cedula +" no está registrado en la base de datos del Banco de Sangre aún.")
+        return
+    pventana.destroy()
+    formularioActualizar(matriz,posicion)
+
+def actualizarInterfaz(ventanaActualizar,
+    cedula,
+    nombre,
+    telefono,
+    fecha,
+    sangre,
+    peso):
+    datosCedula = cedula.get()
+    datosNombre = nombre.get()
+    datosTelefono = telefono.get()
+    datosFecha = fecha.get()
+    datosSangre = sangre.get()
+    datosPeso = peso.get()
+    resultado = actualizarDonadorAux(
+        datosNombre,
+        datosTelefono,
+        datosFecha,
+        datosSangre,
+        datosPeso)
+    if resultado == False:
+        messagebox.showerror("Error","Datos inválidos")
+        return
+    matriz = cargarArchivo()
+    posicion = buscarCedula(matriz,datosCedula)
+    if posicion == -1:
+        messagebox.showerror("Error","No existe esa cédula")
+        return
+    actualizarDonador(matriz,posicion,resultado)
+    guardarArchivo(matriz)
+    messagebox.showinfo("Éxito","Donador actualizado correctamente")
+    ventanaActualizar.destroy()
+
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
@@ -195,7 +309,7 @@ def main():
     titulo.pack(pady=20)
     botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=lambda: ventanaInsertar(listaBotones))
     botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2,command=lambda: ventanaGenerar(listaBotones))
-    botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2)
+    botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2,command=lambda: ventanaActualizar())
     botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar(listaBotones))
     botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2)
     botonReportes = Button(ventana,text="Reportes",width=25,height=2)

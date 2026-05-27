@@ -83,7 +83,7 @@ def insertarDonadorMostrar(pmatrizD,pcedula,pnombre,pfecha,psangre,psexo,ppeso,p
     if psangre not in mostrarTiposSangre():
         return "Tipo de sangre inválido"
     if validarPeso(ppeso)== False:
-     return validarPesoAux(ppeso)
+        return validarPesoAux(ppeso)
     if validarTelefono(ptelefono)==False:
         return "Teléfono inválido. Debe ser en formato ####-#### y comenzar con 2,4,6,7,8 o 9."
     if validarCorreo(pcorreo)==False:
@@ -98,20 +98,15 @@ def insertarDonadorMostrar(pmatrizD,pcedula,pnombre,pfecha,psangre,psexo,ppeso,p
         
 def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     if pnombre=="":
-        print("Debe ingresar un nombre valido.")
-        return False
+        return "Debe ingresar un nombre valido."
     if validarTelefono(ptelefono)==False:
-        print("El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9.")
-        return False
+        return "El teléfono debe tener el formato ####-#### y comenzar con 2,4,6,7,8 o 9."
     if validarFecha(pfecha)==False:
-        print("La fecha debe tener el formato dd/mm/yyyy y ser válida.")
-        return False
+        return "La fecha debe tener el formato dd/mm/yyyy y ser válida."
     if psangre not in mostrarTiposSangre():
-        print("El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-.")
-        return False
+        return "El tipo de sangre debe ser O+, O-, A+, A-, B+, B-, AB+ o AB-."
     if validarPeso(ppeso)==False:
-        print("El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg.")
-        return False
+        return "El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg."
     return [pnombre,ptelefono,pfecha,psangre,ppeso]
 
 def opcionActualizarDonador(pposicion):
