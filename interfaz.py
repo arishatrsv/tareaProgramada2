@@ -145,7 +145,7 @@ def generarDonadores(ventanaGenerar,cantidad,listaBotones):
         boton.config(state="normal")
     ventanaGenerar.destroy()
 
-def ventanaEliminar(listaBotones):
+def ventanaEliminar():
     ventanaEliminar= Toplevel()
     ventanaEliminar.title("Eliminar Donador")
     ventanaEliminar.geometry("500x400")
@@ -183,7 +183,50 @@ def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
     else:
         messagebox.showerror("Resultado",resultado)
 
-def
+def ventanaInsertarLugar(lugaresDonar):
+    ventanaLugar= Toplevel()
+    ventanaLugar.title("Insertar Lugar de Donación")
+    ventanaLugar.geometry("500x300")
+    Label(ventanaLugar,text="Provincia").pack(pady=10)
+    provincias=mostrarProvincias()
+    provinciaElegida= StringVar()
+    provincia= ttk.Combobox(ventanaLugar,textvariable=provinciaElegida,
+                            state="readonly",width=35,values=list(provincias.values()))
+    provincia.pack()
+    Label(ventanaLugar,text="Nuevo Lugar").pack(pady=10)
+    lugar= Text(ventanaLugar,width=40,height=3)
+    lugar.pack()
+    botones= Frame(ventanaLugar)
+    botones.pack(pady=20)
+    Button(botones,text="Insertar",
+           command=lambda: insertarLugares(ventanaLugar,provinciaElegida,lugar)).pack(side=LEFT,padx=10)
+    Button(botones,text="Salir",
+           command=ventanaLugar.destroy).pack(side=LEFT,padx=10)
+
+def insertarLugares(pventanaLugar,pprovincia,plugar):
+    nomProvincia= pprovincia.get()
+    lugar= plugar.get("1.0",END).strip()
+    provincias= mostrarProvincias()
+    codProvincia = ""
+    for codigo in provincias:
+        if provincias[codigo]== nomProvincia:
+            codProvincia= codigo
+    resultado= insertarLugarAux(lugaresDonar,codProvincia,lugar)
+    if resultado== "Lugar agregado correctamente.":
+        messagebox.showinfo("Éxito",resultado)
+        pventanaLugar.destroy()
+    else:
+        messagebox.showerror("Error",resultado)
+
+def salirSistema(pventana):
+    ventanaSalir= Toplevel()
+    ventanaSalir.title("Salir")
+    ventanaSalir.geometry("500x150")
+    ventanaSalir.configure(bg="white")
+    Label(ventanaSalir, text="Donar Sangre, es donar vida",
+          font=("Arial",18,"bold","italic"),fg="red",bg="white").pack(expand=True)
+    ventanaSalir.after(2000,lambda:[ventanaSalir.destroy(),pventana.destroy()]) #2000= muestra el mensaje, espera 2 segundos y cierra el programa
+
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
@@ -197,10 +240,10 @@ def main():
     botonInsertar = Button(ventana,text="Insertar Donador",width=25,height=2,command=lambda: ventanaInsertar(listaBotones))
     botonGenerar = Button(ventana,text="Generar Donadores",width=25,height=2,command=lambda: ventanaGenerar(listaBotones))
     botonActualizar = Button(ventana,text="Actualizar Donador",width=25,height=2)
-    botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar(listaBotones))
-    botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2)
+    botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar())
+    botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2,command=lambda: ventanaInsertarLugar(lugaresDonar))
     botonReportes = Button(ventana,text="Reportes",width=25,height=2)
-    botonSalir = Button(ventana,text="Salir",width=25,height=2,command=ventana.destroy)
+    botonSalir = Button(ventana,text="Salir",width=25,height=2,command=lambda: salirSistema(ventana))
     listaBotones = [botonActualizar,botonEliminar,botonReportes]
     #Coloca los botones en la ventana
     botonInsertar.pack(pady=5)

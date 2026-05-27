@@ -188,13 +188,12 @@ def eliminarDonadorMostrar(matrizDonadores,pcedula,pjustificacion,pconfirmar):
     else:
         return "Donador NO eliminado"
 
-def insertarLugarAux(pprovincia,plugar):
-    if pprovincia not in provincias:
+def insertarLugarAux(plugaresDonar,pprovincia,plugar):
+    if pprovincia not in mostrarProvincias():
         return "Debe seleccionar una provincia válida"
     if plugar.strip()=="":
         return "Debe ingresar un lugar válido"
-    lugaresDonar= crearDiccionarioLugares()
-    insertar= insertarLugar(lugaresDonar,pprovincia,plugar)
+    insertar= insertarLugar(plugaresDonar,pprovincia,plugar)
     if insertar == False:
         return "El lugar ya está registrado en esa provincia."
     return "Lugar agregado correctamente."
