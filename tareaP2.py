@@ -108,37 +108,20 @@ def actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso):
     if validarPeso(ppeso)==False:
         return "El peso debe ser mayor o igual a 50 kg y menor o igual a 120 kg."
     return [pnombre,ptelefono,pfecha,psangre,ppeso]
-
-def opcionActualizarDonador(pposicion):
-    print("Número de cédula:",matrizDonadores[pposicion][1])
-    nombre=input("Digite el nombre completo: ")
-    telefono=input("Digite el teléfono: ")
-    fecha=input("Digite la fecha de nacimiento (dd/mm/yyyy): ")
-    sangre=input("Digite el tipo de sangre: ").upper()
-    peso=input("Digite el peso: ")
-    datos=actualizarDonadorAux(nombre,telefono,fecha,sangre,peso)
-    if not datos==False:
-        return datos
         
-def menuActualizarDonador(pposicion):
-    datos=opcionActualizarDonador(pposicion)
-    while True:
-        print("-----ACTUALIZAR DONADOR-----")
-        print("\n1. Confirmar actualización")
-        print("\n2. Cancelar actualización")
-        print("\n3. Regresar")
-        opcion=input("Digite una opción: ")
-        if opcion=="1":
-            actualizarDonador(matrizDonadores,pposicion,datos)
-            guardarArchivo(matrizDonadores)
-            return "Datos actualizados correctamente."
-        elif opcion=="2":
-            print("Datos No actualizados.")
-        elif opcion=="3":
-            return
-        else:
-            print("La opción seleccionada no existe. Ingrese una opción 1-3")
-
+def actualizarDonadorMostrar(matrizDonadores,pcedula,pnombre,ptelefono,pfecha,psangre,ppeso):
+    if validarCedula(pcedula)==False:
+        return "Debe ingresar una cédula válida"
+    posicion = buscarCedula(matrizDonadores,pcedula)
+    if posicion == -1:
+        return "La persona con el número de cédula: "+pcedula+" no está registrado en la base de datos del Banco de Sangre aún."
+    datos=actualizarDonadorAux(pnombre,ptelefono,pfecha,psangre,ppeso)
+    if type(datos)==str:
+        return datos
+    actualizarDonador(matrizDonadores,posicion,datos)
+    guardarArchivo(matrizDonadores)
+    return True
+    
 def eliminarDonadorAux(matrizDonadores,pcedula,pjustificacion):
     if validarCedula(pcedula)==False:
         return "Debe ingresar una cédula válida"

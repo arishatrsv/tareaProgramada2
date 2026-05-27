@@ -234,30 +234,13 @@ def actualizarInterfaz(ventanaActualizar,
     fecha,
     sangre,
     peso):
-    datosCedula = cedula.get()
-    datosNombre = nombre.get()
-    datosTelefono = telefono.get()
-    datosFecha = fecha.get()
-    datosSangre = sangre.get()
-    datosPeso = peso.get()
-    resultado = actualizarDonadorAux(
-        datosNombre,
-        datosTelefono,
-        datosFecha,
-        datosSangre,
-        datosPeso)
-    if resultado==str(resultado):
-        messagebox.showerror("Error",resultado)
-        return
-    matriz = cargarArchivo()
-    posicion = buscarCedula(matriz,datosCedula)
-    if posicion == -1:
-        messagebox.showerror("Error","No existe esa cédula")
-        return
-    actualizarDonador(matriz,posicion,resultado)
-    guardarArchivo(matriz)
-    messagebox.showinfo("Éxito","Donador actualizado correctamente")
-    ventanaActualizar.destroy()
+    matriz=cargarArchivo()
+    resultado=actualizarDonadorMostrar(matriz,cedula.get(),nombre.get(),telefono.get(),fecha.get(),sangre.get(),peso.get())
+    if resultado==True:
+        messagebox.showinfo("Éxito","Datos actualizados correctamente")
+        ventanaActualizar.destroy()
+    else:
+        messagebox.showerror("Error","Datos no actualizados")
 
 def ventanaEliminar():
     ventanaEliminar= Toplevel()
