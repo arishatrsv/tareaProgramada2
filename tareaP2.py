@@ -201,36 +201,45 @@ def opcionGenerarDonadores():
         break
     return generarDonadoresAux(matrizDonadores,cantidad)
 
-def opcionReporteProvincia():
-    print(mostrarProvincias())
-    provincia=int(input("Digite el número de provincia: "))
-    if provincia not in mostrarProvincias():
+def opcionReporteProvincia(pprovincia):
+    provincias=mostrarProvincias()
+    numeroProvincia=0
+    for provincia in provincias:
+        if provincias[provincia]==pprovincia:
+            numeroProvincia = provincia
+    if numeroProvincia==0:
         return "Provincia inválida."
-    reporte=generarReporteDonadoresProvincia(matrizDonadores,provincia)
+    matrizDonadores = cargarArchivo()
+    reporte=generarReporteDonadoresProvincia(matrizDonadores,numeroProvincia)
     if reporte:
         return "Reporte creado satisfactoriamente"
     else:
-        return "Reporte no creado"
+        return False
 
-def opcionReporteRangoEdad():
-    edadInicial=int(input("Ingrese la edad inicial: "))
+def opcionReporteRangoEdad(pedadInicial,pedadFinal):
+    try:
+        edadInicial = int(pedadInicial)
+    except:
+        return "Debe ingresar una edad inicial válida."
     if edadInicial < 18 or edadInicial > 65:
         return "La edad inicial debe estar entre 18 y 65 años."
-    while True:
+    if pedadFinal=="":
+        edadFinal=edadInicial
+    else:
         try:
-            edadFinal=int(input("Ingrese la edad final: "))
+            edadFinal=int(pedadFinal)
         except:
-            print("Debe ingresar un número válido.")
-            continue
+            return "Debe ingresar una edad final válida."
         if edadFinal < 18 or edadFinal > 65:
             return "La edad final debe estar entre 18 y 65 años."
         if edadFinal < edadInicial:
             return "La edad final no puede ser menor que la inicial."
+        matrizDonadores = cargarArchivo()
         reporte=generarReporteRangoEdad(matrizDonadores,edadInicial,edadFinal)
         if reporte:
             return "Reporte creado satisfactoriamente"
         else:
-            return "Reporte no creado"
+            return False
 
 def opcionReporteListaDonadores():
     opcion=input("Digite una opción: ")

@@ -315,13 +315,17 @@ def insertarLugares(pventanaLugar,pprovincia,plugar):
     else:
         messagebox.showerror("Error",resultado)
 
-#def reporteProvinciaInterfaz(pprovincia):
-    #me falta eso
+def reporteProvinciaInterfaz(pprovincia):
+    resultado=opcionReporteProvincia(pprovincia)
+    if resultado!=False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado.")
     
 def ventanaReporteProvincia():
     ventana = Toplevel()
     ventana.title("Reporte Donadores por Provincia")
-    ventana.geometry("400x250")
+    ventana.geometry("400x300")
     Label(ventana,text="Seleccione la provincia:").pack(pady=15)
     provincias = mostrarProvincias()
     comboProvincia = ttk.Combobox(
@@ -337,39 +341,75 @@ def ventanaReporteProvincia():
         text="Regresar",
         command=ventana.destroy).pack(pady=10)
 
+def reporteEdadInterfaz(pinicial,pfinal):
+    resultado = opcionReporteRangoEdad(pinicial.get(),pfinal.get())
+    if not resultado==False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado")
+
+def activarEdadFinal(pinicial,pfinal):
+    try:
+        edad = int(pinicial.get())
+    except:
+        messagebox.showerror("Error","Debe ingresar una edad válida")
+        return False
+    if edad < 18 or edad > 65:
+        messagebox.showerror(
+            "Error","La edad inicial debe estar entre 18 y 65 años")
+        return False
+    pfinal.config(state="normal")
+    return True
+
+def ventanaReporteEdad():
+    ventana = Toplevel()
+    ventana.title("Reporte por Rango de Edad")
+    ventana.geometry("400x300")
+    Label(ventana,text="Edad inicial:").pack(pady=10)
+    entradaInicial = Entry(ventana)
+    entradaInicial.pack()
+    Label(ventana,text="Edad final:").pack(pady=10)
+    entradaFinal = Entry(ventana,state="disabled")
+    entradaFinal.pack()
+    Button(ventana,text="Validar edad inicial",
+    command=lambda: activarEdadFinal(entradaInicial,entradaFinal)).pack(pady=10)
+    Button(ventana,text="Generar Reporte",command=lambda: reporteEdadInterfaz(
+            entradaInicial,entradaFinal)).pack(pady=20)
+    Button(ventana,text="Regresar",command=ventana.destroy).pack()
+
 def ventanaReportes():
     ventana = Toplevel()
     ventana.title("Reportes")
-    ventana.geometry("500x500")
+    ventana.geometry("600x600")
     Button(
-        ventana,text="Donadores por provincia",width=30,
+        ventana,text="Donadores por provincia",width=30, height=2,
         command=lambda: ventanaReporteProvincia()).pack(pady=5)
     Button(
-        ventana,text="Por rango de edad",width=30,
+        ventana,text="Por rango de edad",width=30,height=2,
         command=lambda: ventanaReporteEdad()).pack(pady=5)
     Button(
-        ventana,text="Por tipo de sangre y provincia",width=30,
+        ventana,text="Por tipo de sangre y provincia",width=30,height=2,
         command=lambda: ventanaReporteSangreProvincia()).pack(pady=5)
     Button(
-        ventana,text="Lista completa de donadores",width=30,
+        ventana,text="Lista completa de donadores",width=30,height=2,
         command=lambda: ventanaListaCompleta()).pack(pady=5)
     Button(
-        ventana,text="Mujeres O-",width=30,
+        ventana,text="Mujeres O-",width=30,height=2,
         command=lambda: ventanaMujeresO()).pack(pady=5)
     Button(
-        ventana,text="¿A quién puede donar?",width=30,
+        ventana,text="¿A quién puede donar?",width=30,height=2,
         command=lambda: ventanaPuedeDonar()).pack(pady=5)
     Button(
-        ventana,text="¿De quién puede recibir?",width=30,
+        ventana,text="¿De quién puede recibir?",width=30,height=2,
         command=lambda: ventanaPuedeRecibir()).pack(pady=5)
     Button(
-        ventana,text="Donadores no activos",width=30,
+        ventana,text="Donadores no activos",width=30,height=2,
         command=lambda: ventanaNoActivos()).pack(pady=5)
     Button(
-        ventana,text="Lugares de donación",width=30,
+        ventana,text="Lugares de donación",width=30,height=2,
         command=lambda: ventanaLugaresDonacion()).pack(pady=5)
     Button(
-        ventana,text="Regresar",width=30,
+        ventana,text="Regresar",width=30,height=2,
         command=ventana.destroy).pack(pady=20)
 
 def salirSistema(pventana):
