@@ -216,7 +216,7 @@ def opcionReporteProvincia(pprovincia):
     else:
         return False
 
-def opcionReporteRangoEdad(pedadInicial,pedadFinal):
+def reporteRangoEdad(pedadInicial,pedadFinal):
     try:
         edadInicial = int(pedadInicial)
     except:
@@ -241,21 +241,14 @@ def opcionReporteRangoEdad(pedadInicial,pedadFinal):
         else:
             return False
 
-def opcionReporteListaDonadores():
-    opcion=input("Digite una opción: ")
-    if opcion=="1": #Genera reporte
-        reporte=generarReporteListaDonadores(matrizDonadores)
-        if reporte:
-            return "Reporte creado satisfactoriamente"
-        else:
-            return "Reporte no creado."
-        return
-    elif opcion=="2": #Regresa al menú reportes
-        return
+def reporteListaDonadores():
+    reporte=generarReporteListaDonadores(matrizDonadores)
+    if reporte:
+        return "Reporte creado satisfactoriamente"
     else:
-        print("Debe seleccionar una opción válida.")
+        return "Reporte no creado."
 
-def opcionReporteDonar():
+def reporteDonar():
     for tipo in tiposSangre:
         print("-",tipo)
     print("9 - Regresar")
@@ -271,7 +264,7 @@ def opcionReporteDonar():
         print("Reporte no creado.")
     return
 
-def opcionReporteRecibeDe():
+def reporteRecibeDe():
     for tipo in tiposSangre:
         print("-",tipo)
     print("9 - Regresar")
@@ -286,14 +279,14 @@ def opcionReporteRecibeDe():
     else:
         return "Reporte no creado."
 
-def opcionReporteMujeresO():
+def reporteMujeresO():
     reporte=generarReporteMujeresDonantes(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
         return "Reporte no creado."
     
-def opcionReporteNoActivo():
+def reporteNoActivo():
     opcion=input("Digite una opción: ")
     if opcion=="1": #Genera reporte
         reporte=generarReporteNoActivo(matrizDonadores)
@@ -307,14 +300,14 @@ def opcionReporteNoActivo():
     else:
         print("Debe seleccionar una opción válida.")
 
-def opcionReporteLugares():
+def reporteLugares():
     reporte=generarReporteLugaresDonacion(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
         return "Reporte no creado."
 
-def opcionReporteTipoProvincia():
+def reporteTipoProvincia():
     for tipo in tiposSangre:
         print("-",tipo)
     tipo=input("Digite el tipo de sangre: ").upper()

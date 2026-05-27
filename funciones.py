@@ -410,6 +410,7 @@ def generarReporteListaDonadores(pmatrizD):
     html+="</tr>" #cierra la fila de encabezados
     provincias= mostrarProvincias()
     for provincia in provincias: #Recorre provincias
+        html+="<tr><td colspan='8'><h2>"+provincias[provincia]+"</h2></td></tr>" #Encabezado con el nombre de la Provincia
         for donador in pmatrizD: #Recorre donadores
             provinciaDonador= obtenerProvincias(donador[1])
             if provinciaDonador==provincia:

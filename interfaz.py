@@ -342,7 +342,7 @@ def ventanaReporteProvincia():
         command=ventana.destroy).pack(pady=10)
 
 def reporteEdadInterfaz(pinicial,pfinal):
-    resultado = opcionReporteRangoEdad(pinicial.get(),pfinal.get())
+    resultado = reporteRangoEdad(pinicial.get(),pfinal.get())
     if not resultado==False:
         messagebox.showinfo("Éxito",resultado)
     else:
@@ -376,6 +376,14 @@ def ventanaReporteEdad():
     Button(ventana,text="Generar Reporte",command=lambda: reporteEdadInterfaz(
             entradaInicial,entradaFinal)).pack(pady=20)
     Button(ventana,text="Regresar",command=ventana.destroy).pack()
+
+def ventanaListaCompleta():
+    resultado= reporteListaDonadores()
+    if resultado == "Reporte creado satisfactoriamente":
+        messagebox.showinfo("Éxito",resultado)
+        #pventana.destroy()
+    else:
+        messagebox("Error",resultado)
 
 def ventanaReportes():
     ventana = Toplevel()
