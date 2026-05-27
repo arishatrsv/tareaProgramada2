@@ -246,8 +246,8 @@ def actualizarInterfaz(ventanaActualizar,
         datosFecha,
         datosSangre,
         datosPeso)
-    if resultado == False:
-        messagebox.showerror("Error","Datos inválidos")
+    if resultado==str(resultado):
+        messagebox.showerror("Error",resultado)
         return
     matriz = cargarArchivo()
     posicion = buscarCedula(matriz,datosCedula)
@@ -313,9 +313,9 @@ def ventanaInsertarLugar(lugaresDonar):
     botones= Frame(ventanaLugar)
     botones.pack(pady=20)
     Button(botones,text="Insertar",
-           command=lambda: insertarLugares(ventanaLugar,provinciaElegida,lugar)).pack(side=LEFT,padx=10)
+            command=lambda: insertarLugares(ventanaLugar,provinciaElegida,lugar)).pack(side=LEFT,padx=10)
     Button(botones,text="Salir",
-           command=ventanaLugar.destroy).pack(side=LEFT,padx=10)
+            command=ventanaLugar.destroy).pack(side=LEFT,padx=10)
 
 def insertarLugares(pventanaLugar,pprovincia,plugar):
     nomProvincia= pprovincia.get()
@@ -338,7 +338,7 @@ def salirSistema(pventana):
     ventanaSalir.geometry("500x150")
     ventanaSalir.configure(bg="white")
     Label(ventanaSalir, text="Donar Sangre, es donar vida",
-          font=("Arial",18,"bold","italic"),fg="red",bg="white").pack(expand=True)
+        font=("Arial",18,"bold","italic"),fg="red",bg="white").pack(expand=True)
     ventanaSalir.after(2000,lambda:[ventanaSalir.destroy(),pventana.destroy()]) #2000= muestra el mensaje, espera 2 segundos y cierra el programa
 
 def main():
