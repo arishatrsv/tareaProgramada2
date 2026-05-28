@@ -12,10 +12,20 @@ from faker import Faker #permite generar datos aleatorios
 fake = Faker("es_MX") #español de Mexico
 
 def mostrarTiposSangre():
+    """
+    Funcionamiento: Retorna los tipos de sangre disponibles.
+    Entrada: Ninguna.
+    Salida: tupla con los tipos de sangre válidos.
+    """
     tipos = ("O+","O-","A+","A-","B+","B-","AB+","AB-")
     return tipos
 
 def mostrarProvincias():
+    """
+    Funcionamiento: Retorna el diccionario de provincias.
+    Entrada: Ninguna.
+    Salida: dict con código de provincia y nombre.
+    """
     provincias= {
     1: "San José",
     2: "Alajuela",
@@ -28,6 +38,11 @@ def mostrarProvincias():
     return provincias
 
 def crearDiccionarioLugares():
+    """
+    Funcionamiento: Retorna el diccionario de centros de donación por provincia.
+    Entrada: Ninguna.
+    Salida: dict con listas de lugares de donación por provincia.
+    """
     diccionarioLugares = {
     1:["Banco Nacional de Sangre",
         "Hospital México",
@@ -48,12 +63,22 @@ def crearDiccionarioLugares():
     return diccionarioLugares
 
 def guardarArchivo(pmatrizD):
+    """
+    Funcionamiento: Guarda la matriz de donadores en el archivo donadores.txt.
+    Entrada: pmatrizD (list) con la matriz de donadores.
+    Salida: None.
+    """
     archivo=open("donadores.txt","wb")
     pickle.dump(pmatrizD,archivo)
     archivo.close()
     return 
 
 def cargarArchivo():
+    """
+    Funcionamiento: Carga la matriz de donadores desde el archivo donadores.txt.
+    Entrada: Ninguna.
+    Salida: Lista de donadores o lista vacía si no existe el archivo.
+    """
     try:
         archivo=open("donadores.txt","rb")
         matriz=pickle.load(archivo)
@@ -63,16 +88,31 @@ def cargarArchivo():
         return []
 
 def buscarCedula(pmatrizD,pcedula):
+    """
+    Funcionamiento: Busca un donador por cédula en la matriz.
+    Entrada: pmatrizD (list), pcedula (str).
+    Salida: Índice del donador o -1 si no existe.
+    """
     for i in range(len(pmatrizD)):
         if pmatrizD[i][1]==pcedula:
             return i
     return -1
     
 def obtenerProvincias(pcedula):
+    """
+    Funcionamiento: Extrae el código de provincia de la cédula.
+    Entrada: pcedula (str) con formato #-####-####.
+    Salida: int con el código de provincia.
+    """
     provincia = int(pcedula[0])
     return provincia
 
 def insertarDonador(pmatrizD,pdatos):
+    """
+    Funcionamiento: Inserta un donador si la cédula no existe en la matriz.
+    Entrada: pmatrizD (list), pdatos (list) con datos del donador.
+    Salida: bool, True si se inserta, False si ya existe.
+    """
     cedula = pdatos[1]
     existe = buscarCedula(pmatrizD,cedula)
     if existe != -1:
@@ -81,11 +121,37 @@ def insertarDonador(pmatrizD,pdatos):
     return True
 
 def validarCedula(pcedula):
+    """
+    Funcionamiento: Valida que la cédula siga el formato correcto.
+    Entrada: pcedula (str) con formato #-####-####.
+    Salida: bool, True si la cédula es válida.
+    Expresión regular: ^[1-8]-\d{4}-\d{4}$
+    """
     if re.match(r"^[1-8]-\d{4}-\d{4}$",pcedula): #Valida que el formato de cedula sea #-####-#### 
         return True
     return False
 
+def validarExpediente(pexpediente):
+    """
+    Funcionamiento: Valida que el formato del expediente sea correcto (3 letras mayúsculas, # y 4 números).
+    Entrada:pexpediente (str): Número de expediente a validar.
+    Salida:bool: True si el formato es válido, False en caso contrario.
+    Expresión regular:
+        ^[A-Z]{3}#[0-9]{4}$
+        - [A-Z]{3} : tres letras mayúsculas
+        - # : carácter 
+        - [0-9]{4} : cuatro dígitos numéricos
+    """
+    if re.match(r"^[A-Z]{3}#[0-9]{4}$", pexpediente):
+        return True
+    return False
+
 def validarFecha(pfecha):
+    """
+    Funcionamiento: Valida la fecha en formato dd/mm/YYYY y retorna objeto datetime.
+    Entrada: pfecha (str).
+    Salida: datetime si es válida, False si no lo es.
+    """
     try:
         fecha=datetime.strptime(pfecha,"%d/%m/%Y") #Verifica que el str es una fecha con el formato correcto
         return fecha
@@ -93,18 +159,32 @@ def validarFecha(pfecha):
         return False
 
 def validarCorreo(pcorreo):
-    #Verifica que el correo cumpla con alguno de los formatos permitidos
+    """
+    Funcionamiento: Valida el correo electrónico contra dominios permitidos.
+    Entrada: pcorreo (str).
+    Salida: bool, True si es válido.
+    """
     if re.match(r"^[\w.%+-]+@(gmail\.com|costarricense\.cr|racsa\.go\.cr|ccss\.sa\.cr)$",pcorreo):
         return True
     return False
 
 def validarTelefono(ptelefono):
+    """
+    Funcionamiento: Valida el teléfono con formato ####-#### y prefijo permitido.
+    Entrada: ptelefono (str).
+    Salida: bool, True si es válido.
+    """
     if re.match(r"^[246789]{1}\d{3}-\d{4}$",ptelefono):
         return True
     else:
         return False
     
 def validarPeso(ppeso):
+    """
+    Funcionamiento: Valida que el peso sea numérico y esté en el rango permitido.
+    Entrada: ppeso (str).
+    Salida: bool, True si el peso es válido.
+    """
     if ppeso.isdigit()==False:
         return False
     peso = int(ppeso) 
@@ -113,6 +193,11 @@ def validarPeso(ppeso):
     return False
 
 def analizarEdadDonar(pfecha):
+    """
+    Funcionamiento: Calcula la edad y verifica si puede donar por edad.
+    Entrada: pfecha (str) con fecha de nacimiento.
+    Salida: int edad o False si la fecha es inválida.
+    """
     fechaNacimiento = validarFecha(pfecha)
     if fechaNacimiento==False:
         return False
@@ -129,6 +214,11 @@ def analizarEdadDonar(pfecha):
     return edad    
 
 def calcularEdad(pfecha):
+    """
+    Funcionamiento: Calcula la edad actual en años completos.
+    Entrada: pfecha (str) con fecha de nacimiento.
+    Salida: int edad.
+    """
     fechaNacimiento= validarFecha(pfecha)
     anno= fechaNacimiento.year
     mes= fechaNacimiento.month
@@ -140,6 +230,11 @@ def calcularEdad(pfecha):
     return edad
 
 def mostrarCompatibilidad():
+    """
+    Funcionamiento: Retorna las opciones de donación posibles para cada tipo de sangre.
+    Entrada: Ninguna.
+    Salida: dict con compatibilidad de donación.
+    """
     compatibilidad = {
         "O-":[
             "O-","O+",
@@ -165,6 +260,11 @@ def mostrarCompatibilidad():
     return compatibilidad
 
 def mostrarRecibeDe():
+    """
+    Funcionamiento: Retorna la compatibilidad de recepción de sangre.
+    Entrada: Ninguna.
+    Salida: dict con tipos de sangre de los que se puede recibir.
+    """
     recibe = {
         "O-":["O-"],
         "O+":["O-","O+"],
@@ -177,6 +277,11 @@ def mostrarRecibeDe():
     return recibe
 
 def mostrarInfoSangre():
+    """
+    Funcionamiento: Retorna recomendaciones según el tipo de sangre.
+    Entrada: Ninguna.
+    Salida: dict con mensajes de recomendación.
+    """
     informacion={
         "A+": "Se le recomienda que done sangre entera y plaquetas.",
         "A-": "Se le recomienda que done sangre entera y glóbulos rojos dobles.",
@@ -189,6 +294,11 @@ def mostrarInfoSangre():
     return informacion
 
 def actualizarDonador(pmatrizD,pposicion,pdatos):
+    """
+    Funcionamiento: Actualiza los datos de un donador en la matriz.
+    Entrada: pmatrizD (list), pposicion (int), pdatos (list).
+    Salida: pmatrizD actualizado.
+    """
     pmatrizD[pposicion][0]=pdatos[0] #nombre
     pmatrizD[pposicion][7]=pdatos[1] #telefono
     pmatrizD[pposicion][4]=pdatos[2] #fecha
@@ -201,6 +311,11 @@ def actualizarDonador(pmatrizD,pposicion,pdatos):
     return pmatrizD
 
 def eliminarDonador(pmatrizD,pcedula,pjustificacion):
+    """
+    Funcionamiento: Marca un donador como inactivo y registra la justificación.
+    Entrada: pmatrizD (list), pcedula (str), pjustificacion (int).
+    Salida: bool, True si se actualiza, False si no existe.
+    """
     posicion = buscarCedula(pmatrizD,pcedula)
     if posicion == -1: #Si no existe
         return False
@@ -209,6 +324,11 @@ def eliminarDonador(pmatrizD,pcedula,pjustificacion):
     return True
 
 def insertarLugar(pdiccionario,pprovincia,plugar):
+    """
+    Funcionamiento: Inserta un lugar nuevo para donación en una provincia.
+    Entrada: pdiccionario (dict), pprovincia (int), plugar (str).
+    Salida: bool, False si ya existe, True si se agrega.
+    """
     listaLugares = pdiccionario[pprovincia]
     if plugar in listaLugares:
         return False
