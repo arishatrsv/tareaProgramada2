@@ -248,21 +248,14 @@ def reporteListaDonadores():
     else:
         return "Reporte no creado."
 
-def reporteDonar():
-    for tipo in tiposSangre:
-        print("-",tipo)
-    print("9 - Regresar")
-    tipo= input("Seleccione el tipo de sangre: ").upper()
-    if tipo=="9": #Regresa al menú reportes
-        return
-    if tipo not in tiposSangre:
-        print("Debe ingresar un tipo de sangre válido.")
-    reporte=generarReportePuedeDonar(matrizDonadores,tipo)
+def reporteDonar(ptipo):
+    if ptipo not in tiposSangre:
+        return "Debe ingresar un tipo de sangre válido."
+    reporte=generarReportePuedeDonar(matrizDonadores,ptipo)
     if reporte:
-        print("Reporte creado satisfactoriamente.")
+        return "Reporte creado satisfactoriamente."
     else:
-        print("Reporte no creado.")
-    return
+        return "Reporte no creado."
 
 def reporteRecibeDe():
     for tipo in tiposSangre:
