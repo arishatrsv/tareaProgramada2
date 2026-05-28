@@ -237,7 +237,6 @@ def reporteDonar(ptipo):
 def reporteRecibeDe(ptipo):
     if ptipo not in tiposSangre:
         return "Debe ingresar un tipo de sangre válido."
-    matrizDonadores = cargarArchivo()
     reporte=generarReporteRecibeDe(matrizDonadores,ptipo)
     if reporte:
         return "Reporte creado satisfactoriamente."
@@ -245,7 +244,6 @@ def reporteRecibeDe(ptipo):
         return False
 
 def reporteMujeresO():
-    matrizDonadores=cargarArchivo()
     reporte=generarReporteMujeresDonantes(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente."
@@ -253,18 +251,11 @@ def reporteMujeresO():
         return False
     
 def reporteNoActivo():
-    opcion=input("Digite una opción: ")
-    if opcion=="1": #Genera reporte
-        reporte=generarReporteNoActivo(matrizDonadores)
-        if reporte:
-            print("Reporte creado satisfactoriamente")
-        else:
-            print("Reporte no creado.")
-        return
-    elif opcion=="2": #Regresa al menú reportes
-        return
+    reporte= generarReporteNoActivo(matrizDonadores)
+    if reporte:
+        return "Reporte creado satisfactoriamente"
     else:
-        print("Debe seleccionar una opción válida.")
+        return "Reporte no creado."
 
 def reporteLugares():
     reporte=generarReporteLugaresDonacion(matrizDonadores)

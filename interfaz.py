@@ -381,7 +381,6 @@ def ventanaListaCompleta():
     resultado= reporteListaDonadores()
     if resultado == "Reporte creado satisfactoriamente":
         messagebox.showinfo("Éxito",resultado)
-        #pventana.destroy()
     else:
         messagebox("Error",resultado)
 
@@ -394,7 +393,7 @@ def reporteTipoProvinciaInterfaz(psangre,pprovincia):
 
 def ventanaReporteSangreProvincia():
     ventana=Toplevel()
-    ventana.title("Reporte Tipo Sangre y Provincia")
+    ventana.title("Tipo Sangre y Provincia")
     ventana.geometry("400x350")
     Label(ventana,text="Seleccione el tipo de sangre:").pack(pady=10)
     comboSangre=ttk.Combobox(ventana,values=mostrarTiposSangre(),state="readonly",width=30)
@@ -425,12 +424,26 @@ def ventanaMujeresO():
     Button(ventana,text="Regresar",
             command=ventana.destroy).pack(pady=10)
 
-def reporteMujeresOInterfaz():
-    resultado=reporteMujeresO()
-    if resultado!=False:
+def reportePuedeDonar(psangre,pventana):
+    tipo= psangre.get()
+    resultado = reporteDonar(tipo)
+    if resultado=="Reporte creado satisfactoriamente.":
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado.")
+        messagebox.showerror("Error",resultado)
+
+def ventanaPuedeDonar():
+    ventana=Toplevel()
+    ventana.title("¿A quién puede donar?")
+    ventana.geometry("400x250")
+    Label(ventana,text="Seleccione el tipo de sangre").pack(pady=20)
+    sangre= ttk.Combobox(ventana,values=mostrarTiposSangre(),state="readonly")
+    sangre.pack()
+    Button(ventana,text="Generar Reporte",
+           command=lambda: reportePuedeDonar(sangre,ventana)).pack(pady=20)
+    Button(ventana,text="Regresar",
+           command=ventana.destroy).pack()
 
 def reporteRecibeInterfaz(psangre):
     resultado = reporteRecibeDe(psangre)
@@ -451,10 +464,52 @@ def ventanaPuedeRecibir():
         command=lambda:reporteRecibeInterfaz(comboSangre.get())).pack(pady=20)
     Button(ventana,text="Regresar",command=ventana.destroy).pack()
 
+def reporteNoActivoInterfaz(pventana):
+    resultado= reporteNoActivo()
+    if resultado == "Reporte creado satisfactoriamente":
+        messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
+    else:
+        messagebox.showerror("Error",resultado)
+
+def ventanaNoActivos():
+    ventana = Toplevel()
+    ventana.title("Donadores No Activos")
+    ventana.geometry("400x300")
+    Label(ventana,text="Generar reporte de donadores NO activos").pack(pady=30)
+    Button(ventana,text="Generar Reporte",
+           command=lambda:reporteNoActivoInterfaz(ventana)).pack(pady=20)
+    Button(ventana,text="Regresar",
+           command=ventana.destroy).pack()
+
+def reporteLugaresInterfaz(pventana):
+    resultado=reporteLugares()
+    if resultado == "Reporte creado satisfactoriamente.":
+        messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
+    else:
+        messagebox.showerror("Error",resultado)
+        
+def ventanaLugaresDonacion():
+    ventana = Toplevel()
+    ventana.title("Lugares de Donación")
+    ventana.geometry("400x300")
+    Label(ventana,text="Generar reporte de lugares de donación").pack(pady=30)
+    Button(ventana,text="Generar Reporte",
+           command=lambda:reporteLugaresInterfaz(ventana)).pack(pady=20)
+    Button(ventana,text="Regresar",
+           command=ventana.destroy).pack()
+    
 def ventanaReportes():
     ventana = Toplevel()
     ventana.title("Reportes")
     ventana.geometry("600x600")
+    titulo=Label(
+        ventana,
+        text="REPORTES",
+        font=("Arial",20,"bold"),
+        fg="#8E1616")
+    titulo.pack(pady=10)
     Button(
         ventana,text="Donadores por provincia",width=30, height=2,
         command=lambda: ventanaReporteProvincia()).pack(pady=5)
@@ -483,7 +538,7 @@ def ventanaReportes():
         ventana,text="Lugares de donación",width=30,height=2,
         command=lambda: ventanaLugaresDonacion()).pack(pady=5)
     Button(
-        ventana,text="Regresar",width=30,height=2,
+        ventana,text="Regresar",width=20,height=2,
         command=ventana.destroy).pack(pady=20)
 
 def salirSistema(pventana):
@@ -498,7 +553,7 @@ def salirSistema(pventana):
 def main():
     ventana=Tk()
     ventana.title("Banco de Sangre")
-    ventana.geometry("800x600")
+    ventana.geometry("800x500")
     titulo=Label(
         ventana,
         text="BANCO DE SANGRE",
