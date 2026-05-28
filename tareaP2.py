@@ -132,29 +132,6 @@ def eliminarDonadorAux(matrizDonadores,pcedula,pjustificacion):
         return "Debe ingresar una justificación"
     return True
 
-#No sirve
-"""
-def opcionEliminarDonador():
-    cedula = input("Digite el número de cédula: ")
-    print("1- Menor de edad")
-    print("2- Peso menor a 50 kg")
-    print("3- Peso mayor a 120 kg")
-    print("4- Enfermedad infecciosa o crónica")
-    print("5- Uso de medicamentos no permitidos")
-    print("6- Procedimiento médico reciente")
-    print("7- Viaje o conducta de riesgo")
-    try:
-        justificacion= int(input("Digite la justificación de eliminación: "))
-    except:
-        print("Debe ingresar un número válido.")
-        return False
-    if justificacion not in [1,2,3,4,5,6,7]:
-        print("Debe seleccionar una opción válida.")
-        return False
-    eliminado=eliminarDonadorAux(matrizDonadores,cedula,justificacion)
-    if not eliminado==False:
-        return eliminado
-"""
 def eliminarDonadorMostrar(matrizDonadores,pcedula,pjustificacion,pconfirmar):
     validacion= eliminarDonadorAux(matrizDonadores,pcedula,pjustificacion)
     if validacion != True:
@@ -257,27 +234,23 @@ def reporteDonar(ptipo):
     else:
         return "Reporte no creado."
 
-def reporteRecibeDe():
-    for tipo in tiposSangre:
-        print("-",tipo)
-    print("9 - Regresar")
-    tipo = input("Seleccione el tipo de sangre: ").upper()
-    if tipo=="9":
-        return
-    if tipo not in tiposSangre:
+def reporteRecibeDe(ptipo):
+    if ptipo not in tiposSangre:
         return "Debe ingresar un tipo de sangre válido."
-    reporte=generarReporteRecibeDe(matrizDonadores,tipo)
+    matrizDonadores = cargarArchivo()
+    reporte=generarReporteRecibeDe(matrizDonadores,ptipo)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
-        return "Reporte no creado."
+        return False
 
 def reporteMujeresO():
+    matrizDonadores=cargarArchivo()
     reporte=generarReporteMujeresDonantes(matrizDonadores)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
-        return "Reporte no creado."
+        return False
     
 def reporteNoActivo():
     opcion=input("Digite una opción: ")
@@ -300,24 +273,22 @@ def reporteLugares():
     else:
         return "Reporte no creado."
 
-def reporteTipoProvincia():
-    for tipo in tiposSangre:
-        print("-",tipo)
-    tipo=input("Digite el tipo de sangre: ").upper()
-    if tipo not in tiposSangre:
+def reporteTipoProvincia(ptipo,pprovincia):
+    if ptipo not in tiposSangre:
         return "Debe ingresar un tipo de sangre válido."
-    print(mostrarProvincias())
-    try:
-        provincia=int(input("Digite la provincia: "))
-    except:
-        return "Debe ingresar un número válido."
-    if provincia not in mostrarProvincias():
+    provincias=mostrarProvincias()
+    numeroProvincia=0
+    for provincia in provincias:
+        if provincias[provincia]==pprovincia:
+            numeroProvincia=provincia
+    if numeroProvincia==0:
         return "Provincia inválida. Intente nuevamente."
-    reporte=generarReporteTipoProvincia(matrizDonadores,tipo,provincia)
+    matrizDonadores=cargarArchivo()
+    reporte=generarReporteTipoProvincia(matrizDonadores,ptipo,provincia)
     if reporte:
         return "Reporte creado satisfactoriamente."
     else:
-        return "Reporte no creado."
+        return False
 
 def buscarCedulaActualizar():
     cedula=input("Digite la cédula del donador: ")
@@ -395,4 +366,4 @@ def menuPrincipal():
             break
         else:
             print("Debe seleccionar una opción válida.")
-#menuPrincipal()
+

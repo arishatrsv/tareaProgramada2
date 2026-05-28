@@ -385,6 +385,72 @@ def ventanaListaCompleta():
     else:
         messagebox("Error",resultado)
 
+def reporteTipoProvinciaInterfaz(psangre,pprovincia):
+    resultado=reporteTipoProvincia(psangre,pprovincia)
+    if resultado!=False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado.")
+
+def ventanaReporteSangreProvincia():
+    ventana=Toplevel()
+    ventana.title("Reporte Tipo Sangre y Provincia")
+    ventana.geometry("400x350")
+    Label(ventana,text="Seleccione el tipo de sangre:").pack(pady=10)
+    comboSangre=ttk.Combobox(ventana,values=mostrarTiposSangre(),state="readonly",width=30)
+    comboSangre.pack(pady=10)
+    Label(ventana,text="Seleccione la provincia:").pack(pady=10)
+    provincias=mostrarProvincias()
+    comboProvincia=ttk.Combobox(ventana,values=list(provincias.values()),state="readonly",width=30)
+    comboProvincia.pack(pady=10)
+    Button(ventana,text="Generar Reporte",command=lambda:
+        reporteTipoProvinciaInterfaz(comboSangre.get(),comboProvincia.get())).pack(pady=20)
+    Button(ventana,text="Regresar",command=ventana.destroy).pack()
+
+def reporteMujeresOInterfaz():
+    resultado=reporteMujeresO()
+    if resultado!=False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado.")
+
+def ventanaMujeresO():
+    ventana=Toplevel()
+    ventana.title("Reporte Mujeres O-")
+    ventana.geometry("400x250")
+    Label(ventana,
+        text="Reporte Mujeres Donantes O-").pack(pady=20)
+    Button(ventana,text="Generar Reporte",
+        command=reporteMujeresOInterfaz).pack(pady=20)
+    Button(ventana,text="Regresar",
+            command=ventana.destroy).pack(pady=10)
+
+def reporteMujeresOInterfaz():
+    resultado=reporteMujeresO()
+    if resultado!=False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado.")
+
+def reporteRecibeInterfaz(psangre):
+    resultado = reporteRecibeDe(psangre)
+    if resultado != False:
+        messagebox.showinfo("Éxito",resultado)
+    else:
+        messagebox.showerror("Error","Reporte no creado.")
+
+def ventanaPuedeRecibir():
+    ventana = Toplevel()
+    ventana.title("¿De quién puede recibir?")
+    ventana.geometry("400x300")
+    Label(ventana,text="Seleccione el tipo de sangre:").pack(pady=15)
+    comboSangre = ttk.Combobox(ventana,
+        values=mostrarTiposSangre(),state="readonly",width=30)
+    comboSangre.pack(pady=10)
+    Button(ventana,text="Generar Reporte",
+        command=lambda:reporteRecibeInterfaz(comboSangre.get())).pack(pady=20)
+    Button(ventana,text="Regresar",command=ventana.destroy).pack()
+
 def ventanaReportes():
     ventana = Toplevel()
     ventana.title("Reportes")
