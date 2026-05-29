@@ -431,6 +431,11 @@ def generarDonadorRandom():
     return [nombre,cedula,sangre,sexo,fecha,peso,correo,telefono,estado,justificacion]
 
 def crearInicioHtml(ptitulo):
+    """
+    Funcionamiento: Crea el inicio del reporte HTML con título y fecha.
+    Entrada: ptitulo (str) con el título de la página.
+    Salida: str con el contenido HTML inicial.
+    """
     fecha=datetime.now()
     html="<html>" #Comienza el documento HTML
     html+="<head>"
@@ -456,15 +461,30 @@ def crearInicioHtml(ptitulo):
     return html #Retorna el html creado hasta el momento
 
 def cerrarHtml():
+    """
+    Funcionamiento: Retorna las etiquetas de cierre para un documento HTML.
+    Entrada: Ninguna.
+    Salida: str con las etiquetas de cierre HTML.
+    """
     return "</body></html>" #cierra el body y el html, para no repetirlo en cada funcion
 
 def guardarHtml(pnombreArchivo,phtml):
+    """
+    Funcionamiento: Guarda un contenido HTML en un archivo.
+    Entrada: pnombreArchivo (str), phtml (str).
+    Salida: bool True si la operación se completa.
+    """
     archivo=open(pnombreArchivo,"w",encoding="utf-8") #utf-8 es algo que encontre para caracteres especiales. 
     archivo.write(phtml) #Escribe todo el html dentro del archivo
     archivo.close()
     return True
 
 def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores de una provincia.
+    Entrada: pmatrizD (list), pprovincia (int).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Donadores por Provincia")
     html+="<table>"
     html+="<tr>" #abre la fila de encabezados
@@ -494,6 +514,11 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     return guardarHtml("reporteDonadoresProvincia.html",html)
 
 def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores dentro de un rango de edad.
+    Entrada: pmatrizD (list), pedadInicial (int), pedadFinal (int).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte por Rango de Edad")
     html+="<table>"
     html+="<tr>" #abre la fila de encabezados
@@ -518,6 +543,11 @@ def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
     return guardarHtml("reporteRangoEdad.html",html)  
 
 def generarReporteListaDonadores(pmatrizD):
+    """
+    Funcionamiento: Genera un reporte HTML de todos los donadores agrupados por provincia.
+    Entrada: pmatrizD (list).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Lista Completa de Donadores")
     html+="<table>"
     html+="<tr>" #abre la fila de encabezados
@@ -551,6 +581,11 @@ def generarReporteListaDonadores(pmatrizD):
     return guardarHtml("reporteListaDonadores.html",html)  
 
 def generarReportePuedeDonar(pmatrizD,ptipo):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores compatibles para donar.
+    Entrada: pmatrizD (list), ptipo (str).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     compatibilidad= mostrarCompatibilidad()
     listaCompatibles= compatibilidad[ptipo]
     html=crearInicioHtml("Reporte ¿A quién puede donar?")
@@ -582,6 +617,11 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
     return guardarHtml("reporteAquienPuedeDonar.html",html)  
             
 def generarReporteRecibeDe(pmatrizD,ptipo):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores compatibles para recibir.
+    Entrada: pmatrizD (list), ptipo (str).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     recibe= mostrarRecibeDe()
     listaCompatibles= recibe[ptipo]
     html=crearInicioHtml("Reporte ¿De quién puede recibir?")
@@ -612,6 +652,11 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
     return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
 
 def generarReporteNoActivo(pmatrizD):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores inactivos.
+    Entrada: pmatrizD (list).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Donantes NO Activos")
     html+="<table>" #bordes visibles
     html+="<tr>" #fila de encabezados
@@ -646,6 +691,11 @@ def generarReporteNoActivo(pmatrizD):
     return guardarHtml("reporteNoActivos.html",html)
 
 def generarReporteLugaresDonacion(pmatrizD):
+    """
+    Funcionamiento: Genera un reporte HTML de lugares de donación por provincia.
+    Entrada: pmatrizD (list).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Lugares de Donación")
     html+="<table>" #Crea una tabla con bordes visibles
     html+="<tr>" #Abre la fila de encabezados 
@@ -674,6 +724,11 @@ def generarReporteLugaresDonacion(pmatrizD):
     return guardarHtml("reporteLugares.html",html)
 
 def generarReporteMujeresDonantes(pmatrizD):
+    """
+    Funcionamiento: Genera un reporte HTML de mujeres donantes O- menores de 45 años.
+    Entrada: pmatrizD (list).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Mujeres Donantes")
     html+="<table>" #bordes visibles
     html+="<tr>" #fila de encabezados 
@@ -704,6 +759,11 @@ def generarReporteMujeresDonantes(pmatrizD):
     return guardarHtml("reporteMujeresDonantes.html",html)
 
 def generarReporteTipoProvincia(pmatrizD,ptipo,pprovincia):
+    """
+    Funcionamiento: Genera un reporte HTML de donadores por tipo de sangre y provincia.
+    Entrada: pmatrizD (list), ptipo (str), pprovincia (int).
+    Salida: bool, True si se guarda el archivo correctamente.
+    """
     html=crearInicioHtml("Reporte Donadores por Tipo de Sangre y Provincia")
     html+="<h2>Tipo de sangre: "+ptipo+"</h2>"
     html+="<h2>Provincia: "+mostrarProvincias()[pprovincia]+"</h2>"

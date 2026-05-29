@@ -292,43 +292,6 @@ def buscarCedulaActualizar():
         return
     print(menuActualizarDonador(posicion))
     
-def menuReportes():
-    while True:
-        print("\n----- REPORTES -----")
-        print("1. Reporte donadores por provincia")
-        print("2. Reporte por rango de edad")
-        print("3. Reporte lista completa de donadores")
-        print("4. Reporte ¿A quién puede donar?")
-        print("5. Reporte ¿De quién puede recibir?")
-        print("6. Reporte mujeres donantes O- menores de 45")
-        print("7. Reporte donadores NO activos")
-        print("8. Reporte lugares de donación")
-        print("9. Reporte por tipo de sangre y provincia")
-        print("10. Regresar")
-        opcion=input("\nDigite una opción: ")
-        if opcion=="1":
-            print(opcionReporteProvincia())
-        elif opcion=="2":
-            print(opcionReporteRangoEdad())
-        elif opcion=="3":
-            print(opcionReporteListaDonadores())
-        elif opcion=="4":
-            opcionReporteDonar()
-        elif opcion=="5":
-            print(opcionReporteRecibeDe())
-        elif opcion=="6":
-            print(opcionReporteMujeresO())
-        elif opcion=="7":
-            opcionReporteNoActivo()
-        elif opcion=="8":
-            print(opcionReporteLugares())
-        elif opcion=="9":
-            print(opcionReporteTipoProvincia())
-        elif opcion=="10":
-            return
-        else:
-            print("Debe seleccionar una opción válida.")
-    
 def menuPrincipal():
     while True:
         print("\n----- BANCO DE SANGRE -----")
