@@ -164,6 +164,7 @@ def validarCorreo(pcorreo):
     Entrada: pcorreo (str).
     Salida: bool, True si es válido.
     """
+    #Valida que solo se puedan los correos con dominio permitido
     if re.match(r"^[\w.%+-]+@(gmail\.com|costarricense\.cr|racsa\.go\.cr|ccss\.sa\.cr)$",pcorreo):
         return True
     return False
@@ -174,6 +175,7 @@ def validarTelefono(ptelefono):
     Entrada: ptelefono (str).
     Salida: bool, True si es válido.
     """
+    #Valida el teléfono cumpla el formato ####-####
     if re.match(r"^[246789]{1}\d{3}-\d{4}$",ptelefono):
         return True
     else:
