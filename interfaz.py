@@ -27,6 +27,11 @@ from tareaP2 import*
 #destroy: cierra una ventana
     
 def ventanaInsertar(listaBotones):
+    """
+    Funcionamiento: Crea y muestra la ventana para insertar un nuevo donador.
+    Entrada: listaBotones (list) lista de botones del menú principal para habilitarlos luego.
+        Salida: Ventana con campos de entrada y botones: 'Registrar', 'Limpiar' y 'Regresar'.
+    """
     ventanaInsertar= Toplevel()
     ventanaInsertar.title("Insertar Donador")
     ventanaInsertar.geometry("600x500")
@@ -69,6 +74,11 @@ def ventanaInsertar(listaBotones):
         command=ventanaInsertar.destroy).grid(row=9,column=3,pady=20,padx=10)
 
 def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefono,correo,listaBotones):
+    """
+    Funcionamiento: Lee los datos del formulario de inserción y registra el donador.
+    Entrada: objetos Entry/Combobox/StringVar del formulario y listaBotones (list).
+        Salida: Muestra mensajes de error/éxito, abre la ventana de información del donador, habilita botones del menú y cierra la ventana de inserción.
+    """
     datosCedula=cedula.get() # .get() obtiene lo escrito por el usuario
     datosNombre=nombre.get()
     datosFecha=fecha.get()
@@ -90,9 +100,15 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     ventanaInsertar.destroy() #Cierra ventana
 
 def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
+    """
+    Funcionamiento: Muestra una ventana con información adicional del donador recién registrado.
+    Entrada: datosCedula (str), datosFecha (str), datosPeso (str), datosSangre (str).
+        Salida: Ventana con información textual y botón 'Regresar'.
+    """
     ventanaInfo = Toplevel()
     ventanaInfo.title("Información del Donador")
     ventanaInfo.geometry("700x500")
+    ventanaInfo.configure(bg="#FFF5F5")
     mensaje = ""
     mensaje += analizarEdadDonarAux(datosFecha)
     mensaje += "\n\n"
@@ -111,6 +127,11 @@ def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
     Button(ventanaInfo,text="Regresar",command=ventanaInfo.destroy).pack(pady=20)
 
 def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
+    """
+    Funcionamiento: Limpia los campos del formulario de inserción/actualización.
+    Entrada: objetos Entry/Combobox/StringVar correspondientes a los campos del formulario.
+        Salida: Los campos quedan vacíos y `sexo` se restablece a 'M'.
+    """
     cedula.delete(0,END) #Borra todos los entry(0-> inicio y end -> final)
     nombre.delete(0,END)
     fecha.delete(0,END)
@@ -121,6 +142,11 @@ def limpiarDonador(cedula,nombre,fecha,sangre,sexo,peso,telefono,correo):
     correo.delete(0,END)
     
 def ventanaGenerar(listaBotones):
+    """
+    Funcionamiento: Crea la ventana para especificar la cantidad de donadores a generar aleatoriamente.
+    Entrada: listaBotones (list) lista de botones del menú principal para habilitarlos luego.
+        Salida: Ventana con campo `Entry` para cantidad y botón 'Generar'.
+    """
     ventanaGenerar = Toplevel()
     ventanaGenerar.title("Generar Donadores")
     ventanaGenerar.geometry("400x200")
@@ -130,6 +156,11 @@ def ventanaGenerar(listaBotones):
     Button(ventanaGenerar,text="Generar",width=20,command=lambda:generarDonadores(ventanaGenerar,cantidad,listaBotones)).pack(pady=20)
 
 def generarDonadores(ventanaGenerar,cantidad,listaBotones):
+    """
+    Funcionamiento: Valida la cantidad ingresada y genera donadores aleatorios.
+    Entrada: ventanaGenerar (Tk window), cantidad (Entry), listaBotones (list).
+    Salida: Muestra mensaje de resultado, habilita botones del menú y cierra la ventana al completar.
+    """
     datosCantidad = cantidad.get()
     if datosCantidad.isdigit() == False:
         messagebox.showerror("Error","Debe ingresar únicamente números enteros positivos")
@@ -146,6 +177,11 @@ def generarDonadores(ventanaGenerar,cantidad,listaBotones):
     ventanaGenerar.destroy()
 
 def formularioActualizar(matriz,posicion):
+    """
+    Funcionamiento: Abre un formulario con los datos actuales de un donador para actualizar.
+    Entrada: matriz (list) matriz de donadores, posicion (int) índice del donador en la matriz.
+        Salida: Ventana con campos precargados y botones 'Actualizar' y 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Actualizar Donador")
     ventana.geometry("600x500")
@@ -198,6 +234,11 @@ def formularioActualizar(matriz,posicion):
         command=ventana.destroy).grid(row=6,column=2,pady=20)
 
 def ventanaActualizar():
+    """
+    Funcionamiento: Abre la ventana para solicitar cédula y buscar un donador a actualizar.
+    Entrada: Ninguna.
+        Salida: Ventana con campo cédula y botones 'Buscar' y 'Regresar'.
+    """
     ventanaActualizar = Toplevel()
     ventanaActualizar.title("Actualizar Donador")
     ventanaActualizar.geometry("400x200")
@@ -215,6 +256,11 @@ def ventanaActualizar():
         command=ventanaActualizar.destroy).pack()
     
 def buscarDonadorCedula(pventana,pcedula):
+    """
+    Funcionamiento: Valida cédula, busca el donador en la matriz y abre el formulario de actualización.
+    Entrada: pventana (Tk window) ventana actual, pcedula (Entry) con la cédula a buscar.
+    Salida: Ninguna; muestra mensajes de error o abre `formularioActualizar`.
+    """
     cedula = pcedula.get()
     if validarCedula(cedula)==False:
         messagebox.showerror("Error","Debe ingresar una cédula válida")
@@ -234,6 +280,11 @@ def actualizarInterfaz(ventanaActualizar,
     fecha,
     sangre,
     peso):
+    """
+    Funcionamiento: Lee los campos del formulario de actualización y solicita guardar los cambios.
+    Entrada: ventanaActualizar (Tk window), cedula,nombre,telefono,fecha,sangre,peso (Entry/Combobox).
+    Salida: Ninguna; muestra mensaje de éxito o error y cierra la ventana si se actualiza.
+    """
     matriz=cargarArchivo()
     resultado=actualizarDonadorMostrar(matriz,cedula.get(),nombre.get(),telefono.get(),fecha.get(),sangre.get(),peso.get())
     if resultado==True:
@@ -243,6 +294,11 @@ def actualizarInterfaz(ventanaActualizar,
         messagebox.showerror("Error","Datos no actualizados")
 
 def ventanaEliminar():
+    """
+    Funcionamiento: Crea la ventana para eliminar (marcar inactivo) un donador aportando una justificación.
+    Entrada: Ninguna.
+        Salida: Ventana con campo cédula, combobox de justificaciones y botones 'Eliminar' y 'Regresar'.
+    """
     ventanaEliminar= Toplevel()
     ventanaEliminar.title("Eliminar Donador")
     ventanaEliminar.geometry("500x400")
@@ -263,6 +319,11 @@ def ventanaEliminar():
         command=ventanaEliminar.destroy).pack(side=LEFT,padx=10)
 
 def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
+    """
+    Funcionamiento: Procesa la eliminación (marcar inactivo) de un donador tras confirmación.
+    Entrada: pventanaEliminar (Tk window), pcedula (Entry), pjustificacion (StringVar/Combobox).
+        Salida: Muestra mensajes de resultado, habilita botones del menú y cierra la ventana si se elimina.
+    """
     matriz= cargarArchivo()
     cedula= pcedula.get()
     justificacionEliminar= pjustificacion.get()
@@ -281,6 +342,11 @@ def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
         messagebox.showerror("Resultado",resultado)
 
 def ventanaInsertarLugar(lugaresDonar):
+    """
+    Funcionamiento: Muestra la ventana para insertar un nuevo lugar de donación en una provincia.
+    Entrada: lugaresDonar (dict) diccionario global de lugares por provincia.
+        Salida: Ventana con combobox de provincias, campo de texto para el lugar y botones 'Insertar' y 'Salir'.
+    """
     ventanaLugar= Toplevel()
     ventanaLugar.title("Insertar Lugar de Donación")
     ventanaLugar.geometry("500x300")
@@ -301,6 +367,11 @@ def ventanaInsertarLugar(lugaresDonar):
             command=ventanaLugar.destroy).pack(side=LEFT,padx=10)
 
 def insertarLugares(pventanaLugar,pprovincia,plugar):
+    """
+    Funcionamiento: Inserta un nuevo lugar en el diccionario de lugares según la provincia seleccionada.
+    Entrada: pventanaLugar (Tk window), pprovincia (StringVar/Combobox), plugar (Text).
+        Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     nomProvincia= pprovincia.get()
     lugar= plugar.get("1.0",END).strip()
     provincias= mostrarProvincias()
@@ -315,14 +386,25 @@ def insertarLugares(pventanaLugar,pprovincia,plugar):
     else:
         messagebox.showerror("Error",resultado)
 
-def reporteProvinciaInterfaz(pprovincia):
+def reporteProvinciaInterfaz(pprovincia,pventana):
+    """
+    Funcionamiento: Llama la función que genera el reporte por provincia y muestra el resultado.
+    Entrada: pprovincia (str) nombre de la provincia seleccionada.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado=opcionReporteProvincia(pprovincia)
     if resultado!=False:
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
         messagebox.showerror("Error","Reporte no creado.")
     
 def ventanaReporteProvincia():
+    """
+    Funcionamiento: Crea la ventana para seleccionar una provincia y generar su reporte.
+    Entrada: Ninguna.
+    Salida: Ventana con combobox de provincias y botones 'Generar Reporte' y 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Reporte Donadores por Provincia")
     ventana.geometry("400x300")
@@ -335,20 +417,31 @@ def ventanaReporteProvincia():
     comboProvincia.pack(pady=10)
     Button(
         ventana,text="Generar Reporte",
-        command=lambda: reporteProvinciaInterfaz(comboProvincia.get())).pack(pady=15)
+        command=lambda: reporteProvinciaInterfaz(comboProvincia.get(),ventana)).pack(pady=15)
     Button(
         ventana,
         text="Regresar",
         command=ventana.destroy).pack(pady=10)
 
-def reporteEdadInterfaz(pinicial,pfinal):
+def reporteEdadInterfaz(pinicial,pfinal,pventana):
+    """
+    Funcionamiento: Solicita la generación de un reporte por rango de edad usando los valores de entrada.
+    Entrada: pinicial (Entry), pfinal (Entry).
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado = reporteRangoEdad(pinicial.get(),pfinal.get())
     if not resultado==False:
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
         messagebox.showerror("Error","Reporte no creado")
 
-def activarEdadFinal(pinicial,pfinal):
+def activarEdadFinal(pinicial,pfinal,pventana):
+    """
+    Funcionamiento: Valida la edad inicial y habilita el campo de edad final si es correcta.
+    Entrada: pinicial (Entry) edad inicial, pfinal (Entry) campo a habilitar.
+    Salida: bool True si habilita correctamente, False en caso de error.
+    """
     try:
         edad = int(pinicial.get())
     except:
@@ -362,6 +455,11 @@ def activarEdadFinal(pinicial,pfinal):
     return True
 
 def ventanaReporteEdad():
+    """
+    Funcionamiento: Crea la ventana para ingresar rango de edad y generar el reporte correspondiente.
+    Entrada: Ninguna.
+    Salida: Ventana con campos 'Edad inicial' y 'Edad final' y botones 'Validar edad inicial', 'Generar Reporte' y 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Reporte por Rango de Edad")
     ventana.geometry("400x300")
@@ -372,26 +470,42 @@ def ventanaReporteEdad():
     entradaFinal = Entry(ventana,state="disabled")
     entradaFinal.pack()
     Button(ventana,text="Validar edad inicial",
-    command=lambda: activarEdadFinal(entradaInicial,entradaFinal)).pack(pady=10)
+    command=lambda: activarEdadFinal(entradaInicial,entradaFinal,ventana)).pack(pady=10)
     Button(ventana,text="Generar Reporte",command=lambda: reporteEdadInterfaz(
-            entradaInicial,entradaFinal)).pack(pady=20)
+            entradaInicial,entradaFinal,ventana),).pack(pady=20)
     Button(ventana,text="Regresar",command=ventana.destroy).pack()
 
 def ventanaListaCompleta():
+    """
+    Funcionamiento: Pide la generación del reporte de lista completa de donadores y muestra resultado.
+    Entrada: Ninguna.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado= reporteListaDonadores()
     if resultado == "Reporte creado satisfactoriamente":
         messagebox.showinfo("Éxito",resultado)
     else:
         messagebox("Error",resultado)
 
-def reporteTipoProvinciaInterfaz(psangre,pprovincia):
+def reporteTipoProvinciaInterfaz(psangre,pprovincia,pventana):
+    """
+    Funcionamiento: Solicita la generación del reporte por tipo de sangre y provincia.
+    Entrada: psangre (str) tipo de sangre, pprovincia (int o str) provincia seleccionada.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado=reporteTipoProvincia(psangre,pprovincia)
     if resultado!=False:
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
         messagebox.showerror("Error","Reporte no creado.")
 
 def ventanaReporteSangreProvincia():
+    """
+    Funcionamiento: Muestra la ventana para seleccionar tipo de sangre y provincia y generar reporte.
+    Entrada: Ninguna.
+    Salida: Ventana con combobox para tipo de sangre y provincia y botones 'Generar Reporte' y 'Regresar'.
+    """
     ventana=Toplevel()
     ventana.title("Tipo Sangre y Provincia")
     ventana.geometry("400x350")
@@ -403,28 +517,44 @@ def ventanaReporteSangreProvincia():
     comboProvincia=ttk.Combobox(ventana,values=list(provincias.values()),state="readonly",width=30)
     comboProvincia.pack(pady=10)
     Button(ventana,text="Generar Reporte",command=lambda:
-        reporteTipoProvinciaInterfaz(comboSangre.get(),comboProvincia.get())).pack(pady=20)
+        reporteTipoProvinciaInterfaz(comboSangre.get(),comboProvincia.get(),ventana)).pack(pady=20)
     Button(ventana,text="Regresar",command=ventana.destroy).pack()
 
-def reporteMujeresOInterfaz():
+def reporteMujeresOInterfaz(pventana):
+    """
+    Funcionamiento: Llama la función que genera el reporte de mujeres O- y muestra el resultado.
+    Entrada: Ninguna.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado=reporteMujeresO()
     if resultado!=False:
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
         messagebox.showerror("Error","Reporte no creado.")
 
 def ventanaMujeresO():
+    """
+    Funcionamiento: Crea la ventana para generar el reporte de mujeres O-.
+    Entrada: Ninguna.
+    Salida: Ventana con botones 'Generar Reporte' y 'Regresar'.
+    """
     ventana=Toplevel()
     ventana.title("Reporte Mujeres O-")
     ventana.geometry("400x250")
     Label(ventana,
         text="Reporte Mujeres Donantes O-").pack(pady=20)
     Button(ventana,text="Generar Reporte",
-        command=reporteMujeresOInterfaz).pack(pady=20)
+        command=lambda:reporteMujeresOInterfaz(ventana)).pack(pady=20)
     Button(ventana,text="Regresar",
             command=ventana.destroy).pack(pady=10)
 
 def reportePuedeDonar(psangre,pventana):
+    """
+    Funcionamiento: Genera el reporte de a quién puede donar el tipo de sangre seleccionado.
+    Entrada: psangre (Combobox/Entry), pventana (Tk window) ventana que llamó la acción.
+    Salida: Ninguna; muestra mensaje de éxito o error y cierra la ventana de selección.
+    """
     tipo= psangre.get()
     resultado = reporteDonar(tipo)
     if resultado=="Reporte creado satisfactoriamente.":
@@ -434,6 +564,11 @@ def reportePuedeDonar(psangre,pventana):
         messagebox.showerror("Error",resultado)
 
 def ventanaPuedeDonar():
+    """
+    Funcionamiento: Muestra la ventana para seleccionar un tipo de sangre y generar el reporte correspondiente.
+    Entrada: Ninguna.
+    Salida: Ventana con combobox para tipo de sangre y botones 'Generar Reporte' y 'Regresar'.
+    """
     ventana=Toplevel()
     ventana.title("¿A quién puede donar?")
     ventana.geometry("400x250")
@@ -441,18 +576,29 @@ def ventanaPuedeDonar():
     sangre= ttk.Combobox(ventana,values=mostrarTiposSangre(),state="readonly")
     sangre.pack()
     Button(ventana,text="Generar Reporte",
-           command=lambda: reportePuedeDonar(sangre,ventana)).pack(pady=20)
+            command=lambda: reportePuedeDonar(sangre,ventana)).pack(pady=20)
     Button(ventana,text="Regresar",
-           command=ventana.destroy).pack()
+            command=ventana.destroy).pack()
 
-def reporteRecibeInterfaz(psangre):
+def reporteRecibeInterfaz(psangre,pventana):
+    """
+    Funcionamiento: Genera el reporte de de quién puede recibir sangre el tipo indicado.
+    Entrada: psangre (str) tipo de sangre.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`.
+    """
     resultado = reporteRecibeDe(psangre)
     if resultado != False:
         messagebox.showinfo("Éxito",resultado)
+        pventana.destroy()
     else:
         messagebox.showerror("Error","Reporte no creado.")
 
 def ventanaPuedeRecibir():
+    """
+    Funcionamiento: Crea la ventana para seleccionar tipo de sangre y generar el reporte de recepción.
+    Entrada: Ninguna.
+    Salida: Ventana con combobox para tipo de sangre and buttons 'Generar Reporte' and 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("¿De quién puede recibir?")
     ventana.geometry("400x300")
@@ -461,10 +607,15 @@ def ventanaPuedeRecibir():
         values=mostrarTiposSangre(),state="readonly",width=30)
     comboSangre.pack(pady=10)
     Button(ventana,text="Generar Reporte",
-        command=lambda:reporteRecibeInterfaz(comboSangre.get())).pack(pady=20)
+        command=lambda:reporteRecibeInterfaz(comboSangre.get(),ventana)).pack(pady=20)
     Button(ventana,text="Regresar",command=ventana.destroy).pack()
 
 def reporteNoActivoInterfaz(pventana):
+    """
+    Funcionamiento: Solicita la generación del reporte de donadores no activos y muestra el resultado.
+    Entrada: pventana (Tk window) ventana que llamó la acción.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`; puede cerrar la ventana que llamó la acción.
+    """
     resultado= reporteNoActivo()
     if resultado == "Reporte creado satisfactoriamente":
         messagebox.showinfo("Éxito",resultado)
@@ -473,16 +624,26 @@ def reporteNoActivoInterfaz(pventana):
         messagebox.showerror("Error",resultado)
 
 def ventanaNoActivos():
+    """
+    Funcionamiento: Muestra la ventana para generar el reporte de donadores no activos.
+    Entrada: Ninguna.
+    Salida: Ventana con botones 'Generar Reporte' and 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Donadores No Activos")
     ventana.geometry("400x300")
     Label(ventana,text="Generar reporte de donadores NO activos").pack(pady=30)
     Button(ventana,text="Generar Reporte",
-           command=lambda:reporteNoActivoInterfaz(ventana)).pack(pady=20)
+            command=lambda:reporteNoActivoInterfaz(ventana)).pack(pady=20)
     Button(ventana,text="Regresar",
-           command=ventana.destroy).pack()
+            command=ventana.destroy).pack()
 
 def reporteLugaresInterfaz(pventana):
+    """
+    Funcionamiento: Llama la función que genera el reporte de lugares de donación y muestra el resultado.
+    Entrada: pventana (Tk window) ventana que llamó la acción.
+    Salida: Muestra mensaje de éxito o error mediante `messagebox`; cierra la ventana que llamó la acción si procede.
+    """
     resultado=reporteLugares()
     if resultado == "Reporte creado satisfactoriamente.":
         messagebox.showinfo("Éxito",resultado)
@@ -491,16 +652,26 @@ def reporteLugaresInterfaz(pventana):
         messagebox.showerror("Error",resultado)
         
 def ventanaLugaresDonacion():
+    """
+    Funcionamiento: Crea la ventana para generar el reporte de lugares de donación.
+    Entrada: Ninguna.
+    Salida: Ventana con botones 'Generar Reporte' and 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Lugares de Donación")
     ventana.geometry("400x300")
     Label(ventana,text="Generar reporte de lugares de donación").pack(pady=30)
     Button(ventana,text="Generar Reporte",
-           command=lambda:reporteLugaresInterfaz(ventana)).pack(pady=20)
+            command=lambda:reporteLugaresInterfaz(ventana)).pack(pady=20)
     Button(ventana,text="Regresar",
-           command=ventana.destroy).pack()
+            command=ventana.destroy).pack()
     
 def ventanaReportes():
+    """
+    Funcionamiento: Muestra el menú de reportes con botones para cada tipo de informe.
+    Entrada: Ninguna.
+        Salida: Ventana con botones para cada tipo de reporte y botón 'Regresar'.
+    """
     ventana = Toplevel()
     ventana.title("Reportes")
     ventana.geometry("600x600")
@@ -542,6 +713,11 @@ def ventanaReportes():
         command=ventana.destroy).pack(pady=20)
 
 def salirSistema(pventana):
+    """
+    Funcionamiento: Muestra un mensaje de despedida y cierra la aplicación tras una pausa.
+    Entrada: pventana (Tk window) ventana principal que se cerrará.
+        Salida: Muestra mensaje de éxito o error; puede cerrar la ventana que llamó la acción.
+    """
     ventanaSalir= Toplevel()
     ventanaSalir.title("Salir")
     ventanaSalir.geometry("500x150")
@@ -551,6 +727,11 @@ def salirSistema(pventana):
     ventanaSalir.after(2000,lambda:[ventanaSalir.destroy(),pventana.destroy()]) #2000= muestra el mensaje, espera 2 segundos y cierra el programa
 
 def main():
+    """
+    Funcionamiento: Inicializa la ventana principal del sistema y coloca los botones del menú.
+    Entrada: Ninguna.
+    Salida: Inicia la interfaz gráfica y entra en el `mainloop` de Tkinter.
+    """
     ventana=Tk()
     ventana.title("Banco de Sangre")
     ventana.geometry("800x500")
@@ -566,7 +747,7 @@ def main():
     botonEliminar = Button(ventana,text="Eliminar Donador",width=25,height=2,command=lambda: ventanaEliminar())
     botonLugar = Button(ventana,text="Insertar Lugar",width=25,height=2,command=lambda: ventanaInsertarLugar(lugaresDonar))
     botonReportes = Button(ventana,text="Reportes",width=25,height=2,command=lambda: ventanaReportes())
-    botonSalir = Button(ventana,text="Salir",width=25,height=2,command=lambda: salirSistema(ventana))
+    botonSalir = Button(ventana,text="Salir",width=15,height=1,command=lambda: salirSistema(ventana))
     listaBotones = [botonActualizar,botonEliminar,botonReportes]
     #Coloca los botones en la ventana
     botonInsertar.pack(pady=5)

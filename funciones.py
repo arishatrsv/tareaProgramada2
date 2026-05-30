@@ -511,7 +511,7 @@ def generarReporteDonadoresProvincia(pmatrizD,pprovincia):
     html+="</table>" #cierra la tabla
         #se repite el ciclo para cada donador
     html+=cerrarHtml() 
-    return guardarHtml("reporteDonadoresProvincia.html",html)
+    return guardarHtml("reportes/reporteDonadoresProvincia.html",html)
 
 def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
     """
@@ -540,7 +540,7 @@ def generarReporteRangoEdad(pmatrizD,pedadInicial,pedadFinal):
             html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
-    return guardarHtml("reporteRangoEdad.html",html)  
+    return guardarHtml("reportes/reporteRangoEdad.html",html)  
 
 def generarReporteListaDonadores(pmatrizD):
     """
@@ -578,7 +578,7 @@ def generarReporteListaDonadores(pmatrizD):
                 html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
-    return guardarHtml("reporteListaDonadores.html",html)  
+    return guardarHtml("reportes/reporteListaDonadores.html",html)  
 
 def generarReportePuedeDonar(pmatrizD,ptipo):
     """
@@ -614,7 +614,7 @@ def generarReportePuedeDonar(pmatrizD,ptipo):
                     html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
-    return guardarHtml("reporteAquienPuedeDonar.html",html)  
+    return guardarHtml("reportes/reporteAquienPuedeDonar.html",html)  
             
 def generarReporteRecibeDe(pmatrizD,ptipo):
     """
@@ -649,7 +649,7 @@ def generarReporteRecibeDe(pmatrizD,ptipo):
                 html+="</tr>"
     html+="</table>" #cierra la tabla 
     html+=cerrarHtml() 
-    return guardarHtml("reporteDeQuienPuedeRecibir.html",html) 
+    return guardarHtml("reportes/reporteDeQuienPuedeRecibir.html",html) 
 
 def generarReporteNoActivo(pmatrizD):
     """
@@ -688,7 +688,7 @@ def generarReporteNoActivo(pmatrizD):
             html+="</tr>"
     html+="</table>" #cierra la tabla
     html+=cerrarHtml() 
-    return guardarHtml("reporteNoActivos.html",html)
+    return guardarHtml("reportes/reporteNoActivos.html",html)
 
 def generarReporteLugaresDonacion(pmatrizD):
     """
@@ -721,7 +721,7 @@ def generarReporteLugaresDonacion(pmatrizD):
         #aqui se repite el ciclo para cada provincia creando una fila nueva
     html+="</table>" #cierra la tabla
     html+=cerrarHtml() 
-    return guardarHtml("reporteLugares.html",html)
+    return guardarHtml("reportes/reporteLugares.html",html)
 
 def generarReporteMujeresDonantes(pmatrizD):
     """
@@ -756,7 +756,7 @@ def generarReporteMujeresDonantes(pmatrizD):
             html+="</tr>"
     html+="</table>"
     html+=cerrarHtml()
-    return guardarHtml("reporteMujeresDonantes.html",html)
+    return guardarHtml("reportes/reporteMujeresDonantes.html",html)
 
 def generarReporteTipoProvincia(pmatrizD,ptipo,pprovincia):
     """
@@ -789,4 +789,4 @@ def generarReporteTipoProvincia(pmatrizD,ptipo,pprovincia):
             html+="</tr>"
     html+="</table>"
     html+=cerrarHtml()
-    return guardarHtml("reporteTipoSangrePorProvincia.html",html)
+    return guardarHtml("reportes/reporteTipoSangrePorProvincia.html",html)
