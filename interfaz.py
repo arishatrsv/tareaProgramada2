@@ -91,9 +91,9 @@ def registrarDonador(ventanaInsertar,cedula,nombre,fecha,sangre,sexo,peso,telefo
     resultado = insertarDonadorMostrar(matriz,datosCedula,datosNombre,datosFecha,datosSangre,
                                         datosSexo,datosPeso,datosTelefono,datosCorreo)
     if type(resultado)==str:
-        messagebox.showerror("Error",resultado)
+        messagebox.showerror("Error",resultado,parent=ventanaInsertar)
         return
-    messagebox.showinfo("Éxito","Donador registrado correctamente")
+    messagebox.showinfo("Éxito","Donador registrado correctamente",parent=ventanaInsertar)
     mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre)
     for boton in listaBotones:
         boton.config(state="normal")
@@ -107,7 +107,7 @@ def mostrarInformacionDonador(datosCedula,datosFecha,datosPeso,datosSangre):
     """
     ventanaInfo = Toplevel()
     ventanaInfo.title("Información del Donador")
-    ventanaInfo.geometry("700x500")
+    ventanaInfo.geometry("500x500")
     ventanaInfo.configure(bg="#FFF5F5")
     mensaje = ""
     mensaje += analizarEdadDonarAux(datosFecha)
@@ -163,15 +163,15 @@ def generarDonadores(ventanaGenerar,cantidad,listaBotones):
     """
     datosCantidad = cantidad.get()
     if datosCantidad.isdigit() == False:
-        messagebox.showerror("Error","Debe ingresar únicamente números enteros positivos")
+        messagebox.showerror("Error","Debe ingresar únicamente números enteros positivos",parent=ventanaGenerar)
         return
     datosCantidad = int(datosCantidad)
     if datosCantidad <= 0:
-        messagebox.showerror("Error","La cantidad debe ser mayor a 0")
+        messagebox.showerror("Error","La cantidad debe ser mayor a 0",parent=ventanaGenerar)
         return
     matriz = cargarArchivo()
     mensaje = generarDonadoresAux(matriz,datosCantidad)
-    messagebox.showinfo("Éxito",mensaje)
+    messagebox.showinfo("Éxito",mensaje,parent=ventanaGenerar)
     for boton in listaBotones:
         boton.config(state="normal")
     ventanaGenerar.destroy()
@@ -263,12 +263,13 @@ def buscarDonadorCedula(pventana,pcedula):
     """
     cedula = pcedula.get()
     if validarCedula(cedula)==False:
-        messagebox.showerror("Error","Debe ingresar una cédula válida")
+        messagebox.showerror("Error","Debe ingresar una cédula válida",parent=pventana)
         return
     matriz = cargarArchivo()
     posicion = buscarCedula(matriz,cedula)
     if posicion == -1:
-        messagebox.showerror("Error","La persona con el número de cédula: "+ cedula +" no está registrado en la base de datos del Banco de Sangre aún.")
+        messagebox.showerror("Error","La persona con el número de cédula: "+ cedula +" no está registrado en la base de datos del Banco de Sangre aún.",
+                            parent=pventana )
         return
     pventana.destroy()
     formularioActualizar(matriz,posicion)
@@ -288,10 +289,10 @@ def actualizarInterfaz(ventanaActualizar,
     matriz=cargarArchivo()
     resultado=actualizarDonadorMostrar(matriz,cedula.get(),nombre.get(),telefono.get(),fecha.get(),sangre.get(),peso.get())
     if resultado==True:
-        messagebox.showinfo("Éxito","Datos actualizados correctamente")
+        messagebox.showinfo("Éxito","Datos actualizados correctamente",parent=ventanaActualizar)
         ventanaActualizar.destroy()
     else:
-        messagebox.showerror("Error","Datos no actualizados")
+        messagebox.showerror("Error","Datos no actualizados",parent=ventanaActualizar)
 
 def ventanaEliminar():
     """
@@ -333,13 +334,13 @@ def eliminarDonadores(pventanaEliminar,pcedula,pjustificacion):
         if opciones[codigo] == justificacionEliminar:
             codigoJustificacion= codigo
     confirmar= messagebox.askyesno(
-        "Confirmar eliminación", "¿Desea eliminar el donador?") #muestra ventana con dos botones Si y No
+        "Confirmar eliminación", "¿Desea eliminar el donador?",parent=pventanaEliminar) #muestra ventana con dos botones Si y No
     resultado= eliminarDonadorMostrar(matriz,cedula,codigoJustificacion,confirmar)
     if resultado == "Donador eliminado satisfactoriamente.":
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventanaEliminar)
         pventanaEliminar.destroy()
     else:
-        messagebox.showerror("Resultado",resultado)
+        messagebox.showerror("Resultado",resultado,parent=pventanaEliminar)
 
 def ventanaInsertarLugar(lugaresDonar):
     """
@@ -381,10 +382,10 @@ def insertarLugares(pventanaLugar,pprovincia,plugar):
             codProvincia= codigo
     resultado= insertarLugarAux(lugaresDonar,codProvincia,lugar)
     if resultado== "Lugar agregado correctamente.":
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventanaLugar)
         pventanaLugar.destroy()
     else:
-        messagebox.showerror("Error",resultado)
+        messagebox.showerror("Error",resultado,parent=pventanaLugar)
 
 def reporteProvinciaInterfaz(pprovincia,pventana):
     """
@@ -394,10 +395,10 @@ def reporteProvinciaInterfaz(pprovincia,pventana):
     """
     resultado=opcionReporteProvincia(pprovincia)
     if resultado!=False:
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado.")
+        messagebox.showerror("Error","Reporte no creado.",parent=pventana)
     
 def ventanaReporteProvincia():
     """
@@ -431,10 +432,10 @@ def reporteEdadInterfaz(pinicial,pfinal,pventana):
     """
     resultado = reporteRangoEdad(pinicial.get(),pfinal.get())
     if not resultado==False:
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado")
+        messagebox.showerror("Error","Reporte no creado",parent=pventana)
 
 def activarEdadFinal(pinicial,pfinal,pventana):
     """
@@ -445,11 +446,11 @@ def activarEdadFinal(pinicial,pfinal,pventana):
     try:
         edad = int(pinicial.get())
     except:
-        messagebox.showerror("Error","Debe ingresar una edad válida")
+        messagebox.showerror("Error","Debe ingresar una edad válida",parent=pventana)
         return False
     if edad < 18 or edad > 65:
         messagebox.showerror(
-            "Error","La edad inicial debe estar entre 18 y 65 años")
+            "Error","La edad inicial debe estar entre 18 y 65 años",parent=pventana)
         return False
     pfinal.config(state="normal")
     return True
@@ -485,7 +486,7 @@ def ventanaListaCompleta():
     if resultado == "Reporte creado satisfactoriamente":
         messagebox.showinfo("Éxito",resultado)
     else:
-        messagebox("Error",resultado)
+        messagebox.showerror("Error",resultado)
 
 def reporteTipoProvinciaInterfaz(psangre,pprovincia,pventana):
     """
@@ -495,10 +496,10 @@ def reporteTipoProvinciaInterfaz(psangre,pprovincia,pventana):
     """
     resultado=reporteTipoProvincia(psangre,pprovincia)
     if resultado!=False:
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado.")
+        messagebox.showerror("Error","Reporte no creado.",parent=pventana)
 
 def ventanaReporteSangreProvincia():
     """
@@ -528,10 +529,10 @@ def reporteMujeresOInterfaz(pventana):
     """
     resultado=reporteMujeresO()
     if resultado!=False:
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado.")
+        messagebox.showerror("Error","Reporte no creado.",parent=pventana)
 
 def ventanaMujeresO():
     """
@@ -558,10 +559,10 @@ def reportePuedeDonar(psangre,pventana):
     tipo= psangre.get()
     resultado = reporteDonar(tipo)
     if resultado=="Reporte creado satisfactoriamente.":
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error",resultado)
+        messagebox.showerror("Error",resultado,parent=pventana)
 
 def ventanaPuedeDonar():
     """
@@ -588,10 +589,10 @@ def reporteRecibeInterfaz(psangre,pventana):
     """
     resultado = reporteRecibeDe(psangre)
     if resultado != False:
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error","Reporte no creado.")
+        messagebox.showerror("Error","Reporte no creado.",parent=pventana)
 
 def ventanaPuedeRecibir():
     """
@@ -618,10 +619,10 @@ def reporteNoActivoInterfaz(pventana):
     """
     resultado= reporteNoActivo()
     if resultado == "Reporte creado satisfactoriamente":
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error",resultado)
+        messagebox.showerror("Error",resultado,parent=pventana)
 
 def ventanaNoActivos():
     """
@@ -646,10 +647,10 @@ def reporteLugaresInterfaz(pventana):
     """
     resultado=reporteLugares()
     if resultado == "Reporte creado satisfactoriamente.":
-        messagebox.showinfo("Éxito",resultado)
+        messagebox.showinfo("Éxito",resultado,parent=pventana)
         pventana.destroy()
     else:
-        messagebox.showerror("Error",resultado)
+        messagebox.showerror("Error",resultado,parent=pventana)
         
 def ventanaLugaresDonacion():
     """

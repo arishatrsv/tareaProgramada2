@@ -5,6 +5,7 @@
 
 #Importación de librerias
 import pickle
+import os #Para crear la carpeta de los reportes
 import re
 from datetime import datetime
 import random
@@ -398,7 +399,7 @@ def generarJustificacionRandom(pfecha,ppeso):
         return 2
     if int(ppeso)>120:
         return 3
-    otrasJustificaciones=[0,4,5,6,7,0,0,0] #puse 0 para que sea mas probable que sea apto
+    otrasJustificaciones=[0,4,5,6,7,8,0,0,0] #puse 0 para que sea mas probable que sea apto
     return random.choice(otrasJustificaciones)
 
 def mostrarJustificacion():
@@ -410,7 +411,8 @@ def mostrarJustificacion():
         4:"Enfermedad infecciosa o crónica",
         5:"Uso de medicamentos no permitidos",
         6:"Procedimiento médico reciente",
-        7:"Viaje o conducta de riesgo"}
+        7:"Conducta de riesgo",
+        8:"Viaje reciente a zona de riesgo"}
     return justificaciones
 
 def generarEstadoDonador(pjustificacion):
@@ -474,6 +476,7 @@ def guardarHtml(pnombreArchivo,phtml):
     Entrada: pnombreArchivo (str), phtml (str).
     Salida: bool True si la operación se completa.
     """
+    os.makedirs("reportes",exist_ok=True) #Esto verifica si la carpeta reportes existe, si no, la crea
     archivo=open(pnombreArchivo,"w",encoding="utf-8") #utf-8 es algo que encontre para caracteres especiales. 
     archivo.write(phtml) #Escribe todo el html dentro del archivo
     archivo.close()
