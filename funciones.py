@@ -339,6 +339,11 @@ def insertarLugar(pdiccionario,pprovincia,plugar):
     return True
 
 def generarCedulaRandom():
+    """
+    Funcionamiento: Genera una cédula costarricense aleatoria con formato #-####-####.
+    Entrada: Ninguna.
+    Salida: str con la cédula generada.
+    """
     provincia=str(random.randint(1,8)) #Genera un número de provincia entre 1 y 8
     tomo=random.randint(1000,9999) #Genera 4 números aleatorios para el tomo
     asiento=random.randint(1000,9999) #Genera 4 números aleatorios para el asiento
@@ -346,7 +351,12 @@ def generarCedulaRandom():
     return cedula
 
 def generarNombreSexoRandom():
-    sexo=random.choice(["M","F"])
+    """
+    Funcionamiento: Genera un nombre completo aleatorio y asigna un sexo.
+    Entrada: Ninguna.
+    Salida: tuple (nombreCompleto, sexo).
+    """
+    sexo=random.choice(["M","F"]) #Selecciona aleatoriamente el sexo del donador
     if sexo=="M":
         nombre=fake.first_name_male()
     else:
@@ -357,19 +367,39 @@ def generarNombreSexoRandom():
     return nombreCompleto,sexo
 
 def generarTipoSangreRandom():
+    """
+    Funcionamiento: Selecciona aleatoriamente un tipo de sangre válido.
+    Entrada: Ninguna.
+    Salida: str con el tipo de sangre.
+    """
     tipos=mostrarTiposSangre()
-    return random.choice(tipos)
+    return random.choice(tipos) #Selecciona uno aleatoriamente
 
 def generarPesoRandom():
+    """
+    Funcionamiento: Genera un peso aleatorio para un donador.
+    Entrada: Ninguna.
+    Salida: str con un peso entre 30 y 150 kg.
+    """
     return str(random.randint(30,150))
 
 def generarTelefonoRandom():
+    """
+    Funcionamiento: Genera un número telefónico aleatorio con formato ####-####.
+    Entrada: Ninguna.
+    Salida: str con el teléfono generado.
+    """
     primerNumero=random.choice(["2","4","6","7","8","9"])
     resto=str(random.randint(1000000,9999999)) #str para poder separarlo despues
     telefono=primerNumero+resto[:3]+"-"+resto[3:] #Genera un número de teléfono con formato ####-####
     return telefono
 
 def generarCorreoRandom(pnombre):
+    """
+    Funcionamiento: Genera un correo electrónico aleatorio a partir del nombre.
+    Entrada: pnombre (str), nombre completo del donador.
+    Salida: str con el correo generado.
+    """
     usuario=pnombre.lower().replace(" ","") #quita espacios y lo pone en minuscula
     terminaciones=["@costarricense.cr","@racsa.go.cr","@ccss.sa.cr","@gmail.com"]
     terminacion=random.choice(terminaciones) #elige la terminacion al azar
@@ -378,6 +408,11 @@ def generarCorreoRandom(pnombre):
     return correo
 
 def generarFechaRandom():
+    """
+    Funcionamiento: Genera una fecha de nacimiento aleatoria.
+    Entrada: Ninguna.
+    Salida: str con la fecha en formato dd/mm/YYYY.
+    """
     anno=random.randint(1926,2015) #genera un año entre 1926 y 2015
     mes=random.randint(1,12)
     if mes==2: #febrero, max dias=28
@@ -393,16 +428,29 @@ def generarFechaRandom():
     return fecha
 
 def generarJustificacionRandom(pfecha,ppeso):
-    if analizarEdadDonar(pfecha)<18:
+    """
+    Funcionamiento: Genera una justificación de estado para el donador según edad, peso o causas aleatorias.
+    Entrada:
+        pfecha (str): fecha de nacimiento.
+        ppeso (str): peso del donador.
+    Salida:
+        int con el código de justificación.
+    """
+    if analizarEdadDonar(pfecha)<18: #menor de edad
         return 1
-    if int(ppeso)<50:
+    if int(ppeso)<50: #Peso menor al mínimo permitido
         return 2
-    if int(ppeso)>120:
+    if int(ppeso)>120: #Peso mayor al máximo permitido
         return 3
     otrasJustificaciones=[0,4,5,6,7,8,0,0,0] #puse 0 para que sea mas probable que sea apto
     return random.choice(otrasJustificaciones)
 
 def mostrarJustificacion():
+    """
+    Funcionamiento: Retorna el diccionario de justificaciones para el estado del donador.
+    Entrada: Ninguna.
+    Salida: dict con código y descripción de la justificación.
+    """
     justificaciones={
         0:"Apto para donar",
         1:"Menor de edad",
@@ -416,11 +464,21 @@ def mostrarJustificacion():
     return justificaciones
 
 def generarEstadoDonador(pjustificacion):
+    """
+    Funcionamiento: Determina el estado del donador según la justificación.
+    Entrada: pjustificacion (int).
+    Salida: 1 si está activo, 0 si está inactivo.
+    """
     if pjustificacion == 0:
         return 1 #Activo
     return 0 #Inactivo
 
 def generarDonadorRandom():
+    """
+    Funcionamiento: Genera un donador con datos aleatorios.
+    Entrada: Ninguna.
+    Salida: list con los datos completos del donador.
+    """
     cedula=generarCedulaRandom()
     nombre,sexo=generarNombreSexoRandom()    
     fecha=generarFechaRandom()
@@ -781,7 +839,7 @@ def generarReporteTipoProvincia(pmatrizD,ptipo,pprovincia):
     for donador in pmatrizD:
         provincia=obtenerProvincias(donador[1])
         sangre=donador[2]
-        estado=donador[8]
+        estado=donador[8] #1=activo, 0=inactivo
         if provincia==pprovincia and sangre==ptipo and estado==1:
             html+="<tr>"
             html+="<td>"+donador[1]+"</td>"
